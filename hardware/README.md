@@ -1,0 +1,47 @@
+# Homelab Hardware
+
+This repository documents the physical hardware that powers my home lab. It covers current devices, network architecture, power‑management strategies, and future build plans.
+
+---
+
+## Current Hardware Overview
+| Device | Role | CPU | GPU | RAM | Storage | Motherboard | PSU | Case |
+|--------|------|-----|-----|-----|---------|-------------|-----|------|
+| **Primary Desktop** | Workstation / gaming | Ryzen 9 9950X | RTX 5080 FE | 64 GB DDR5-6000 | Samsung 990 Pro 2 TB (Linux), Samsung 9100 Pro 2 TB (Windows), WD Black SN850 2 TB NVMe, Samsung 870 Evo 4 TB HDD | MSI MPG X870E EDGE TI WIFI ATX AM5 | Corsair RM1000x 1 000 W | Corsair FRAME 4000D RS ARGB |
+| **NAS** | Bulk storage & backups | Intel Xeon E3‑1235L V5 @ 2 GHz (4 c) | – | 32 GB DDR4‑2400 ECC | 2× Samsung 870 Evo 1 TB SSDs (mirrored boot), Samsung 980 Pro 1TB NVMe (L2ARC), 2× Seagate IronWolf Pro 8 TB HDDs | Supermicro MBD‑X11SSL‑F O mATX | Corsair RM850 850 W | Fractal Node 804 |
+| **Rack‑mount Compute Node** | ProxmoxVE, gaming VMs, AI, transcoding | Ryzen 9 5900X | RTX 3070 Ti | 64 GB DDR4‑4000 (4×16) | 1 TB NVMe SSD | Asus ROG STRIX B550‑F GAMING WIFI ATX AM4 | Corsair RM850 850 W | Sliger CX4170a  (4U) |
+| **Always‑On Utility Node** | Low‑power (eventually) server for services & WoL/IPMI | Intel Core i7‑7700 (6 c/12 t) | NVIDIA GTX 1050 2 GB VRAM | 16 GB DDR4 | 1 TB HDD | Proprietary HP board | – | HP Pavilion Gaming Desktop 790‑0050xt |
+| **Miscellaneous** | Network services, monitoring & automation | Raspberry Pi 5 | – | 8 GB | – | – | – | – |
+
+---
+
+## Network Architecture
+
+- **Core Switch:** TP‑Link TL‑SX3008F SFP+ (10 Gb island). All 10 Gb NICs (workstation, compute node, NAS, services) connect here for local traffic.
+- **Access Layer:** QNAP QSW‑12104‑2S‑A‑US (2.5 Gb) connected to the core via a short passive DAC.
+- **House Router:** AX1500 Wi‑Fi 6 router with 1 Gb wall port; uplink to the core switch.
+- **Port Mapping on Core Switch**
+  - Port 1: NAS → DAC
+  - Port 2: Compute node → DAC
+  - Port 3: Primary desktop → AOC
+  - Port 7: QNAP access switch → DAC
+  - Port 8: Router uplink → RJ45 SFP+ transceiver
+- **Traffic Flow:** All local traffic (NAS ↔ workstation/compute) stays on the 10 Gb island; Internet traffic uses the 1 Gb uplink.
+
+---
+
+## Build Plans & Future Hardware
+| Item | Goal | Notes |
+|------|------|-------|
+| **Primary Desktop** | Complete - Upgrade over time | Remains as high‑performance workstation (Ryzen 9950X/RTX 5080 FE). |
+| **Compute Node** | Rack‑mounted GPU compute node powered on demand. Uses my retired RTX 3070 Ti desktop in a 4U chassis; CPU upgrade is optional. |
+| **Always‑On Utility Node** | Replace HP Pavilion with low‑power rackmount server (e.g., Intel i5‑13500 or similar) hosting services and providing WoL/IPMI wake‑up for the compute node. |
+| **NAS** | Continue using FractalNode 804 as dedicated storage; existing setup remains unchanged. | Will be used as offsite backup at co-location when available. |
+| **Server Rack** | 12U adjustable depth rack: U1–U2 (NAS, Pi 5, QNAP switch), U3 (SFP+ core), U4 (patch panel), U5–U6 (utility node placeholders), U7–U10 (compute node), U11–U12 (UPS 1500VA). |
+
+
+
+---
+
+## Further Reading
+- For software‑side integration, see the [Software](../software/README.md) repository.
