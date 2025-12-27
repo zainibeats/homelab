@@ -28,4 +28,4 @@ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock nickfedor/watchtowe
 
 ## Documentation
 
-For more advanced configuration options and features, visit the [official Watchtower documentation](https://containrrr.dev/watchtower/).
+For more advanced configuration options and features, visit the [official Watchtower documentation](https://watchtower.nickfedor.com/).
