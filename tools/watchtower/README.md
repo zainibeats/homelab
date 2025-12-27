@@ -23,7 +23,7 @@ To trigger an immediate update check without waiting for the scheduled time:
 
 ```bash
 # Run a one-time update check
-docker run --rm -v /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower --run-once
+docker run --rm -v /var/run/docker.sock:/var/run/docker.sock nickfedor/watchtower --run-once
 ```
 
 ## Documentation
