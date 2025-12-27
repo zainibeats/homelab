@@ -8,7 +8,7 @@ This repository contains configuration files and documentation for my homelab se
 | **TrueNAS Server**         | Centralized storage and backups             | TrueNAS Scale           | ZFS storage, SMB/NFS shares                                                                                                              |
 | **Ubuntu Server**          | Primary application hosting                 | Ubuntu Server 22.04 LTS | Docker containers, application services                                                                                                  |
 | **Raspberry Pi**           | Network services, monitoring and automation | Raspberry Pi OS Lite    | Pi-Hole, Home Assistant, WG-Easy, Nginx Proxy Manager, DDClient, Grafana, Prometheus, [Taskwise](https://github.com/zainibeats/taskwise) |
-| **Rackmount Compute Node** | Proxmox VE host & Minecraft servers         | Proxmox VE 7.x          | Virtualization platform, Minecraft server VMs                                                                                            |
+| **Rackmount Compute Node** | Proxmox VE host & Minecraft servers         | Proxmox VE | Virtualization platform, Minecraft server VMs                                                                                            |
 | **Debian Server**          | Testing                                     | Debian 12 (headless)    | Powered on to test configurations, services, etc.                                                                                        |
 
 
