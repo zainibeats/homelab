@@ -150,33 +150,25 @@ sudo ufw reload
 
 # Troubleshooting
 
-## Restarting Wireguard
+## Troubleshooting
 
-```bash
-sudo wg-quick down wg0
-sudo wg-quick up wg0
-```
+- **Restart WireGuard**  
+  ```bash
+  sudo wg-quick down wg0 && sudo wg-quick up wg0
+  ```
 
-## Firewall errors 
+- **Check forwarding rules**  
+  ```bash
+  sudo iptables -L FORWARD -v -n --line-numbers
+  ```
+  Expect:
+  ```bash
+  ACCEPT  wg0 → <VM_IP> tcp dpt:25565
+  ACCEPT  <VM_IP> → wg0 tcp spt:25565
+  DROP    wg0 → anywhere
+  ```
 
-```bash
-sudo iptables -L FORWARD -v -n --line-numbers
-```
-
-### What you want to see (important)
-You should now see something like:
-
-```bash
-ACCEPT  wg0 → <VM_IP> tcp dpt:25565
-ACCEPT  <VM_IP> → wg0 tcp spt:25565
-DROP    wg0 → anywhere
-```
-
-And no general `ACCEPT wg0 *` rules above them.
-
-### Test behavior (expected results)
-✅ Should work
-
-```bash
-nc -vz <VM_IP> 25565
-```
+- **Test connectivity**  
+  ```bash
+  nc -vz <VM_IP> 25565
+  ```
