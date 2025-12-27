@@ -37,35 +37,35 @@ services:
     container_name: qbittorrent
     restart: unless-stopped
     labels:
-      - deunhealth.restart.on.unhealthy=true  # Trigger deunhealth to restart if unhealthy
+      - deunhealth.restart.on.unhealthy=true # Trigger deunhealth to restart if unhealthy
     environment:
-      - PUID=1010                            # Adjust to match host user ID
-      - PGID=1010                            # Adjust to match host group ID
+      - PUID=1010 # Adjust to match host user ID
+      - PGID=1010 # Adjust to match host group ID
       - TZ=${TZ}
-      - WEBUI_PORT=8123                      # Internal web UI port
+      - WEBUI_PORT=8123 # Internal web UI port
     volumes:
-      - ./qbittorrent:/config                # Holds settings and torrent data
+      - ./qbittorrent:/config # Holds settings and torrent data
       - /mnt/nfs/jellyfin:/data
       - /mnt/WD-ExtHDD/Jellyfin:/external
     depends_on:
       gluetun:
         condition: service_healthy
         restart: true
-    network_mode: service:gluetun           # Route all traffic through VPN container
+    network_mode: service:gluetun # Route all traffic through VPN container
     healthcheck:
-        test: ping -c 1 www.mullvad.net || exit 1
-        interval: 60s
-        retries: 3
-        start_period: 20s
-        timeout: 10s
+      test: ping -c 1 www.mullvad.net || exit 1
+      interval: 60s
+      retries: 3
+      start_period: 20s
+      timeout: 10s
 
-# See the 'qBittorrent Stalls with VPN Timeout' section for more information.
+  # See the 'qBittorrent Stalls with VPN Timeout' section for more information.
   deunhealth:
     image: qmcgaw/deunhealth
     container_name: deunhealth
-    network_mode: "none"                     # Isolate from network, communicates via Docker socket
+    network_mode: "none" # Isolate from network, communicates via Docker socket
     environment:
-      - LOG_LEVEL=info                      # 'debug' for verbose logs
+      - LOG_LEVEL=info # 'debug' for verbose logs
       - HEALTH_SERVER_ADDRESS=127.0.0.1:9999 # Endpoint where deunhealth listens
       - TZ=${TZ}
     restart: always
@@ -79,11 +79,11 @@ services:
       - PUID=1010
       - PGID=1010
       - TZ=${TZ}
-      - NZBGET_USER=<USERNAME>             # Web UI login username
-      - NZBGET_PASS=<PASSWORD>             # Web UI login password
+      - NZBGET_USER=<USERNAME> # Web UI login username
+      - NZBGET_PASS=<PASSWORD> # Web UI login password
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./nzbget:/config                    # NZBGet configuration and queue
+      - ./nzbget:/config # NZBGet configuration and queue
       - /mnt/nfs/jellyfin:/data
     depends_on:
       gluetun:
@@ -119,11 +119,11 @@ services:
       - TZ=${TZ}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./sonarr:/config                   # Sonarr database and settings
+      - ./sonarr:/config # Sonarr database and settings
       - /mnt/truenas_data/jellyfin_data:/data
       - /mnt/truenas_data/jellyfin_data/tv:/tv
     ports:
-      - 8989:8989                         # Sonarr Web UI
+      - 8989:8989 # Sonarr Web UI
     networks:
       servarrnetwork:
         ipv4_address: 172.69.0.3
@@ -138,14 +138,32 @@ services:
       - TZ=${TZ}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./radarr:/config                   # Radarr database and settings
+      - ./radarr:/config # Radarr database and settings
       - /mnt/truenas_data/jellyfin_data:/data
       - /mnt/truenas_data/jellyfin_data/movies:/movies
     ports:
-      - 7878:7878                         # Radarr Web UI
+      - 7878:7878 # Radarr Web UI
     networks:
       servarrnetwork:
         ipv4_address: 172.69.0.4
+
+  lidarr:
+    container_name: lidarr
+    image: lscr.io/linuxserver/lidarr:latest
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./lidarr:/config
+      - /mnt/WD-ExtHDD/Jellyfin/Music:/data
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ}
+    ports:
+      - 8686:8686
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.69.0.5
 
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
@@ -157,10 +175,10 @@ services:
       - TZ=${TZ}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./bazarr:/config                  # Bazarr settings and subtitle data
+      - ./bazarr:/config # Bazarr settings and subtitle data
       - /mnt/truenas_data/jellyfin_data:/data
     ports:
-      - 6767:6767                         # Bazarr Web UI
+      - 6767:6767 # Bazarr Web UI
     networks:
       servarrnetwork:
         ipv4_address: 172.69.0.6
@@ -171,11 +189,11 @@ services:
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
-      - ./homarr/appdata:/appdata         # Homarr settings and widget data
+      - ./homarr/appdata:/appdata # Homarr settings and widget data
     environment:
-      - SECRET_ENCRYPTION_KEY=<KEY>       # Generate via 'openssl rand -hex 32'
+      - SECRET_ENCRYPTION_KEY=<KEY> # Generate via 'openssl rand -hex 32'
     ports:
-      - 7575:7575                         # Homarr Web UI
+      - 7575:7575 # Homarr Web UI
     networks:
       servarrnetwork:
         ipv4_address: 172.69.0.7
@@ -196,55 +214,37 @@ services:
         ipv4_address: 172.69.0.8
     restart: unless-stopped
 
-  # lidarr:
-    # container_name: lidarr
-    # image: lscr.io/linuxserver/lidarr:latest
-    # restart: unless-stopped
-    # volumes:
-      # - /etc/localtime:/etc/localtime:ro
-      # - ./lidarr:/config
-      # - /mnt/nfs/jellyfin:/data
-    # environment:
-     # - PUID=1000
-     # - PGID=1000
-     # - TZ=${TZ}
-    # ports:
-      # - 8686:8686
-    # networks:
-      # servarrnetwork:
-        # ipv4_address: 172.69.0.5
-
   # readarr:
-    # image: lscr.io/linuxserver/readarr:develop
-    # container_name: readarr
-    # restart: unless-stopped
-    # environment:
-      # - PUID=1000
-      # - PGID=1000
-      # - TZ=${TZ}
-    # volumes:
-      # - ./readarr:/config
-      # - /mnt/WD-ExtHDD/Jellyfin:/data
-      # - /mnt/truenas_data/jellyfin_data:/data
-    # ports:
-      # - 8787:8787
-    # networks:
-      # servarrnetwork:
-        # ipv4_address: 172.69.0.5
+  # image: lscr.io/linuxserver/readarr:develop
+  # container_name: readarr
+  # restart: unless-stopped
+  # environment:
+  # - PUID=1000
+  # - PGID=1000
+  # - TZ=${TZ}
+  # volumes:
+  # - ./readarr:/config
+  # - /mnt/WD-ExtHDD/Jellyfin:/data
+  # - /mnt/truenas_data/jellyfin_data:/data
+  # ports:
+  # - 8787:8787
+  # networks:
+  # servarrnetwork:
+  # ipv4_address: 172.69.0.5
 
   # firefox:
-    # image: lscr.io/linuxserver/firefox:latest
-    # container_name: firefox
-    # network_mode: "service:gluetun"
-    # depends_on:
-      # - gluetun
-    # security_opt:
-      # - seccomp:unconfined #optional
-    # environment:
-      # - PUID=1000
-      # - PGID=1000
-      # - TZ=${TZ}
-    # volumes:
-      # - ./firefox:/config
-    # shm_size: "1gb"
-    # restart: unless-stopped
+  # image: lscr.io/linuxserver/firefox:latest
+  # container_name: firefox
+  # network_mode: "service:gluetun"
+  # depends_on:
+  # - gluetun
+  # security_opt:
+  # - seccomp:unconfined #optional
+  # environment:
+  # - PUID=1000
+  # - PGID=1000
+  # - TZ=${TZ}
+  # volumes:
+  # - ./firefox:/config
+  # shm_size: "1gb"
+  # restart: unless-stopped
