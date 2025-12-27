@@ -88,7 +88,7 @@ The `itzg/minecraft-server` image supports a number of JVM flags.
 
 ```bash
 # From the project root
-docker compose up -d mc
+docker compose up -d
 ```
 
 The first run will download the image and the modpack, which may take several minutes depending on your internet speed.
@@ -118,12 +118,6 @@ docker compose down
 | Player cannot connect via VPN | Port forwarding issue on router | Ensure UDP 51820 (or your custom port) is forwarded to the host. |
 
 For detailed WireGuard troubleshooting, refer to [VPN_SETUP.md](./VPN_SETUP.md).
-
----
-
-## License
-
-This repository is licensed under the MIT License – see the [LICENSE](../../LICENSE) file for details.
 
 --- 
 
