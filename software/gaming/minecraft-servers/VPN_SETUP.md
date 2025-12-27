@@ -134,7 +134,7 @@ DNS = 1.1.1.1
 
 [Peer]
 PublicKey = <SERVER_PUBLIC_KEY> # Replace with server_public.key
-AllowedIPs = <VM_IP>/32, 10.8.0.0/24
+AllowedIPs = <VM_IP>/32, 10.8.0.0/24 # Replace with VM IP (eg. 192.168.1.100/32)
 Endpoint = <YOUR_HOME_PUBLIC_IP>:51820 # Replace with home ip/domain name and custom wireguard port (if configured)
 PersistentKeepalive = 25
 ```
