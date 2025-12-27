@@ -6,45 +6,54 @@ scrape_configs:
   - job_name: "prometheus"
     scrape_interval: 1m
     static_configs:
-    - targets: ["localhost:9090"]
-
-  # --- Debian Host Metrics ---
-  - job_name: "node"
-    static_configs:
-    - targets: ["node-exporter:9100"]
-
+      - targets: ["prometheus:9090"]
   - job_name: "cadvisor"
     scrape_interval: 5s
     static_configs:
-    - targets: ["cadvisor:8080"]
+      - targets: ["cadvisor:8080"]
+
+  # --- PI 5 Metrics ---
+  - job_name: "pi5-node"
+    static_configs:
+      - targets: ["node-exporter:9100"] # Node exporter on Ubuntu
+        labels:
+          instance: "raspberry-pi-5"
 
   # --- Ubuntu Server Metrics ---
-  - job_name: 'ubuntu-node'
+  - job_name: "ubuntu-node"
     static_configs:
-      - targets: ['<UBUNTU_IP>:9100'] # Node exporter on Ubuntu
+      - targets: ["<UBUNTU_IP>:9100"] # Node exporter on Ubuntu
         labels:
-          instance: 'ubuntu-server'
-  - job_name: 'ubuntu-cadvisor'
-    static_configs:
-      - targets: ['<UBUNTU_IP>:8081'] # cAdvisor on Ubuntu
+          instance: "ubuntu-server"
 
-  # --- Raspberry Pi Metrics ---
-  - job_name: 'rpi-node'
-    static_configs:
-      - targets: ['<RPI_IP>:9100'] # Node exporter on Raspberry Pi
-        labels:
-          instance: 'raspberry-pi-5'
+  # - job_name: 'ubuntu-cadvisor'
+  # static_configs:
+  # - targets: ['<UBUNTU_IP>:8081'] # cAdvisor on Ubuntu
 
   # --- LinuxMint Metrics ---
-  - job_name: 'lm-node'
+  - job_name: "lm-node"
     static_configs:
-      - targets: ['<LINUX_MINT_IP>:9100'] # Node exporter on 'linux-mint'
+      - targets: ["<LM_IP>:9100"] # Node exporter on 'linux-mint'
         labels:
-          instance: 'linux-mint'
+          instance: "linux-mint"
 
   # --- TrueNAS Metrics ---
-  - job_name: 'tn-node'
+  - job_name: "tn-node"
     static_configs:
-      - targets: ['<TRUENAS_IP>:9100'] # Node exporter on RPi
+      - targets: ["<TN_IP>:9100"] # Node exporter on RPi
         labels:
-          instance: 'truenas-scale'
+          instance: "truenas-scale"
+
+  # --- PVECompute Metrics ---
+  - job_name: "pvecompute-node"
+    static_configs:
+      - targets: ["<PVE_IP>:9100"] # Node exporter on RPi
+        labels:
+          instance: "pve-compute"
+
+  # --- Debian-Sceptre Metrics ---
+  - job_name: "sceptre-node"
+    static_configs:
+      - targets: ["<SCEPTRE_IP>:9100"] # Node exporter on RPi
+        labels:
+          instance: "debian-sceptre"
