@@ -17,9 +17,9 @@ This section documents the physical hardware that powers my home lab. It covers 
 - StarTech Open Frame 12U adjustable depth rack
    - **U1–U2**: Shelf which holds my NAS, Pi 5, QNAP switch, etc.
    - **U3**: TP‑Link TL‑SX3008F SFP+ Switch
-   - **U4**: pending decision
-   - **U5–U6**: utility node placeholders
-   - **U7–U10**: compute node
+   - **U4**: Pending decision
+   - **U5–U6**: Utility node placeholders
+   - **U7–U10**: Compute node
    - **U11–U12**: Cyberpower UPS 1500VA 
 
 ---
