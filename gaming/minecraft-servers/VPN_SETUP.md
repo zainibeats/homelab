@@ -144,7 +144,8 @@ If UFW is enabled:
 
 ```bash
 # Replace with home ip and custom wireguard port (if configured)
-sudo ufw allow from <YOUR_HOME_PUBLIC_IP> to any port 51820 proto udp 
+# Alternatively, allow from only specific ip addresses (eg. sudo ufw allow from <CLIENT_PUBLIC_IP> to any port 51820 proto udp)
+sudo ufw allow 51820/udp
 sudo ufw reload
 ```
 
