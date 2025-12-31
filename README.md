@@ -7,7 +7,7 @@ This repository contains configuration files and documentation for my homelab se
 | -------------------------- | ------------------------------------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | **TrueNAS Server**         | Centralized storage and backups             | TrueNAS Scale           | ZFS storage, SMB/NFS shares                                                                                                              |
 | **Ubuntu Server**          | Primary application hosting                 | Ubuntu Server 22.04 LTS | Docker containers, application services                                                                                                  |
-| **Raspberry Pi**           | Network services, monitoring and automation | Raspberry Pi OS Lite    | Pi-Hole, Home Assistant, WG-Easy, Nginx Proxy Manager, DDClient, Grafana, Prometheus, [Taskwise](https://github.com/zainibeats/taskwise) |
+| **Raspberry Pi**           | Network services, monitoring and automation | Raspberry Pi OS Lite    | Pi-Hole, Home Assistant, Wireguard VPN, Nginx Proxy Manager, DDClient, Grafana, Prometheus, [Taskwise](https://github.com/zainibeats/taskwise) |
 | **Rackmount Compute Node** | Proxmox VE host & Minecraft servers         | Proxmox VE              | Virtualization platform, Minecraft server VMs                                                                                            |
 | **Debian Server**          | Testing                                     | Debian 12 (headless)    | Powered on to test configurations, services, etc.                                                                                        |
 
@@ -29,11 +29,10 @@ Below is a list of all services configured in this repository, organized by cate
 ### Gaming [(docs)](./gaming/minecraft-servers/README.md)
 
 - **Minecraft Server** – Modded Fabric server with automated CurseForge modpack downloads
-  - **WireGuard VPN** – Secure remote access setup for the Minecraft server
 ### Infrastructure ([docs](./infrastructure/README.md))
 - **Nginx Proxy Manager + DDClient** ([docs](./infrastructure/nginx-ddclient/README.md)): Reverse proxy management with SSL/TLS certificates and dynamic DNS updates for Cloudflare
 - **Guacamole** ([docs](./infrastructure/guacamole/README.md)): Clientless remote desktop gateway supporting VNC, RDP, and SSH protocols with web-based access
-- **WG-Easy** ([docs](./infrastructure/wg-easy/README.md)): Easy-to-use Wireguard VPN with a web interface for secure remote access to the homelab
+- **Wireguard** ([docs](./infrastructure/wireguard/README.md)): Wireguard VPN for secure remote access to the homelab and services
 - **Monitoring** ([docs](./infrastructure/monitoring/README.md)): Monitoring stack including Prometheus, Grafana, Node Exporter, and cAdvisor
 
 ### Media ([docs](./media/README.md))
