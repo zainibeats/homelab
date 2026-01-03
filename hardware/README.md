@@ -70,7 +70,81 @@ This section documents the physical hardware that powers my home lab. It covers 
    - **U4**: Pending decision
    - **U5–U6**: Utility node placeholders
    - **U7–U10**: Compute node
-   - **U11–U12**: Cyberpower UPS 1500VA 
+   - **U11–U12**: Cyberpower UPS 1500VA  
+
+---
+
+## Operating / Wake‑on‑LAN Configuration
+
+- **Raspberry Pi 5** 
+  - Central SSH host that broadcasts magic packets from any machine on the network.  
+    
+    1. Run wakeonlan command directly:
+      ```bash
+      wakeonlan 00:11:22:33:44:55
+      ```
+    
+    2. Alternatively, use short script:
+      ```bash
+      ## ~/wol/utility-wake.sh
+      #!/bin/bash
+      
+      # MAC address of the target machine
+      TARGET_MAC="00:11:22:33:44:55"
+      
+      wakeonlan "$TARGET_MAC"
+      ```
+      Make it executable: `chmod +x ~/wol/utility-wake.sh`
+  
+
+- **Rack‑mount Compute Node**  
+  - Powered on via Wake‑on‑LAN.  
+  - Automatic shutdown when no VMs or containers are running.
+
+    1. Create the idle‑shutdown script:
+       ```bash
+       ## /usr/local/sbin/pve-idle-shutdown.sh
+       #!/bin/bash
+
+       RUNNING_VMS=$(qm list | grep -w running)
+       RUNNING_CTS=$(pct list | grep -w running)
+
+       if [[ -z "$RUNNING_VMS" && -z "$RUNNING_CTS" ]]; then
+           /sbin/shutdown -h now
+       fi
+       ```
+    2. Make it executable:
+       ```bash
+       chmod +x /usr/local/sbin/pve-idle-shutdown.sh
+       ```
+    3. Schedule the script to run every 30 minutes via cron:
+       ```cron
+       */30 * * * * /usr/local/sbin/pve-idle-shutdown.sh
+       ```
+
+- **Utility Node**  
+  - Powered on via Wake‑on‑LAN.  
+  - Systemd service `wakeonlan.service` configures the NIC with `ethtool`.
+
+    ```bash
+    sudo systemctl enable --now wakeonlan.service
+    sudo systemctl disable --now wakeonlan.service
+    ```
+
+  Example unit file (enabling WoL on interface `enp3s0`):
+
+  ```yaml
+  ## /etc/systemd/system/wakeonlan.service
+  [Unit]
+  Description=Enable Wake On Lan
+
+  [Service]
+  Type=oneshot
+  ExecStart=/usr/sbin/ethtool -s enp3s0 wol g
+
+  [Install]
+  WantedBy=basic.target
+  ```
 
 ---
 
