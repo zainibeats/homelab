@@ -9,7 +9,7 @@ This directory contains infrastructure services that handle networking, remote a
 
 ### Remote Access
 - **[Guacamole](./guacamole/README.md)** - Clientless remote desktop gateway supporting VNC, RDP, and SSH protocols with web-based access
-- **[Wireguard](./wireguard/README.md)** - Wireguard VPN for secure remote access to the homelab and services
+- **[Wireguard](./wireguard/README.md)** - Wireguard VPN for secure remote access to homelab and services
 
 ### Monitoring
 - **[Monitoring](./monitoring/README.md)** - Complete monitoring stack including Prometheus, Grafana, Node Exporter, and cAdvisor for system and container monitoring
