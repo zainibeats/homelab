@@ -1,7 +1,6 @@
 # Minecraft Server
 
-My self‑hosted modded Minecraft server running in Docker, along with WireGuard VPN configuration that allows secure remote access from client devices (laptops, phones, etc.).  
-The setup is based on the `itzg/minecraft-server` image and leverages CurseForge to pull the *Essential Perfected Fabric* modpack automatically.
+My self‑hosted modded Minecraft server running in Docker. Based on the `itzg/minecraft-server` image and leverages CurseForge to pull the *Essential Perfected Fabric* modpack automatically.
 
 ---
 
@@ -9,11 +8,9 @@ The setup is based on the `itzg/minecraft-server` image and leverages CurseForge
 
 - Docker Engine
 - Docker Compose
-- WireGuard (on host)
-- Port forward the WireGuard UDP port (default 51820) to the host
 
 The instructions assume the host is a Debian/Ubuntu VM that already has Docker installed.  
-WireGuard installation and configuration are documented in [VPN_SETUP.md](./VPN_SETUP.md).
+WireGuard configurations for remote clients are documented in the [WireGuard README](../../infrastructure/wireguard/README.md).
 
 ---
 
@@ -27,9 +24,11 @@ A single [docker-compose.yml](./docker-compose.yml) file defines the Minecraft c
 > Replace `YOUR_CF_API_KEY` with a valid CurseForge API key. You can generate one at the [CurseForge Developer Portal](https://console.curseforge.com/developers).  
 > `$USERNAME` should be replaced with your Minecraft username or the UUID of operators/whitelisted players.
 
-### WireGuard VPN
+### Remote VPN Access
 
-WireGuard is required for secure access from outside the local network. The full setup steps are in [VPN_SETUP.md](./VPN_SETUP.md). In brief:
+WireGuard is required for secure access from outside the local network. The full setup steps are in the [WireGuard README](../../infrastructure/wireguard/README.md). An example minecraft server specifi configuration can be found [here](../../infrastructure/wireguard/templates/minecraft-server-example.conf)
+
+In brief:
 
 1. Install WireGuard on the host (`apt install wireguard iptables`).  
 2. Enable IP forwarding and configure firewall rules that allow traffic from the VPN subnet to reach port `25565`.  
@@ -104,7 +103,9 @@ docker compose down
 ## Accessing the Server
 
 1. **Inside LAN** – Players can join using the host’s IP address (`<HOST_IP>:25565`).  
-2. **Over VPN** – Connect a client to the WireGuard network (see `VPN_SETUP.md`) and use the VPN IP of the host (`10.8.0.1:25565` or whatever subnet you configured).
+2. **Over VPN** – Connect a client to the WireGuard network and use the VPN IP of the host (`10.8.0.1:25565` or whatever subnet you configured).
+
+
 
 ---
 
@@ -117,9 +118,4 @@ docker compose down
 | VPN traffic blocked | Firewall rules missing | Re‑run `wg-quick up wg0` and check `iptables -L FORWARD`. |
 | Player cannot connect via VPN | Port forwarding issue on router | Ensure UDP 51820 (or your custom port) is forwarded to the host. |
 
-For detailed WireGuard troubleshooting, refer to [VPN_SETUP.md](./VPN_SETUP.md).
-
---- 
-
-> **Tip**  
-> If you want to customize the Minecraft server further (e.g., change world seed, enable hardcore mode), edit the corresponding environment variables in `docker-compose.yml` and redeploy. The container will preserve your data across restarts thanks to the `./data` volume.
+For detailed WireGuard troubleshooting, refer to the [WireGuard README](../../infrastructure/wireguard/README.md).
