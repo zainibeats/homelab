@@ -10,7 +10,7 @@ This section documents the physical hardware that powers my home lab. It covers 
   - *Role*: Workstation / gaming  
   - *CPU*: Ryzen 9 9950X  
   - *GPU*: RTX 5080 FE  
-  - *RAM*: 64 GB DDR5‑6000 CL30  
+  - *RAM*: 32 GB DDR5‑6000 CL30  
   - *Storage*:
     - Samsung 990 Pro 2 TB (Linux)  
     - Samsung 9100 Pro 2 TB (Windows)  
