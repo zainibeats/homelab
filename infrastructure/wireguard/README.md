@@ -1,16 +1,23 @@
 # WireGuard VPN Setup Guide
 
-> Detailed examples are kept in separate `.conf` files under `templates/`.
+> Detailed examples are kept in separate `.conf` files under [templates/](./templates).
 
 ---
 
 ## Prerequisites
 
-* **Port‑forwarded UDP port** – default `51820`. Allows clients behind NAT to reach the VPN server.
-* **WireGuard & iptables packages** (`wireguard`, `iptables`). Core VPN daemon and firewall rules.
-* **IP forwarding enabled**. Lets traffic pass from the VPN interface through your host’s network stack.
+* **Port‑forwarded UDP port** – default 51820. Allows clients behind NAT to reach the VPN server.
 
 ---
+
+## Install WireGuard
+
+```bash
+sudo apt update
+sudo apt install -y wireguard iptables
+```
+
+Verify: `wg --version`
 
 ## Generate Server Keys
 
@@ -31,7 +38,7 @@ Create `/etc/wireguard/wg0.conf`.
 
 Replace `<SERVER_PRIVATE_KEY>` with the contents of `~/wireguard/server_private.key`.
 
-```ini
+```yaml
 [Interface]
 PrivateKey = <SERVER_PRIVATE_KEY>
 Address = 10.8.0.1/24          ## VPN subnet
@@ -43,6 +50,8 @@ PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o
 PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
 
 ```
+
+See server configuration examples [here](./templates)
 
 ---
 
@@ -59,6 +68,8 @@ Apply changes:
 ```bash
 sudo sysctl --system
 ```
+
+Verify: `sysctl net.ipv4.ip_forward`
 
 ---
 
@@ -104,7 +115,7 @@ wg genpsk > client1.psk
 ```
 
 2. **Register the peer** in `/etc/wireguard/wg0.conf`:
-```ini
+```yaml
 [Peer]
 PublicKey = <CLIENT1_PUBLIC_KEY>
 # PresharedKey = <CLIENT1_PSK>  ## include if using a preshared key
@@ -117,7 +128,7 @@ sudo systemctl restart wg-quick@wg0
 ```
 
 4. **Create the client config** (`client1.conf`):
-```ini
+```yaml
 [Interface]
 PrivateKey = <CLIENT1_PRIVATE_KEY>
 Address = 10.8.0.2/32
