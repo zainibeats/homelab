@@ -10,7 +10,6 @@ My self‑hosted modded Minecraft server running in Docker. Based on the `itzg/m
 - Docker Compose
 
 The instructions assume the host is a Debian/Ubuntu VM that already has Docker installed.  
-WireGuard configurations for remote clients are documented in the [WireGuard README](../../infrastructure/wireguard/README.md).
 
 ---
 
