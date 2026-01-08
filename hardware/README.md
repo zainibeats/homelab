@@ -89,7 +89,7 @@ This section documents the physical hardware that powers my home lab. It covers 
       ## ~/wol/utility-wake.sh
       #!/bin/bash
       
-      # MAC address of the target machine
+      ## MAC address of the target machine
       TARGET_MAC="00:11:22:33:44:55"
       
       wakeonlan "$TARGET_MAC"
@@ -125,26 +125,27 @@ This section documents the physical hardware that powers my home lab. It covers 
 - **Utility Node**  
   - Powered on via Wake‑on‑LAN.  
   - Systemd service `wakeonlan.service` configures the NIC with `ethtool`.
-  ```bash
-  sudo systemctl enable --now wakeonlan.service
-  ```
 
-
-  Example unit file (enabling WoL on interface `enp3s0`):
-  ```yaml
-  ## /etc/systemd/system/wakeonlan.service
-  [Unit]
-  Description=Enable Wake On Lan
-  After=network.target
-  
-  [Service]
-  Type=oneshot
-  ExecStart=/usr/sbin/ethtool -s enp3s0 wol g
-  RemainAfterExit=yes
-  
-  [Install]
-  WantedBy=multi-user.target
-  ```
+    1. Example unit file (enabling WoL on interface `enp3s0`):
+        ```yaml
+        ## /etc/systemd/system/wakeonlan.service
+        [Unit]
+        Description=Enable Wake On Lan
+        After=network.target
+        
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/sbin/ethtool -s enp3s0 wol g
+        RemainAfterExit=yes
+        
+        [Install]
+        WantedBy=multi-user.target
+        ```
+      
+    2. Enable the systemd service
+        ```bash
+        sudo systemctl enable --now wakeonlan.service
+        ```
 
 ---
 
@@ -177,3 +178,9 @@ This section documents the physical hardware that powers my home lab. It covers 
 - **NAS**  
   - Goal: Continue using FractalNode 804 as dedicated storage; existing setup remains unchanged.  
   *Will be used as offsite backup at co-location when available.*
+
+---
+
+## Further reading
+
+For my build processes, insight, stories, photos and more, visit my [blog](https://blog.czaini.net).
