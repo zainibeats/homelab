@@ -183,4 +183,4 @@ This section documents the physical hardware that powers my home lab. It covers 
 
 ## Further reading
 
-For my build processes, insight, stories, photos and more, visit my [blog](https://blog.czaini.net).
+For my build processes, insights, stories, photos and more, visit my [blog](https://blog.czaini.net).
