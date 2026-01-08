@@ -124,6 +124,27 @@ This section documents the physical hardware that powers my home lab. It covers 
 
 - **Utility Node**  
   - Powered on via Wake‑on‑LAN.  
+  - Systemd service `wakeonlan.service` configures the NIC with `ethtool`.
+  ```bash
+  sudo systemctl enable --now wakeonlan.service
+  ```
+
+
+  Example unit file (enabling WoL on interface `enp3s0`):
+  ```yaml
+  ## /etc/systemd/system/wakeonlan.service
+  [Unit]
+  Description=Enable Wake On Lan
+  After=network.target
+  
+  [Service]
+  Type=oneshot
+  ExecStart=/usr/sbin/ethtool -s enp3s0 wol g
+  RemainAfterExit=yes
+  
+  [Install]
+  WantedBy=multi-user.target
+  ```
 
 ---
 
