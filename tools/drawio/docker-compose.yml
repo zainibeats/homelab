@@ -1,0 +1,21 @@
+services:
+  drawio:
+    image: jgraph/drawio
+    container_name: drawio
+    restart: unless-stopped
+    ports:
+      # - 8081:8080
+      - 8443:8443
+    environment:
+      PUBLIC_DNS: drawio.DOMAIN
+      ORGANISATION_UNIT: Drawio
+      ORGANISATION: ORGANISATION
+      CITY: CITY
+      STATE: STATE
+      COUNTRY_CODE: US
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://domain:8080 || exit 1"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
