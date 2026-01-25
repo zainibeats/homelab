@@ -1,0 +1,77 @@
+networks:
+  neko-network:
+    name: neko-network
+    ipam:
+      config:
+        - subnet: 172.77.0.0/24
+
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    restart: unless-stopped
+    container_name: gluetun-neko
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    networks:
+      wirebrave:
+        ipv4_address: 172.77.0.2
+    ports:
+      - "8880:8080"
+      - "52000-52100:52000-52100/udp"
+    volumes:
+      - ./gluetun:/gluetun
+    env_file:
+      - .env
+    healthcheck:
+      test: ping -c 1 www.mullvad.net || exit 1
+      interval: 20s
+      timeout: 10s
+      retries: 5
+  neko:
+    image: ghcr.io/m1k1o/neko/nvidia-brave:latest
+    restart: unless-stopped
+    network_mode: "service:gluetun"
+    container_name: neko-brave
+    depends_on:
+      gluetun:
+        condition: service_healthy
+    shm_size: 2gb
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+      - ./brave-profile:/home/neko/.config/BraveSoftware/Brave-Browser
+    environment:
+      NEKO_CAPTURE_VIDEO_PIPELINE: |
+        ximagesrc display-name={display} show-pointer=true use-damage=false
+          ! video/x-raw,framerate=25/1
+          ! cudaupload ! cudaconvert ! queue
+          ! video/x-raw(memory:CUDAMemory),format=NV12
+          ! nvh264enc
+            name=encoder
+            preset=2
+            gop-size=25
+            spatial-aq=true
+            temporal-aq=true
+            bitrate=4096
+            vbv-buffer-size=4096
+            rc-mode=6
+          ! h264parse config-interval=-1
+          ! video/x-h264,stream-format=byte-stream
+          ! appsink name=appsink
+      NEKO_CAPTURE_VIDEO_CODEC: "h264"
+      NEKO_SCREEN: 1920x1080@30
+      NEKO_PASSWORD: ${NEKO_PASSWORD}
+      NEKO_PASSWORD_ADMIN: ${NEKO_PASSWORD_ADMIN}
+      NEKO_EPR: 52000-52100
+      NEKO_NAT1TO1: ${NEKO_NAT1TO1}
+      NEKO_ICELITE: 1
+      NEKO_HWENC: nvenc
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
