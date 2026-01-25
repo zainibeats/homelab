@@ -20,6 +20,7 @@ This directory contains services for managing, streaming, and requesting media c
 
 ### Media Streaming
 - **[Jellyfin](./jellyfin/README.md)** - Self-hosted media server for streaming movies, TV shows, music, and more
+- **[Neko](./neko/README.md)** - Virtual browser with VPN integration for watch parties, remote access, collaborative browsing, etc.
 
 ## Common Considerations
 

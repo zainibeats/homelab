@@ -18,8 +18,8 @@ services:
       wirebrave:
         ipv4_address: 172.77.0.2
     ports:
-      - "8880:8080"
-      - "52000-52100:52000-52100/udp"
+      - "8880:8080" # Neko web interface
+      - "52000-52100:52000-52100/udp" # WebRTC media streaming
     volumes:
       - ./gluetun:/gluetun
     env_file:
