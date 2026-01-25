@@ -20,3 +20,7 @@ This directory contains various utility services that enhance the homelab functi
 ### Container Management
 
 - **[Watchtower](./watchtower/README.md)** - Automatic Docker container update service that monitors and updates running containers on a scheduled basis
+
+### Design & Planningz
+
+- **[Draw.io](./drawio/README.md)** - Self-hosted diagramming application for creating flowcharts, network diagrams, UML diagrams, and more
