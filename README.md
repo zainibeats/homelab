@@ -3,15 +3,12 @@
 This repository contains configuration files and documentation for my homelab setup, including Docker Compose configurations, infrastructure details, and hardware specifications. Further details about the hardware powering this homelab are available in the [Hardware](./hardware/README.md) readme.
 
 ## 🖥️ Infrastructure Overview
-| Device                     | Purpose                                     | OS                      | Key Services                                                                                                                             |
-| -------------------------- | ------------------------------------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| **TrueNAS Server**         | Centralized storage and backups             | TrueNAS Scale           | ZFS storage, SMB/NFS shares                                                                                                              |
-| **Ubuntu Server**          | Primary application hosting                 | Ubuntu Server 22.04 LTS | Docker containers, application services                                                                                                  |
-| **Raspberry Pi**           | Network services, monitoring and automation | Raspberry Pi OS Lite    | Pi-Hole, Home Assistant, Wireguard VPN, Nginx Proxy Manager, DDClient, Grafana, Prometheus, [Taskwise](https://github.com/zainibeats/taskwise) |
-| **Rackmount Compute Node** | Proxmox VE host & Minecraft servers         | Proxmox VE              | Virtualization platform, Minecraft server VMs                                                                                            |
-| **Debian Server**          | Testing                                     | Debian 12 (headless)    | Powered on to test configurations, services, etc.                                                                                        |
-
-
+| Device                     | Purpose                                     | OS                     
+| -------------------------- | ------------------------------------------- | ----------------------- 
+| **TrueNAS Server**         | Centralized storage and backups             | TrueNAS Scale          
+| **Ubuntu Server**          | Primary application hosting                 | Ubuntu Server 22.04 LTS 
+| **Raspberry Pi**           | Network services, monitoring and automation | Raspberry Pi OS Lite
+| **Rackmount Compute Node** | Proxmox VE host & Minecraft servers         | Proxmox VE              
 
 ## Project Organization
 
@@ -26,30 +23,13 @@ Services are organized into logical categories for easier management and navigat
 
 Below is a list of all services configured in this repository, organized by category. Each service directory contains a `docker-compose.yml` file and a specific `README.md` with setup instructions.
 
-### Gaming [(docs)](./gaming/minecraft-servers/README.md)
-
-- **Minecraft Server** – Modded Fabric server with automated CurseForge modpack downloads
-### Infrastructure ([docs](./infrastructure/README.md))
-- **Nginx Proxy Manager + DDClient** ([docs](./infrastructure/nginx-ddclient/README.md)): Reverse proxy management with SSL/TLS certificates and dynamic DNS updates for Cloudflare
-- **Guacamole** ([docs](./infrastructure/guacamole/README.md)): Clientless remote desktop gateway supporting VNC, RDP, and SSH protocols with web-based access
-- **Wireguard** ([docs](./infrastructure/wireguard/README.md)): Wireguard VPN for secure remote access to the homelab and services
-- **Monitoring** ([docs](./infrastructure/monitoring/README.md)): Monitoring stack including Prometheus, Grafana, Node Exporter, and cAdvisor
-
-### Media ([docs](./media/README.md))
-- **Arr Stack** ([docs](./media/arr-stack/README.md)): Complete media automation suite including Sonarr, Radarr, Lidarr, Bazarr, Prowlarr, NZBGet, qBittorrent, Jellyseerr, and Homarr dashboard. All download traffic is routed through a VPN (Gluetun) with NFS/SMB for media storage
-- **Jellyfin** ([docs](./media/jellyfin/README.md)): Self-hosted media server for streaming movies, TV shows, music, and more
-
-### Storage & Backup ([docs](./storage/README.md))
-- **Immich** ([docs](./storage/immich/README.md)): Self-hosted photo and video management platform with automatic backup and AI-powered features
-- **Nextcloud** ([docs](./storage/nextcloud/README.md)): Self-hosted file sync and share platform with NFS storage integration
-- **Vaultwarden** ([docs](./storage/vaultwarden/README.md)): Self-hosted password manager compatible with the official [Bitwarden](https://bitwarden.com/) app
-
-### Tools & Utilities ([docs](./tools/README.md))
-- **Home Assistant** ([docs](./tools/home-assistant/README.md)): Comprehensive home automation platform for controlling and automating smart home devices
-- **ConvertX** ([docs](./tools/convertx/README.md)): Simple file conversion service with a web interface
-- **Syncthing** ([docs](./tools/syncthing/README.md)): Continuous file synchronization program that synchronizes files between computers in real time
-- **Ollama + Open WebUI** ([docs](./tools/ollama-openwebui/README.md)): Run large language models locally with Ollama and interact with them through Open WebUI
-- **Watchtower** ([docs](./tools/watchtower/README.md)): Automatic Docker container update service that monitors and updates running containers on a scheduled basis
+| Category                   | Services                                    
+| -------------------------- | ------------------------------------------- 
+| **Gaming**                 | Minecraft Servers             
+| **Infrastructure**         | Nginx Proxy Manager + DDClient, Guacamole, Wireguard VPN, Monitoring Stack (Grafana, Prometheus, etc.)
+| **Media**                  | Neko, Jellyfin, Arr Stack (Sonarr, Radarr, Lidarr, Bazarr, Prowlarr, NZBGet, qBittorrent, Jellyseerr, Homarr, and Gluetun)
+| **Storage & Backup**       | Immich, Nextcloud, Vaultwarden
+| **Tools & Utilities**      | Home Assistant, ConvertX, Draw.io, Syncthing, Ollama + Open WebUI, Watchtower
 
 ## Storage Configuration
 
@@ -86,7 +66,7 @@ This homelab is designed with network storage in mind:
   - Immich: `/mnt/truenas_data/immich`
   - Jellyfin: `/mnt/truenas_data/jellyfin`
 
-## Docker Image Management - Portainer
+## Docker Image Management
 
 **Portainer** provides a web-based interface for managing Docker containers, images, networks, and volumes. It offers an intuitive GUI for Docker management tasks that would otherwise require command-line operations.
 
@@ -102,30 +82,8 @@ This homelab is designed with network storage in mind:
    docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:lts
    ```
 
-### Access
+## Automatic Updates
 
-- **Web Interface**: `https://<IP_ADDRESS>:9443`
+Utilizing **Watchtower** for automatic Docker container updates.
 
-## Prerequisites
-
--   Docker
--   Docker Compose
-
-## Automatic Updates (Optional)
-
-For automatic Docker container updates, this repository includes a dedicated **Watchtower** service ([docs](./tools/watchtower/README.md)) that monitors running containers and automatically pulls new images and restarts containers when updates are available.
-
-The Watchtower service can be deployed in two ways:
-- **Docker Compose**: Use the included docker-compose configuration for centralized management
-- **Docker Run**: Run directly on each machine using the `docker run` command
-
-The Watchtower service is configured to run daily at 5:00 AM to minimize disruption during peak usage hours. See the [Watchtower documentation](./tools/watchtower/README.md) for configuration details and usage instructions.
-
-A basic Watchtower container might look like this:
-
-```bash
-docker run -d \
---name watchtower \
--v /var/run/docker.sock:/var/run/docker.sock \
-nickfedor/watchtower
-```
+I've configured it to run daily at 5:00 AM to minimize disruption during peak usage hours. See the [Watchtower documentation](./tools/watchtower/README.md) for configuration details and usage instructions.
