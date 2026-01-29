@@ -1,151 +1,155 @@
 # Homelab Hardware
 
-This section documents the physical hardware that powers my home lab. It covers current devices, network architecture, power‑management strategies, and future build plans.
+This section documents the physical hardware that powers my home lab. It covers current devices, network architecture, power‑management strategies, and future build plans. 
+
+> For my build processes, insights, stories, photos and more, visit my [blog](https://blog.czaini.net).
 
 ---
 
 ## Current Hardware Overview
 
-- **Primary Desktop**
-  - *Role*: Workstation / gaming  
-  - *CPU*: Ryzen 9 9950X  
-  - *GPU*: RTX 5080 FE  
-  - *RAM*: 32 GB DDR5‑6000 CL30  
-  - *Storage*:
-    - Samsung 990 Pro 2 TB (Linux)  
-    - Samsung 9100 Pro 2 TB (Windows)  
-    - WD Black SN850 2 TB NVMe  
-    - Samsung 870 Evo 4 TB HDD  
-  - *Motherboard*: MSI MPG X870E EDGE TI WIFI ATX AM5  
-  - *NIC*: Onboard 5GbE & Dual SFP+ Mellanox ConnectX‑4  
-  - *Case*: Corsair FRAME 4000D RS ARGB  
+### Primary Desktop
 
-- **NAS**
-  - *Role*: Bulk storage & backups  
-  - *CPU*: Intel Xeon E3‑1235L V5 @ 2 GHz (4 c)  
-  - *GPU*: –  
-  - *RAM*: 32 GB DDR4‑2400 ECC  
-  - *Storage*:
-    - 2× Samsung 870 Evo 1 TB SSDs (mirrored boot)  
-    - Samsung 980 Pro 1TB NVMe (L2ARC)  
-    - 2× Seagate IronWolf Pro 8 TB HDDs  
-  - *Motherboard*: Supermicro MBD‑X11SSL‑F O mATX  
-  - *NIC*: Onboard 1GbE & Dual SFP+ Intel X570  
-  - *Case*: Fractal Node 804  
+**Role**: Workstation / gaming  
+- *CPU*: Ryzen 9 9950X  
+- *GPU*: RTX 5080 FE  
+- *RAM*: 32 GB DDR5‑6000 CL30  
+- *Storage*:
+  - Samsung 990 Pro 2 TB (Linux)  
+  - Samsung 9100 Pro 2 TB (Windows)  
+  - WD Black SN850 2 TB NVMe  
+  - Samsung 870 Evo 4 TB HDD  
+- *Motherboard*: MSI MPG X870E EDGE TI WIFI ATX AM5  
+- *NIC*: Onboard 5GbE & Dual SFP+ Mellanox ConnectX‑4  
+- *Case*: Corsair FRAME 4000D RS ARGB  
 
-- **Rack‑mount Compute Node**
-  - *Role*: ProxmoxVE, gaming VMs, AI, transcoding  
-  - *CPU*: Ryzen 9 5900X  
-  - *GPU*: RTX 3070 Ti  
-  - *RAM*: 64 GB DDR4‑4000 (4×16)  
-  - *Storage*: 1 TB NVMe SSD  
-  - *Motherboard*: Asus ROG STRIX B550‑F GAMING WIFI ATX AM4  
-  - *NIC*: Onboard 2.5GbE & Dual SFP+ Mellanox ConnectX‑3  
-  - *Case*: Sliger CX4170a (4U)  
+### NAS
 
-- **Always‑On Utility Node**
-  - *Role*: Low‑power server for services & WoL/IPMI  
-  - *CPU*: Intel Core i7‑7700 (6 c/12 t)  
-  - *GPU*: NVIDIA GTX 1050 2 GB  
-  - *RAM*: 16 GB DDR4  
-  - *Storage*: 1 TB HDD  
-  - *Motherboard*: Proprietary HP board  
-  - *NIC*: –  
-  - *Case*: HP Pavilion Gaming Desktop 790‑0050xt  
+**Role**: Bulk storage & backups  
+- *CPU*: Intel Xeon E3‑1235L V5 @ 2 GHz (4 c)  
+- *RAM*: 32 GB DDR4‑2400 ECC  
+- *Storage*:
+  - 2× Samsung 870 Evo 1 TB SSDs (mirrored boot)  
+  - Samsung 980 Pro 1TB NVMe (L2ARC)  
+  - 2× Seagate IronWolf Pro 8 TB HDDs  
+- *Motherboard*: Supermicro MBD‑X11SSL‑F O mATX  
+- *NIC*: Onboard 1GbE & Dual SFP+ Intel X570  
+- *Case*: Fractal Node 804  
 
-- **Miscellaneous**
-  - *Role*: Network services, monitoring & automation  
-  - *CPU*: Raspberry Pi 5  
-  - *GPU*: –  
-  - *RAM*: 8 GB  
-  - *Storage*: –  
-  - *Motherboard*: –  
-  - *NIC*: –  
-  - *Case*: –
+### Rack‑mount Compute Node
 
-### Server Rack
+**Role**: ProxmoxVE, gaming VMs, AI, transcoding  
+- *CPU*: Ryzen 9 5900X  
+- *GPU*: RTX 3070 Ti  
+- *RAM*: 64 GB DDR4‑4000 (4×16)  
+- *Storage*: 1 TB NVMe SSD  
+- *Motherboard*: Asus ROG STRIX B550‑F GAMING WIFI ATX AM4  
+- *NIC*: Onboard 2.5GbE & Dual SFP+ Mellanox ConnectX‑3  
+- *Case*: Sliger CX4170a (4U)  
+
+### Always‑On Utility Node
+
+**Role**: Low‑power server for services & WoL/IPMI  
+- *CPU*: Intel Core i7‑7700 (6 c/12 t)  
+- *GPU*: NVIDIA GTX 1050 2 GB  
+- *RAM*: 16 GB DDR4  
+- *Storage*: 1 TB HDD  
+- *Motherboard*: Proprietary HP board  
+- *Case*: HP Pavilion Gaming Desktop 790‑0050xt  
+
+### Miscellaneous
+
+**Role**: Network services, monitoring & automation  
+- *CPU*: Raspberry Pi 5  
+- *RAM*: 8 GB  
+
+## Server Rack
+
 - StarTech Open Frame 12U adjustable depth rack
-   - **U1–U2**: Shelf which holds my NAS, Pi 5, QNAP switch, etc.
-   - **U3**: TP‑Link TL‑SX3008F SFP+ Switch
-   - **U4**: Pending decision
-   - **U5–U6**: Utility node placeholders
-   - **U7–U10**: Compute node
-   - **U11–U12**: Cyberpower UPS 1500VA  
+  - **U1–U2**: Shelf which holds my NAS, Pi 5, QNAP switch, etc.
+  - **U3**: TP‑Link TL‑SX3008F SFP+ Switch
+  - **U4**: Pending decision
+  - **U5–U6**: Utility node placeholders
+  - **U7–U10**: Compute node
+  - **U11–U12**: Cyberpower UPS 1500VA  
 
 ---
 
 ## Operating / Wake‑on‑LAN Configuration
 
-- **Raspberry Pi 5** 
-  - Central SSH host that broadcasts magic packets from any machine on the network.  
+### Raspberry Pi 5 
+
+Central SSH host that broadcasts magic packets from any machine on the network.  
     
-    1. Run wakeonlan command directly:
-      ```bash
-      wakeonlan 00:11:22:33:44:55
-      ```
+1. Run wakeonlan command directly:
+    ```bash
+    wakeonlan 00:11:22:33:44:55
+    ```
     
-    2. Alternatively, use short script:
-      ```bash
-      ## ~/wol/utility-wake.sh
-      #!/bin/bash
-      
-      ## MAC address of the target machine
-      TARGET_MAC="00:11:22:33:44:55"
-      
-      wakeonlan "$TARGET_MAC"
-      ```
-      Make it executable: `chmod +x ~/wol/utility-wake.sh`
+2. Alternatively, use short script:
+    ```bash
+    ## ~/wol/utility-wake.sh
+    #!/bin/bash
+  
+    ## MAC address of the target machine
+    TARGET_MAC="00:11:22:33:44:55"
+     
+    wakeonlan "$TARGET_MAC"
+    ```
+    Make it executable: `chmod +x ~/wol/utility-wake.sh`
   
 
-- **Rack‑mount Compute Node**  
-  - Powered on via Wake‑on‑LAN.  
-  - Automatic shutdown when no VMs or containers are running.
+### Rack‑mount Compute Node
 
-    1. Create the idle‑shutdown script:
-       ```bash
-       ## /usr/local/sbin/pve-idle-shutdown.sh
-       #!/bin/bash
+- Powered on via Wake‑on‑LAN.  
+- Automatic shutdown when no VMs or containers are running (NOT )
 
-       RUNNING_VMS=$(qm list | grep -w running)
-       RUNNING_CTS=$(pct list | grep -w running)
+1. Create the idle‑shutdown script:
+    ```bash
+    ## /usr/local/sbin/pve-idle-shutdown.sh
+    #!/bin/bash
 
-       if [[ -z "$RUNNING_VMS" && -z "$RUNNING_CTS" ]]; then
-           /sbin/shutdown -h now
-       fi
-       ```
-    2. Make it executable:
-       ```bash
-       chmod +x /usr/local/sbin/pve-idle-shutdown.sh
-       ```
-    3. Schedule the script to run every 30 minutes via cron:
-       ```cron
-       */30 * * * * /usr/local/sbin/pve-idle-shutdown.sh
-       ```
+    RUNNING_VMS=$(qm list | grep -w running)
+    RUNNING_CTS=$(pct list | grep -w running)
 
-- **Utility Node**  
-  - Powered on via Wake‑on‑LAN.  
-  - Systemd service `wakeonlan.service` configures the NIC with `ethtool`.
+    if [[ -z "$RUNNING_VMS" && -z "$RUNNING_CTS" ]]; then
+    /sbin/shutdown -h now
+    fi
+    ```
+2. Make it executable:
+    ```bash
+    chmod +x /usr/local/sbin/pve-idle-shutdown.sh
+    ```
+3. Schedule the script to run every 30 minutes via cron:
+    ```cron
+    */30 * * * * /usr/local/sbin/pve-idle-shutdown.sh
+    ```
 
-    1. Example unit file (enabling WoL on interface `enp3s0`):
-        ```yaml
-        ## /etc/systemd/system/wakeonlan.service
-        [Unit]
-        Description=Enable Wake On Lan
-        After=network.target
+### Utility Node
+
+- Powered on via Wake‑on‑LAN
+- Systemd service `wakeonlan.service` configures the NIC with `ethtool`
+
+1. Example unit file (enabling WoL on interface `enp3s0`):
+    ```yaml
+    ## /etc/systemd/system/wakeonlan.service
+    [Unit]
+    Description=Enable Wake On Lan
+    After=network.target
         
-        [Service]
-        Type=oneshot
-        ExecStart=/usr/sbin/ethtool -s enp3s0 wol g
-        RemainAfterExit=yes
+    [Service]
+    Type=oneshot
+    ExecStart=/usr/sbin/ethtool -s enp3s0 wol g
+    RemainAfterExit=yes
         
-        [Install]
-        WantedBy=multi-user.target
-        ```
+    [Install]
+    WantedBy=multi-user.target
+    ```
       
-    2. Enable the systemd service
-        ```bash
-        sudo systemctl enable --now wakeonlan.service
-        ```
+2. Enable the systemd service
+    ```bash
+    sudo systemctl enable --now wakeonlan.service
+    ```
 
 ---
 
@@ -178,9 +182,3 @@ This section documents the physical hardware that powers my home lab. It covers 
 - **NAS**  
   - Goal: Continue using FractalNode 804 as dedicated storage; existing setup remains unchanged.  
   *Will be used as offsite backup at co-location when available.*
-
----
-
-## Further reading
-
-For my build processes, insights, stories, photos and more, visit my [blog](https://blog.czaini.net).
