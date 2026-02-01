@@ -166,6 +166,8 @@ Central SSH host that broadcasts magic packets from any machine on the network.
   - Port 8: Router uplink → RJ45 SFP+ transceiver
 - **Traffic Flow:** All local traffic (NAS ↔ workstation/compute) stays on the 10 Gb island; Internet traffic uses the 1 Gb uplink.
 
+![Network Topology Diagram](../images/homelab_diagram.jpg)
+
 ---
 
 ## Build Plans & Future Hardware
