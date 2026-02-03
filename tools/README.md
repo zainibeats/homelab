@@ -15,6 +15,7 @@ This directory contains various utility services that enhance the homelab functi
 
 ### AI & Machine Learning
 
+- **[Ollama + Open WebUI AWS Deployment](./ollama-aws-hybrid/README.md)** - Hybrid deployment of a local Ollama instance exposed to Open WebUI on an AWS EC2 instance via a Gluetun WireGuard tunnel.
 - **[Ollama + Open WebUI](./ollama-openwebui/README.md)** - Run large language models locally with Ollama and interact with them through a user-friendly web interface
 
 ### Container Management
