@@ -5,12 +5,12 @@ This repository contains configuration files and documentation for my homelab se
 > For my build processes, insights, stories, photos, and more, visit my [blog](https://blog.czaini.net).
 
 ## 🖥️ Infrastructure Overview
-| Device                     | Purpose                                     | OS                     
-| -------------------------- | ------------------------------------------- | ----------------------- 
-| **TrueNAS Server**         | Centralized storage and backups             | TrueNAS Scale          
-| **Ubuntu Server**          | Primary application hosting                 | Ubuntu Server 22.04 LTS 
-| **Raspberry Pi**           | Network services, monitoring and automation | Raspberry Pi OS Lite
-| **Rackmount Compute Node** | Proxmox VE host & Minecraft servers         | Proxmox VE              
+| Device                     | Purpose                                       | OS                     
+| -------------------------- | --------------------------------------------- | ----------------------- 
+| **TrueNAS Server**         | Centralized storage and backups               | TrueNAS Scale          
+| **Ubuntu Server**          | Primary application hosting                   | Ubuntu Server 22.04 LTS 
+| **Raspberry Pi**           | Network services, monitoring and automation   | Raspberry Pi OS Lite
+| **Rackmount Compute Node** | Virtual machines, remote desktop and testing  | Proxmox VE              
 
 ## Project Organization
 
