@@ -1,0 +1,41 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv6.conf.all.disable_ipv6=0
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - 3000:8080
+    volumes:
+      - ./gluetun:/gluetun
+    env_file:
+      - .env
+    networks:
+      - openwebui-net
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: unless-stopped
+    network_mode: "service:gluetun"
+    volumes:
+      - open-webui:/app/backend/data
+    environment:
+      - "OLLAMA_BASE_URL=http://192.168.1.100:11434" # Points to the ollama service. Must add 'network_mode: host' to environment on local ollama instance to use local ip
+      - "WEBUI_SECRET_KEY=" # Optional: Change for production (openssl rand -hex 32)
+    depends_on:
+      - gluetun
+
+volumes:
+  open-webui:
+
+networks:
+  openwebui-net:
+    driver: bridge
