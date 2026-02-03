@@ -5,10 +5,10 @@ services:
     volumes:
       - open-webui:/app/backend/data
     ports:
-      - "3000:8080" # Or "8080:8080" if you prefer
+      - "3000:8080" ## Or "8080:8080" if you prefer
     environment:
-      - 'OLLAMA_BASE_URL=http://ollama:11434' # Points to the ollama service below
-      - 'WEBUI_SECRET_KEY=' # Optional: Change for production
+      - "OLLAMA_BASE_URL=http://ollama:11434" ## Points to the ollama service below
+      - "WEBUI_SECRET_KEY=" ## Optional: Change for production
     depends_on:
       - ollama
     restart: unless-stopped
@@ -16,6 +16,8 @@ services:
   ollama:
     image: ollama/ollama
     container_name: ollama
+    ## Optional: If accessing ollama from local ip address is required
+    # network_mode: host
     volumes:
       - ollama:/root/.ollama
     deploy:
@@ -23,14 +25,13 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              count: all # Or specify device IDs: ['0']
+              count: all ## Or specify device IDs: ['0']
               capabilities: [gpu]
     restart: unless-stopped
-    # Expose is not strictly needed for service-to-service comms in compose
+    ## Expose is not strictly needed for service-to-service comms in compose
     # expose:
     #   - 11434
 
 volumes:
   open-webui:
   ollama:
-
