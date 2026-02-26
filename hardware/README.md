@@ -31,7 +31,8 @@ This section documents the physical hardware that powers my home lab. It covers 
 - *Storage*:
   - 2× Samsung 870 Evo 1 TB SSDs (mirrored boot)  
   - Samsung 980 Pro 1TB NVMe (L2ARC)  
-  - 2× Seagate IronWolf Pro 8 TB HDDs  
+  - 2× Mirrored Seagate IronWolf Pro 8 TB HDDs (Jellyfin media storage)
+  - 2x Mirrored Seagate Exos 20 TB HDDs (Immich, Nextcloud, Proxmox, etc.)
 - *Motherboard*: Supermicro MBD‑X11SSL‑F O mATX  
 - *NIC*: Onboard 1GbE & Dual SFP+ Intel X570  
 - *Case*: Fractal Node 804  
@@ -42,12 +43,12 @@ This section documents the physical hardware that powers my home lab. It covers 
 - *CPU*: Ryzen 9 5900X  
 - *GPU*: RTX 3070 Ti  
 - *RAM*: 64 GB DDR4‑4000 (4×16)  
-- *Storage*: 1 TB NVMe SSD  
+- *Storage*: 2 x 1 TB NVMe SSD  
 - *Motherboard*: Asus ROG STRIX B550‑F GAMING WIFI ATX AM4  
 - *NIC*: Onboard 2.5GbE & Dual SFP+ Mellanox ConnectX‑3  
 - *Case*: Sliger CX4170a (4U)  
 
-### Always‑On Utility Node
+### Utility Node
 
 **Role**: Low‑power server for services & WoL/IPMI  
 - *CPU*: Intel Core i7‑7700 (6 c/12 t)  
@@ -60,8 +61,8 @@ This section documents the physical hardware that powers my home lab. It covers 
 ### Miscellaneous
 
 **Role**: Network services, monitoring & automation  
-- *CPU*: Raspberry Pi 5  
-- *RAM*: 8 GB  
+- Raspberry Pi 5 8 GB
+
 
 ## Server Rack
 
@@ -157,14 +158,32 @@ Central SSH host that broadcasts magic packets from any machine on the network.
 
 - **Core Switch:** TP‑Link TL‑SX3008F SFP+ (10 Gb island). All 10 Gb NICs (workstation, compute node, NAS, services) connect here for local traffic.
 - **Access Layer:** QNAP QSW‑12104‑2S‑A‑US (2.5 Gb) connected to the core via a short passive DAC.
-- **House Router:** AX1500 Wi‑Fi 6 router with 1 Gb wall port; uplink to the core switch.
+- **House Router:** UniFi Dream Router 7
+- **VLANs**: 
+  - Default (1)
+  - Homelab (10)
+  - Infra (20)
+  - Guest (60)
+  - IoT (70)
 - **Port Mapping on Core Switch**
-  - Port 1: Compute node → DAC
-  - Port 2: NAS → DAC
+  - Port 1: NAS → DAC
+    - Untagged Vlan 10
+    - PVID: 10
+  - Port 2: Compute node → DAC
+    - Untagged Vlan 10
+    - PVID: 10
   - Port 3: Primary desktop → AOC
+    - Untagged Vlan 10
+    - PVID: 10
   - Port 7: QNAP access switch → DAC
+    - Untagged Vlan Infra
+    - PVID: 20
   - Port 8: Router uplink → RJ45 SFP+ transceiver
-- **Traffic Flow:** All local traffic (NAS ↔ workstation/compute) stays on the 10 Gb island; Internet traffic uses the 1 Gb uplink.
+    - Tagged Vlans: 
+      - Homelab
+      - Infra
+    - PVID: Unused 999 dummy VLAN
+- **Traffic Flow:** All local traffic (NAS ↔ workstation/compute) stays on the 10 Gb island; Internet traffic uses the router 2.5 Gb uplink.
 
 ![Network Topology Diagram](../images/homelab_diagram.jpg)
 
