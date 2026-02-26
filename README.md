@@ -35,29 +35,21 @@ Below is a list of all services configured in this repository, organized by cate
 
 ## Storage Configuration
 
-This homelab is designed with network storage in mind:
+This homelab is designed with modularity in mind:
 
-- **TrueNAS Datasets and Services**:
-  - `/mnt/Ironwolf-Pro-8TB-Mirror/` (Main Storage Pool)
-    - `encrypted/` (Encrypted Dataset)
-      - **Services**:
-        - vaultwarden
-        - syncthing
-    - `family/` (Family Dataset)
-      - **Service**: nextcloud
-    - `immich/` (Immich Dataset)
-      - **Service**: immich
-    - `jellyfin_data/` (Jellyfin Dataset)
-      - **Services**:
-        - jellyfin
-        - arr
-    - `ProxmoxData/` (Proxmox Dataset)
-      - **Services**:
-        - NFS share for Proxmox host (compute node)
-  - `/mnt/Barracuda/` (Downloads Storage Pool)
-    - `downloads/` (Downloads Dataset)
-      - **Services**:
-        - General purpose download network share (repurposed desktop HDD) 
+- **TrueNAS Datasets**:
+  - `/mnt/Ironwolf-Pro-8TB-Mirror/` (Media Storage Pool)
+    - jellyfin_data/ (Jellyfin Dataset)
+      - Services: _Jellyfin and arr stack_
+  - `/mnt/exos-20tb/` (Downloads Storage Pool)
+    - encrypted/ (Encrypted Dataset)
+      - Services: _Vaultwarden and Syncthing_
+    - ProxmoxData/ (Proxmox Dataset)
+      - Services: _NFS share for Proxmox host (compute node)_
+    - immich/ (Immich Dataset)
+      - Services: _Immich_
+    - family/ (Family Dataset)
+      - Services: _Nextcloud_
 
 - **NFS Shares**:
   - Media: `/mnt/nfs/jellyfin` (for Arr Stack)
