@@ -35,6 +35,7 @@ This section documents the physical hardware that powers my home lab. It covers 
   - 2x Mirrored Seagate Exos 20 TB HDDs (Immich, Nextcloud, Proxmox, etc.)
 - *Motherboard*: Supermicro MBD‑X11SSL‑F O mATX  
 - *NIC*: Onboard 1GbE & Dual SFP+ Intel X570  
+- *IPMI*: Supermicro onboard NIC connects to the QNAP access switch on VLAN 20 (Infra) for remote management. See [Network Architecture](##network-architecture) below for details
 - *Case*: Fractal Node 804  
 
 ### Rack‑mount Compute Node
@@ -159,31 +160,29 @@ Central SSH host that broadcasts magic packets from any machine on the network.
 - **Core Switch:** TP‑Link TL‑SX3008F SFP+ (10 Gb island). All 10 Gb NICs (workstation, compute node, NAS, services) connect here for local traffic.
 - **Access Layer:** QNAP QSW‑12104‑2S‑A‑US (2.5 Gb) connected to the core via a short passive DAC.
 - **House Router:** UniFi Dream Router 7
-- **VLANs**: 
-  - Default (1)
-  - Homelab (10)
-  - Infra (20)
-  - Guest (60)
-  - IoT (70)
-- **Port Mapping on Core Switch**
-  - Port 1: NAS → DAC
-    - Untagged Vlan 10
-    - PVID: 10
-  - Port 2: Compute node → DAC
-    - Untagged Vlan 10
-    - PVID: 10
-  - Port 3: Primary desktop → AOC
-    - Untagged Vlan 10
-    - PVID: 10
-  - Port 7: QNAP access switch → DAC
-    - Untagged Vlan Infra
-    - PVID: 20
-  - Port 8: Router uplink → RJ45 SFP+ transceiver
-    - Tagged Vlans: 
-      - Homelab
-      - Infra
-    - PVID: Unused 999 dummy VLAN
-- **Traffic Flow:** All local traffic (NAS ↔ workstation/compute) stays on the 10 Gb island; Internet traffic uses the router 2.5 Gb uplink.
+### VLANs
+| ID | Name   |
+|----|--------|
+| 1  | Default |
+| 10 | Homelab |
+| 20 | Infra   |
+| 60 | Guest   |
+| 70 | IoT     |
+
+### Port Mapping (Core Switch)
+| Port | Device / Link | VLAN | PVID |
+|------|--------------|------|------|
+| 1    | NAS → DAC    | 10   | 10   |
+| 2    | Compute → DAC| 10   | 10   |
+| 3    | Desktop → AOC| 10   | 10   |
+| 7    | Access → DAC | 20   | 20   |
+| 8    | Router uplink| 10/20| 999 (unused dummy VLAN) |
+
+*Port 8 is a trunk carrying Homelab (10) and Infra (20).  
+The 999 VLAN is a placeholder as SX3008F Web UI requires a PVID value for each port.*
+
+- **Traffic Flow:** All local traffic (NAS ↔ workstation/compute) stays on the 10 Gb island; Internet and Inter-VLAN traffic uses the router’s 2.5 Gb uplink.
+
 
 ![Network Topology Diagram](../images/homelab_diagram.jpg)
 
