@@ -51,15 +51,6 @@ This homelab is designed with modularity in mind:
     - family/ (Family Dataset)
       - Services: _Nextcloud_
 
-- **NFS Shares**:
-  - Media: `/mnt/nfs/jellyfin` (for Arr Stack)
-  - Nextcloud: `/mnt/nfs/family/nextcloud`
-  - Configured in `/etc/fstab` for automatic mounting
-  
-- **SMB Shares**:
-  - Immich: `/mnt/truenas_data/immich`
-  - Jellyfin: `/mnt/truenas_data/jellyfin`
-
 ## Docker Image Management
 
 **Portainer** provides a web-based interface for managing Docker containers, images, networks, and volumes. It offers an intuitive GUI for Docker management tasks that would otherwise require command-line operations.
