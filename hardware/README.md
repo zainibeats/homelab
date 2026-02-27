@@ -18,7 +18,7 @@ This section documents the physical hardware that powers my home lab. It covers 
   - Samsung 990 Pro 2 TB (Linux)  
   - Samsung 9100 Pro 2 TB (Windows)  
   - WD Black SN850 2 TB NVMe  
-  - Samsung 870 Evo 4 TB HDD  
+  - Samsung 870 Evo 4 TB SATA SSD  
 - *Motherboard*: MSI MPG X870E EDGE TI WIFI ATX AM5  
 - *NIC*: Onboard 5GbE & Dual SFP+ Mellanox ConnectX‑4  
 - *Case*: Corsair FRAME 4000D RS ARGB  
