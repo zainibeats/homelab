@@ -39,16 +39,16 @@ This homelab is designed with modularity in mind:
 
 - **TrueNAS Datasets**:
   - `/mnt/Ironwolf-Pro-8TB-Mirror/` (Media Storage Pool)
-    - jellyfin_data/ (Jellyfin Dataset)
+    - `jellyfin_data/` (Jellyfin Dataset)
       - Services: _Jellyfin and arr stack_
   - `/mnt/exos-20tb/` (Downloads Storage Pool)
-    - encrypted/ (Encrypted Dataset)
+    - `encrypted/` (Encrypted Dataset)
       - Services: _Vaultwarden and Syncthing_
-    - ProxmoxData/ (Proxmox Dataset)
+    - `ProxmoxData/` (Proxmox Dataset)
       - Services: _NFS share for Proxmox host (compute node)_
-    - immich/ (Immich Dataset)
+    - `immich/` (Immich Dataset)
       - Services: _Immich_
-    - family/ (Family Dataset)
+    - `family/` (Family Dataset)
       - Services: _Nextcloud_
 
 ## Docker Image Management
