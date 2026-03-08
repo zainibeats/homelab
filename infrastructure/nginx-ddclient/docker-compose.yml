@@ -1,27 +1,27 @@
 services:
   nginxproxymanager:
-    image: 'jc21/nginx-proxy-manager:latest'
+    image: "jc21/nginx-proxy-manager:latest"
     container_name: nginxproxymanager
     restart: unless-stopped
     ports:
-      - '80:80'
-      - '81:81'
-      - '443:443'
+      - "80:80"
+      - "81:81"
+      - "443:443"
     volumes:
       - ./nginx/data:/data
       - ./nginx/letsencrypt:/etc/letsencrypt
 
   ddclient:
-    image: 'linuxserver/ddclient:latest'
+    image: "linuxserver/ddclient:latest"
     container_name: ddclient
     restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=<YOUR_TIMEZONE>
-      - CF_API_TOKEN=<YOUR_CLOUDFLARE_API_TOKEN>
-      - CF_EMAIL=<YOUR_CLOUDFLARE_EMAIL>
-      - CF_ZONE=<DOMAIN_NAME>
-      - CF_RECORD=<DOMAIN_NAME>
+      - TZ=America/Los_Angeles
+      - CF_API_TOKEN=$CF_API_TOKEN
+      - CF_EMAIL=$CF_EMAIL
+      - CF_ZONE=$CF_ZONE
+      - CF_RECORD=$CF_RECORD
     volumes:
       - ./config:/config
