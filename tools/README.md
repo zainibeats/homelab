@@ -4,10 +4,6 @@ This directory contains various utility services that enhance the homelab functi
 
 ## Services Overview
 
-### Home Automation
-
-- **[Home Assistant](./home-assistant/README.md)** - Comprehensive home automation platform for controlling and automating smart home devices
-
 ### File operations
 
 - **[ConvertX](./convertx/README.md)** - Simple file conversion service with a web interface for converting between various file formats
@@ -17,10 +13,6 @@ This directory contains various utility services that enhance the homelab functi
 
 - **[Ollama + Open WebUI AWS Deployment](./ollama-aws-hybrid/README.md)** - Hybrid deployment of a local Ollama instance exposed to Open WebUI on an AWS EC2 instance via a Gluetun WireGuard tunnel.
 - **[Ollama + Open WebUI](./ollama-openwebui/README.md)** - Run large language models locally with Ollama and interact with them through a user-friendly web interface
-
-### Container Management
-
-- **[Watchtower](./watchtower/README.md)** - Automatic Docker container update service that monitors and updates running containers on a scheduled basis
 
 ### Design & Planning
 
