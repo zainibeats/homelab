@@ -15,23 +15,12 @@ This repository contains configuration files and documentation for my homelab se
 ## Project Organization
 
 Services are organized into logical categories for easier management and navigation:
+- **[Automation](./automation/README.md)** - Home and Docker container automation
 - **[Gaming](./gaming/minecraft-servers/README.md)** - Directory for gaming services, currently hosting only Minecraft servers.
 - **[Infrastructure](./infrastructure/README.md)** - Networking, monitoring, proxy, and remote access services
 - **[Media](./media/README.md)** - Media automation, management, and streaming services
 - **[Storage](./storage/README.md)** - Data storage, backup, and security services
-- **[Tools](./tools/README.md)** - Utility services including automation, file sync, and AI capabilities
-
-## Services
-
-Below is a list of all services configured in this repository, organized by category. Each service directory contains a `docker-compose.yml` file and a specific `README.md` with setup instructions.
-
-| Category                   | Services                                    
-| -------------------------- | ------------------------------------------- 
-| **Gaming**                 | Minecraft Servers             
-| **Infrastructure**         | Nginx Proxy Manager + DDClient, Guacamole, Wireguard VPN, Monitoring Stack (Grafana, Prometheus, etc.)
-| **Media**                  | Neko, Jellyfin, Arr Stack (Sonarr, Radarr, Lidarr, Bazarr, Prowlarr, NZBGet, qBittorrent, Jellyseerr, Homarr, and Gluetun)
-| **Storage & Backup**       | Immich, Nextcloud, Vaultwarden
-| **Tools & Utilities**      | Home Assistant, ConvertX, Draw.io, Syncthing, Ollama + Open WebUI, Watchtower
+- **[Tools](./tools/README.md)** - Utility services including secret sharing, file sync, and local AI
 
 ## Storage Configuration
 
@@ -39,16 +28,18 @@ This homelab is designed with modularity in mind:
 
 - **TrueNAS Datasets**:
   - `/mnt/Ironwolf-Pro-8TB-Mirror/` (Media Storage Pool)
-    - `jellyfin_data/` (Jellyfin Dataset)
+    - `jellyfin_data/`
       - Services: _Jellyfin and arr stack_
-  - `/mnt/exos-20tb/` (Downloads Storage Pool)
-    - `encrypted/` (Encrypted Dataset)
+  - `/mnt/exos-20tb/` (Application Storage Pool)
+    - `apps/`
+      - Services: _Gitea_
+    - `encrypted/`
       - Services: _Vaultwarden and Syncthing_
-    - `ProxmoxData/` (Proxmox Dataset)
+    - `ProxmoxData/`
       - Services: _NFS share for Proxmox host (compute node)_
-    - `immich/` (Immich Dataset)
+    - `immich/`
       - Services: _Immich_
-    - `family/` (Family Dataset)
+    - `family/`
       - Services: _Nextcloud_
 
 ## Docker Image Management
