@@ -1,6 +1,6 @@
 # Tools & Utilities
 
-This directory contains various utility services that enhance the homelab functionality, from home automation to file synchronization and AI capabilities.
+This directory contains various utility services that enhance the homelab functionality, from secret sharing to file synchronization and local AI.
 
 ## Services Overview
 
@@ -8,6 +8,10 @@ This directory contains various utility services that enhance the homelab functi
 
 - **[ConvertX](./convertx/README.md)** - Simple file conversion service with a web interface for converting between various file formats
 - **[Syncthing](./syncthing/README.md)** - Continuous file synchronization program that synchronizes files between two or more computers in real time
+
+## Version Control
+
+- **[Gitea](./gitea/README.md)** - Github alternative
 
 ### AI & Machine Learning
 
@@ -17,3 +21,7 @@ This directory contains various utility services that enhance the homelab functi
 ### Design & Planning
 
 - **[Draw.io](./drawio/README.md)** - Self-hosted diagramming application for creating flowcharts, network diagrams, UML diagrams, and more
+
+## Secret Sharing
+
+- **[Yopass](./yopass/README.md)** - Password and secret sharing platform
