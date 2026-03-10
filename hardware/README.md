@@ -184,7 +184,7 @@ The 999 VLAN is a placeholder as SX3008F Web UI requires a PVID value for each p
 - **Traffic Flow:** All local traffic (NAS ↔ workstation/compute) stays on the 10 Gb island; Internet and Inter-VLAN traffic uses the router’s 2.5 Gb uplink.
 
 
-![Network Topology Diagram](../images/homelab_diagram.jpg)
+![Network Topology Diagram](https://assets.czaini.net/images/homelab_diagram.jpg)
 
 ---
 

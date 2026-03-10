@@ -4,7 +4,7 @@ This project provides a hybrid LLM deployment that runs your large language mode
 
 ## Architecture Overview
 
-<img src="../../images/aws-ollama-diagram.jpg" width="50%" height="auto"/>
+<img src="https://assets.czaini.net/images/aws-ollama-diagram.jpg" width="50%" height="auto"/>
 
 **EC2 Instance**:
 - Gluetun runs inside the instance and creates a secure tunnel to the local network.
