@@ -4,7 +4,7 @@ This repository contains configuration files and documentation for my homelab se
 
 > For my build processes, insights, stories, photos, and more, visit my [blog](https://blog.czaini.net).
 
-## 🖥️ Infrastructure Overview
+## Infrastructure Overview
 | Device                     | Purpose                                       | OS                     
 | -------------------------- | --------------------------------------------- | ----------------------- 
 | **TrueNAS Server**         | Centralized storage and backups               | TrueNAS Scale          
@@ -16,7 +16,7 @@ This repository contains configuration files and documentation for my homelab se
 
 Services are organized into logical categories for easier management and navigation:
 - **[Automation](./automation/README.md)** - Home and Docker container automation
-- **[Gaming](./gaming/minecraft-servers/README.md)** - Directory for gaming services, currently hosting only Minecraft servers.
+- **[Gaming](./gaming/minecraft-servers/README.md)** - Directory for gaming services, currently hosting only Minecraft servers
 - **[Infrastructure](./infrastructure/README.md)** - Networking, monitoring, proxy, and remote access services
 - **[Media](./media/README.md)** - Media automation, management, and streaming services
 - **[Storage](./storage/README.md)** - Data storage, backup, and security services
