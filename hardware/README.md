@@ -140,13 +140,16 @@ Central SSH host that broadcasts magic packets from any machine on the network.
 - **Access Layer:** QNAP QSW‑12104‑2S‑A‑US (2.5 Gb) connected to the core via a short passive DAC.
 - **House Router:** UniFi Dream Router 7
 ### VLANs
-| ID | Name   |
-|----|--------|
-| 1  | Default |
+| ID | Name    |
+|----|---------|
+| 1  | Internal |
 | 10 | Homelab |
 | 20 | Infra   |
-| 60 | Guest   |
+| 60 | Zigbee  |
 | 70 | IoT     |
+| 80 | Guest   |
+| 999 | Dummy   |
+
 
 ### Port Mapping (Core Switch)
 | Port | Device / Link | VLAN | PVID |
