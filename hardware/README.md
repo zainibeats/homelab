@@ -104,28 +104,7 @@ Central SSH host that broadcasts magic packets from any machine on the network.
 ### Rack‑mount Compute Node
 
 - Powered on via Wake‑on‑LAN.  
-- Automatic shutdown when no VMs or containers are running (NOT )
-
-1. Create the idle‑shutdown script:
-    ```bash
-    ## /usr/local/sbin/pve-idle-shutdown.sh
-    #!/bin/bash
-
-    RUNNING_VMS=$(qm list | grep -w running)
-    RUNNING_CTS=$(pct list | grep -w running)
-
-    if [[ -z "$RUNNING_VMS" && -z "$RUNNING_CTS" ]]; then
-    /sbin/shutdown -h now
-    fi
-    ```
-2. Make it executable:
-    ```bash
-    chmod +x /usr/local/sbin/pve-idle-shutdown.sh
-    ```
-3. Schedule the script to run every 30 minutes via cron:
-    ```cron
-    */30 * * * * /usr/local/sbin/pve-idle-shutdown.sh
-    ```
+- Currently powered off manually via ssh or Proxmox web ui
 
 ### Utility Node
 
