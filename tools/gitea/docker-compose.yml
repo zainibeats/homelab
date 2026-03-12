@@ -7,8 +7,8 @@ services:
     image: docker.gitea.com/gitea:1.25.4
     container_name: gitea
     environment:
-      - USER_UID=1000
-      - USER_GID=3001
+      - USER_UID=1010
+      - USER_GID=1010
       - GITEA__database__DB_TYPE=mysql
       - GITEA__database__HOST=db:3306
       - GITEA__database__NAME=$GITEA__database__NAME
@@ -33,8 +33,8 @@ services:
     container_name: gitea-db
     env_file: .env
     environment:
-      - USER_UID=1000
-      - USER_GID=3001
+      - USER_UID=1010
+      - USER_GID=1010
       - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
       - MYSQL_USER=$MYSQL_USER
       - MYSQL_PASSWORD=$MYSQL_PASSWORD
