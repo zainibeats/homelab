@@ -22,10 +22,6 @@ This directory contains various utility services that enhance the homelab functi
 - **[Ollama + Open WebUI AWS Deployment](./ollama-aws-hybrid/README.md)** - Hybrid deployment of a local Ollama instance exposed to Open WebUI on an AWS EC2 instance via a Gluetun WireGuard tunnel.
 - **[Ollama + Open WebUI](./ollama-openwebui/README.md)** - Run large language models locally with Ollama and interact with them through a user-friendly web interface
 
-### Design & Planning
-
-- **[Draw.io](./drawio/README.md)** - Self-hosted diagramming application for creating flowcharts, network diagrams, UML diagrams, and more
-
 ### Secret Sharing
 
 - **[Yopass](./yopass/README.md)** - Secure, self‑hosted secret‑sharing platform that encrypts data client‑side, stores it temporarily in Memcached, and returns a one‑time URL that expires automatically
