@@ -15,7 +15,7 @@ This directory contains various utility services that enhance the homelab functi
 
 ### Dashboard
 
-- **[homepage](./homepage/README.md)** - Highly‑customizable dashboard that aggregates over 100 service APIs, runs in Docker, and serves a static web UI on port 3000 inside the container
+- **[Homepage](./homepage/README.md)** - Highly‑customizable dashboard that aggregates over 100 service APIs, runs in Docker, and serves a static web UI on port 3000 inside the container
 
 ### AI & Machine Learning
 
