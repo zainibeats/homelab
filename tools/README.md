@@ -11,7 +11,11 @@ This directory contains various utility services that enhance the homelab functi
 
 ### Version Control
 
-- **[Gitea](./gitea/README.md)** - Github alternative
+- **[Gitea](./gitea/README.md)** - Lightweight, self‑hosted Git service offering a web UI, SSH, REST API, package registry, and CI/CD, all packaged in a single Docker container
+
+### Dashboard
+
+- **[homepage](./homepage/README.md)** - Highly‑customizable dashboard that aggregates over 100 service APIs, runs in Docker, and serves a static web UI on port 3000 inside the container
 
 ### AI & Machine Learning
 
@@ -24,4 +28,4 @@ This directory contains various utility services that enhance the homelab functi
 
 ### Secret Sharing
 
-- **[Yopass](./yopass/README.md)** - Password and secret sharing platform
+- **[Yopass](./yopass/README.md)** - Secure, self‑hosted secret‑sharing platform that encrypts data client‑side, stores it temporarily in Memcached, and returns a one‑time URL that expires automatically
