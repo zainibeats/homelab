@@ -20,7 +20,6 @@ services:
       - 6881:6881 # qbittorrent torrent port
       - 6789:6789 # nzbget
       - 9696:9696 # prowlarr
-      # - 3001:3001 # firefox
     volumes:
       - ./gluetun:/gluetun
     env_file:
@@ -183,21 +182,6 @@ services:
       servarrnetwork:
         ipv4_address: 172.69.0.6
 
-  homarr:
-    container_name: homarr
-    image: ghcr.io/homarr-labs/homarr:latest
-    restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
-      - ./homarr/appdata:/appdata # Homarr settings and widget data
-    environment:
-      - SECRET_ENCRYPTION_KEY=<KEY> # Generate via 'openssl rand -hex 32'
-    ports:
-      - 7575:7575 # Homarr Web UI
-    networks:
-      servarrnetwork:
-        ipv4_address: 172.69.0.7
-
   jellyseerr:
     container_name: jellyseerr
     image: fallenbagel/jellyseerr:latest
@@ -213,38 +197,3 @@ services:
       servarrnetwork:
         ipv4_address: 172.69.0.8
     restart: unless-stopped
-
-  # readarr:
-  # image: lscr.io/linuxserver/readarr:develop
-  # container_name: readarr
-  # restart: unless-stopped
-  # environment:
-  # - PUID=1000
-  # - PGID=1000
-  # - TZ=${TZ}
-  # volumes:
-  # - ./readarr:/config
-  # - /mnt/WD-ExtHDD/Jellyfin:/data
-  # - /mnt/truenas_data/jellyfin_data:/data
-  # ports:
-  # - 8787:8787
-  # networks:
-  # servarrnetwork:
-  # ipv4_address: 172.69.0.5
-
-  # firefox:
-  # image: lscr.io/linuxserver/firefox:latest
-  # container_name: firefox
-  # network_mode: "service:gluetun"
-  # depends_on:
-  # - gluetun
-  # security_opt:
-  # - seccomp:unconfined #optional
-  # environment:
-  # - PUID=1000
-  # - PGID=1000
-  # - TZ=${TZ}
-  # volumes:
-  # - ./firefox:/config
-  # shm_size: "1gb"
-  # restart: unless-stopped

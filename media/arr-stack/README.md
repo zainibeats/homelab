@@ -10,7 +10,7 @@ The "Arr Stack" is a collection of services for managing and automating media do
 - **Download Clients**: qBittorrent (torrents) and NZBGet (Usenet)
 - **Media Management**: Sonarr, Radarr, Lidarr, and Bazarr
 - **Indexer Management**: Prowlarr
-- **Additional Tools**: Firefox browser, Homarr dashboard, and Jellyseerr
+- **Additional Tools**: Jellyseerr
 
 ## Components
 
@@ -24,8 +24,6 @@ The "Arr Stack" is a collection of services for managing and automating media do
 | Radarr | Movie management | 7878 |
 | Lidarr | Music management | 8686 |
 | Bazarr | Subtitle management | 6767 |
-| Firefox | Browser with VPN protection | 3001 |
-| Homarr | Service dashboard | 7575 |
 | Jellyseerr | Media Requesting | 5055 |
 | Deunhealth | Container health monitor | N/A |
 
@@ -163,11 +161,6 @@ docker compose up -d
 - Connect to Sonarr and Radarr
 - Configure subtitle providers
 
-### Homarr
-
-- Access at port 7575
-- Add your services to the dashboard
-
 ### Jellyseerr
 - Connect to Sonarr and Radarr for automatic scanning/downloading upon approval
 
@@ -205,5 +198,4 @@ All service configurations are stored in the respective subdirectories (./sonarr
 ## Security Considerations
 
 - Replace all placeholder values (`<USERNAME>`, `<PASSWORD>`, etc.) with your actual information
-- Generate a secure encryption key for Homarr using `openssl rand -hex 32`
 - Consider changing default ports for additional security
