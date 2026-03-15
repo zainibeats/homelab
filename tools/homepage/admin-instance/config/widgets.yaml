@@ -1,0 +1,19 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/info-widgets/
+
+- resources:
+    cpu: true
+    memory: true
+    disk: /
+
+- search:
+    provider: brave # google, duckduckgo, bing, baidu, brave or custom
+    focus: true # Optional, will set focus to the search bar on page load
+    showSearchSuggestions: false # Optional, will show search suggestions. Defaults to false
+    target: _blank # One of _self, _blank, _parent or _top
+
+- datetime:
+    text_size: xl
+    format:
+      timeStyle: short

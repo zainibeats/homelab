@@ -1,0 +1,153 @@
+- Monitoring:
+    - Grafana:
+        href: https://grafana.zaini.cloud
+        description: Metrics & Visualization
+        icon: grafana.png
+        server: local-docker
+        container: grafana
+- Management:
+    - Portainer:
+        href: https://portainer.zaini.cloud
+        description: Container Management
+        icon: portainer.png
+        siteMonitor: https://172.23.51.30:9443
+    - Nginx Proxy Manager:
+        href: https://nginx.zaini.cloud
+        description: Reverse Proxy Management
+        icon: nginx-proxy-manager.png
+        server: local-docker
+        container: nginxproxymanager
+- Infrastructure:
+    - Truenas Web-UI:
+        href: https://tn.zaini.cloud
+        description: TrueNAS Storage Management
+        icon: truenas-scale.png
+        siteMonitor: http://172.23.51.32:80
+- Tools:
+    - Gitea:
+        href: https://git.zaini.cloud
+        description: Local Git Server
+        icon: gitea.png
+        siteMonitor: http://172.23.51.30:3331
+- Arr Suite:
+    - Prowlarr:
+        href: https://prowlarr.zaini.cloud
+        description: Indexer Manager
+        icon: prowlarr.png
+        siteMonitor: http://172.23.51.30:9696
+    - Radarr:
+        href: https://radarr.zaini.cloud
+        description: Movie Automation
+        icon: radarr.png
+        siteMonitor: http://172.23.51.30:7878
+    - Sonarr:
+        href: https://sonarr.zaini.cloud
+        description: TV Show Automation
+        icon: sonarr.png
+        siteMonitor: http://172.23.51.30:8989
+    - qBittorrent:
+        href: https://qb.zaini.cloud
+        description: Torrent Client
+        icon: qbittorrent.png
+        siteMonitor: http://172.23.51.30:8123
+        widget:
+          type: qbittorrent
+          url: http://172.23.51.30:8123
+          username: "{{HOMEPAGE_VAR_QBIT_USER}}"
+          password: "{{HOMEPAGE_VAR_QBIT_PWD}}"
+- Network:
+    - UDR7 Router:
+        href: https://account.ui.com
+        description: Remote Site Management
+        icon: ubiquiti.png
+        ping: http://192.168.1.1
+- Monitoring (Local):
+    - Grafana:
+        href: http://172.23.20.31:3000
+        description: Metrics & Visualization
+        icon: grafana.png
+        server: local-docker
+        container: grafana
+    - Prometheus:
+        href: http://172.23.20.31:9090
+        description: Systems Monitoring
+        icon: prometheus.png
+        server: local-docker
+        container: prometheus
+- Management (Local):
+    - Portainer:
+        href: https://172.23.51.30:9443
+        description: Container Management
+        icon: portainer.png
+        siteMonitor: https://172.23.51.30:9443
+    - Nginx Proxy Manager:
+        href: http://172.23.20.31:81
+        description: Reverse Proxy Management
+        icon: nginx-proxy-manager.png
+        server: local-docker
+        container: nginxproxymanager
+- Infrastructure (Local):
+    - Truenas Web-UI:
+        href: https://172.23.51.32
+        description: TrueNAS Storage Management
+        icon: truenas-scale.png
+        siteMonitor: http://172.23.51.32:80
+    - Supermicro IPMI Web-UI:
+        href: http://172.23.20.32
+        description: Server Remote Management
+        icon: supermicro.png
+        ping: http://172.23.20.32
+- IoT and SmartHome:
+    - Home Assistant:
+        href: http://172.23.20.31:8123
+        description: Home Automation
+        icon: home-assistant.png
+        server: local-docker
+        container: homeassistant
+- Arr Suite (Local):
+    - Prowlarr:
+        href: http://172.23.51.30:9696
+        description: Indexer Manager
+        icon: prowlarr.png
+        siteMonitor: http://172.23.51.30:9696
+    - Bazarr:
+        href: http://172.23.51.30:6767
+        description: Subtitle Management
+        icon: bazarr.png
+        siteMonitor: http://172.23.51.30:6767
+    - Radarr:
+        href: http://172.23.51.30:7878
+        description: Movie Automation
+        icon: radarr.png
+        siteMonitor: http://172.23.51.30:7878
+    - Sonarr:
+        href: http://172.23.51.30:8989
+        description: TV Show Automation
+        icon: sonarr.png
+        siteMonitor: http://172.23.51.30:8989
+    - qBittorrent:
+        href: http://172.23.51.30:8123
+        description: Torrent Client
+        icon: qbittorrent.png
+        siteMonitor: http://172.23.51.30:8123
+        widget:
+          type: qbittorrent
+          url: http://172.23.51.30:8123
+          username: "{{HOMEPAGE_VAR_QBIT_USER}}"
+          password: "{{HOMEPAGE_VAR_QBIT_PWD}}"
+- Network (Local):
+    - UDR7 Router:
+        href: https://192.168.1.1
+        description: Router Management
+        icon: ubiquiti.png
+        ping: http://192.168.1.1
+    - Sx3008F Switch:
+        href: https://172.23.20.10
+        description: Homelab Switch Management
+        icon: tp-link.png
+        ping: http://172.23.20.10
+    - Pi-hole:
+        href: https://172.23.20.31:4438/admin/login
+        description: Ad Blocker
+        icon: pi-hole.png
+        siteMonitor: https://172.23.20.31:4438

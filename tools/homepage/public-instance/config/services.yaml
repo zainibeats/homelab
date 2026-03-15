@@ -1,0 +1,73 @@
+- Media:
+    - Jellyfin:
+        href: https://jellyfin.zaini.cloud
+        description: Media Streaming Server
+        icon: jellyfin.png
+        siteMonitor: http://172.23.51.30:8096
+    - Jellyseerr:
+        href: https://jellyseerr.zaini.cloud
+        description: Media Request Management
+        icon: jellyseerr.png
+        siteMonitor: http://172.23.51.30:5055
+- Storage and Backups:
+    - Nextcloud:
+        href: https://nextcloud.zaini.cloud
+        description: File Sync & Share
+        icon: nextcloud.png
+        siteMonitor: http://172.23.51.30:8080
+    - Immich:
+        href: https://immich.zaini.cloud
+        description: Photo & Video Backup
+        icon: immich.png
+        siteMonitor: http://172.23.51.30:2283
+    - Vaultwarden:
+        href: https://vaultwarden.zaini.cloud
+        description: Password Manager
+        icon: vaultwarden.png
+        siteMonitor: http://172.23.51.30:8088
+- Tools:
+    - ConvertX:
+        href: https://convertx.zaini.cloud
+        description: File Conversion
+        icon: convertx.png
+        siteMonitor: http://172.23.51.30:3000
+    - Yopass:
+        href: https://yopass.zaini.cloud
+        description: Secret sharing
+        icon: yopass.png
+        siteMonitor: http://172.23.51.30:8889
+- Media (Local):
+    - Jellyfin:
+        href: http://172.23.51.30:8096
+        description: Media Streaming Server
+        icon: jellyfin.png
+        siteMonitor: http://172.23.51.30:8096
+    - Jellyseerr:
+        href: http://172.23.51.30:5055
+        description: Media Request Management
+        icon: jellyseerr.png
+        siteMonitor: http://172.23.51.30:5055
+- Storage and Backups (Local):
+    - Immich:
+        href: http://172.23.51.30:2283
+        description: Photo & Video Backup
+        icon: immich.png
+        siteMonitor: http://172.23.51.30:2283
+- Stocks:
+    - Watchlist:
+        widget:
+          type: stocks
+          provider: finnhub
+          cache: 15
+          hideErrors: true
+          watchlist:
+            - VOO
+            - VXUS
+            - IBIT
+            - GOOG
+            - NVDA
+            - AMZN
+            - MSFT
+            - PLTR
+            - JPM
+            - XOM

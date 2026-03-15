@@ -1,0 +1,90 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/settings/
+
+title: Zaini.cloud Admin Dashboard
+headerStyle: boxed
+theme: dark
+hideVersion: true
+instanceName: admin
+
+background:
+  image: https://images.unsplash.com/photo-1637825891028-564f672aa42c
+  blur: xl
+  brightness: 90
+  opacity: 60
+
+cardBlur: sm
+
+layout:
+  Monitoring:
+    style: column
+    rows: 2
+    tab: Home
+    icon: mdi-list-status-#FFFFFF
+
+  Management:
+    style: column
+    rows: 2
+    tab: Home
+    icon: mdi-auto-fix-#FFFFFF
+
+  Infrastructure:
+    style: column
+    rows: 2
+    tab: Home
+    icon: mdi-server-#FFFFFF
+
+  Tools:
+    style: column
+    rows: 2
+    tab: Home
+    icon: mdi-tools-#FFFFFF
+
+  Network:
+    style: row
+    columns: 3
+    tab: Home
+    icon: mdi-network-#FFFFFF
+
+  Arr Suite:
+    style: row
+    columns: 1
+    tab: Home
+    icon: mdi-sail-boat-#FFFFFF
+
+  Monitoring (Local):
+    style: column
+    rows: 2
+    tab: Local
+    icon: mdi-list-status-#FFFFFF
+
+  Management (Local):
+    style: column
+    rows: 2
+    tab: Local
+    icon: mdi-auto-fix-#FFFFFF
+
+  Infrastructure (Local):
+    style: column
+    rows: 2
+    tab: Local
+    icon: mdi-server-#FFFFFF
+
+  IoT and SmartHome:
+    style: column
+    rows: 2
+    tab: Local
+    icon: mdi-home-automation-#FFFFFF
+
+  Network (Local):
+    style: row
+    columns: 3
+    tab: Local
+    icon: mdi-network-#FFFFFF
+
+  Arr Suite (Local):
+    style: row
+    columns: 1
+    tab: Local
+    icon: mdi-sail-boat-#FFFFFF

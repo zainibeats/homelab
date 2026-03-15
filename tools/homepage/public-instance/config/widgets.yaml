@@ -1,0 +1,29 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/info-widgets/
+
+- datetime:
+    text_size: xl
+    format:
+      timeStyle: short
+
+- search:
+    provider: brave # google, duckduckgo, bing, baidu, brave or custom
+    focus: true # Optional, will set focus to the search bar on page load
+    showSearchSuggestions: true # Optional, will show search suggestions. Defaults to false
+    target: _blank # One of _self, _blank, _parent or _top
+
+- openweathermap:
+    label: "{{HOMEPAGE_VAR_OWM_LABEL}}" #optional
+    latitude: "{{HOMEPAGE_VAR_OWM_LAT}}"
+    longitude: "{{HOMEPAGE_VAR_OWM_LONG}}"
+    units: imperial # or imperial
+    provider: openweathermap
+    apiKey: "{{HOMEPAGE_VAR_OWM_KEY}}" # required only if not using provider, this reveals api key in requests
+    cache: 10 # Time in minutes to cache API responses, to stay within limits
+    format: # optional, Intl.NumberFormat options
+      maximumFractionDigits: 1
+
+- greeting:
+    text_size: x4
+    text: Welcome to Zaini.Cloud

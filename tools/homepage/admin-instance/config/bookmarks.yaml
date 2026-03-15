@@ -1,0 +1,8 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/bookmarks
+- Repos:
+    - Homelab:
+        - href: https://github.com/zainibeats/homelab
+          icon: github.png
+          description: https://github.com/zainibeats/homelab
