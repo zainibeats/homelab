@@ -97,6 +97,17 @@
         description: Server Remote Management
         icon: supermicro.png
         ping: http://172.23.20.32
+- Tools (Local):
+    - Syncthing - TrueNAS:
+        href: http://172.23.51.32:8384
+        description: File Sync
+        icon: syncthing.png
+        siteMonitor: http://172.23.51.32:8384
+    - Syncthing - Desktop:
+        href: http://172.23.51.35:8384
+        description: File Sync
+        icon: syncthing.png
+        siteMonitor: http://172.23.51.35:8384
 - IoT and SmartHome:
     - Home Assistant:
         href: http://172.23.20.31:8123

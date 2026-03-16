@@ -71,6 +71,12 @@ layout:
     tab: Local
     icon: mdi-server-#FFFFFF
 
+  Tools (Local):
+    style: column
+    rows: 2
+    tab: Local
+    icon: mdi-tools-#FFFFFF
+
   IoT and SmartHome:
     style: column
     rows: 2
