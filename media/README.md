@@ -15,12 +15,9 @@ This directory contains services for managing, streaming, and requesting media c
   - **NZBGet** - Usenet download client (VPN-protected)
   - **Gluetun** - VPN client for securing download traffic
   - **Jellyseerr** - Media request management and discovery
-  - **Homarr** - Service dashboard
-  - **Firefox** - Browser with VPN protection
 
 ### Media Streaming
 - **[Jellyfin](./jellyfin/README.md)** - Self-hosted media server for streaming movies, TV shows, music, and more
-- **[Neko](./neko/README.md)** - Virtual browser with VPN integration for watch parties, remote access, collaborative browsing, etc.
 
 ## Common Considerations
 
