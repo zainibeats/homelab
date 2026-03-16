@@ -36,6 +36,11 @@
         description: Secret sharing
         icon: yopass.png
         siteMonitor: http://172.23.51.30:8889
+    - Neko:
+        href: https://neko.zaini.cloud
+        description: Virtual Browser
+        icon: neko.png
+        siteMonitor: http://172.23.51.30:8880
 - Media (Local):
     - Jellyfin:
         href: http://172.23.51.30:8096
@@ -53,6 +58,12 @@
         description: Photo & Video Backup
         icon: immich.png
         siteMonitor: http://172.23.51.30:2283
+- Tools (Local):
+    - Neko:
+        href: http://172.23.51.30:8880
+        description: Virtual Browser
+        icon: neko.png
+        siteMonitor: http://172.23.51.30:8880
 - Stocks:
     - Watchlist:
         widget:

@@ -1,7 +1,6 @@
 ---
 # For configuration options and examples, please see:
 # https://gethomepage.dev/configs/settings/
-
 title: Zaini.cloud
 headerStyle: boxed
 theme: dark
@@ -51,6 +50,12 @@ layout:
     rows: 3
     tab: Local
     icon: mdi-cloud-upload-#FFFFFF
+
+  Tools (Local):
+    style: column
+    rows: 2
+    tab: Local
+    icon: mdi-tools-#FFFFFF
 
   Stocks:
     icon: mdi-finance-#FFFFFF
