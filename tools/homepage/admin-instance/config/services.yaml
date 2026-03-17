@@ -1,10 +1,3 @@
-- Monitoring:
-    - Grafana:
-        href: https://grafana.zaini.cloud
-        description: Metrics & Visualization
-        icon: grafana.png
-        server: local-docker
-        container: grafana
 - Management:
     - Portainer:
         href: https://portainer.zaini.cloud
@@ -55,25 +48,26 @@
           url: http://172.23.51.30:8123
           username: "{{HOMEPAGE_VAR_QBIT_USER}}"
           password: "{{HOMEPAGE_VAR_QBIT_PWD}}"
+- Monitoring:
+    - Grafana:
+        href: https://grafana.zaini.cloud
+        description: Metrics & Visualization
+        icon: grafana.png
+        server: local-docker
+        container: grafana
+    - Self-Hosted Apps:
+        icon: uptime-kuma.png
+        widget:
+          type: uptimekuma
+          url: http://172.23.20.31:3001
+          slug: apps
 - Network:
     - UDR7 Router:
         href: https://account.ui.com
         description: Remote Site Management
         icon: ubiquiti.png
         ping: http://192.168.1.1
-- Monitoring (Local):
-    - Grafana:
-        href: http://172.23.20.31:3000
-        description: Metrics & Visualization
-        icon: grafana.png
-        server: local-docker
-        container: grafana
-    - Prometheus:
-        href: http://172.23.20.31:9090
-        description: Systems Monitoring
-        icon: prometheus.png
-        server: local-docker
-        container: prometheus
+
 - Management (Local):
     - Portainer:
         href: https://172.23.51.30:9443
@@ -146,6 +140,25 @@
           url: http://172.23.51.30:8123
           username: "{{HOMEPAGE_VAR_QBIT_USER}}"
           password: "{{HOMEPAGE_VAR_QBIT_PWD}}"
+- Monitoring (Local):
+    - Grafana:
+        href: http://172.23.20.31:3000
+        description: Metrics & Visualization
+        icon: grafana.png
+        server: local-docker
+        container: grafana
+    - Prometheus:
+        href: http://172.23.20.31:9090
+        description: Systems Monitoring
+        icon: prometheus.png
+        server: local-docker
+        container: prometheus
+    - Self-Hosted Apps:
+        icon: uptime-kuma.png
+        widget:
+          type: uptimekuma
+          url: http://172.23.20.31:3001
+          slug: apps
 - Network (Local):
     - UDR7 Router:
         href: https://192.168.1.1

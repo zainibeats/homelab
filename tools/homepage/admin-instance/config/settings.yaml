@@ -17,12 +17,6 @@ background:
 cardBlur: sm
 
 layout:
-  Monitoring:
-    style: column
-    rows: 2
-    tab: Home
-    icon: mdi-list-status-#FFFFFF
-
   Management:
     style: column
     rows: 2
@@ -41,23 +35,23 @@ layout:
     tab: Home
     icon: mdi-tools-#FFFFFF
 
+  Monitoring:
+    style: row
+    columns: 1
+    tab: Home
+    icon: mdi-hospital-box-#FFFFFF
+
   Network:
     style: row
-    columns: 3
+    columns: 1
     tab: Home
-    icon: mdi-network-#FFFFFF
+    icon: mdi-lan-#FFFFFF
 
   Arr Suite:
     style: row
     columns: 1
     tab: Home
-    icon: mdi-sail-boat-#FFFFFF
-
-  Monitoring (Local):
-    style: column
-    rows: 2
-    tab: Local
-    icon: mdi-list-status-#FFFFFF
+    icon: mdi-pirate-#FFFFFF
 
   Management (Local):
     style: column
@@ -83,14 +77,20 @@ layout:
     tab: Local
     icon: mdi-home-automation-#FFFFFF
 
+  Monitoring (Local):
+    style: row
+    columns: 2
+    tab: Local
+    icon: mdi-hospital-box-#FFFFFF
+
   Network (Local):
     style: row
     columns: 3
     tab: Local
-    icon: mdi-network-#FFFFFF
+    icon: mdi-lan-#FFFFFF
 
   Arr Suite (Local):
     style: row
     columns: 1
     tab: Local
-    icon: mdi-sail-boat-#FFFFFF
+    icon: mdi-pirate-#FFFFFF

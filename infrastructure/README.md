@@ -13,3 +13,4 @@ This directory contains infrastructure services that handle networking, remote a
 
 ### Monitoring
 - **[Monitoring](./monitoring/README.md)** - Complete monitoring stack including Prometheus, Grafana, Node Exporter, and cAdvisor for system and container monitoring
+- **[Uptime Kuma](./uptime-kuma/README.md)** - Self-hosted monitoring tool designed to track the uptime and performance
