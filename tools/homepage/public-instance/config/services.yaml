@@ -4,10 +4,10 @@
         description: Media Streaming Server
         icon: jellyfin.png
         siteMonitor: http://172.23.51.30:8096
-    - Jellyseerr:
-        href: https://jellyseerr.zaini.cloud
+    - Seerr:
+        href: https://seerr.zaini.cloud
         description: Media Request Management
-        icon: jellyseerr.png
+        icon: seerr.png
         siteMonitor: http://172.23.51.30:5055
 - Storage and Backups:
     - Nextcloud:
@@ -47,10 +47,10 @@
         description: Media Streaming Server
         icon: jellyfin.png
         siteMonitor: http://172.23.51.30:8096
-    - Jellyseerr:
+    - Seerr:
         href: http://172.23.51.30:5055
         description: Media Request Management
-        icon: jellyseerr.png
+        icon: seerr.png
         siteMonitor: http://172.23.51.30:5055
 - Storage and Backups (Local):
     - Immich:
