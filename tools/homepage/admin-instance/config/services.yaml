@@ -55,8 +55,12 @@
         icon: grafana.png
         server: local-docker
         container: grafana
-    - Self-Hosted Apps:
+    - Uptime Kuma:
+        href: https://uptime.zaini.cloud
+        description: Uptime Monitoring
         icon: uptime-kuma.png
+        server: local-docker
+        container: uptime-kuma
         widget:
           type: uptimekuma
           url: http://172.23.20.31:3001
@@ -153,8 +157,12 @@
         icon: prometheus.png
         server: local-docker
         container: prometheus
-    - Self-Hosted Apps:
+    - Uptime Kuma:
+        href: http://172.23.20.31:3001
+        description: Uptime Monitoring
         icon: uptime-kuma.png
+        server: local-docker
+        container: uptime-kuma
         widget:
           type: uptimekuma
           url: http://172.23.20.31:3001
