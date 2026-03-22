@@ -85,6 +85,11 @@
         server: local-docker
         container: nginxproxymanager
 - Infrastructure (Local):
+    - Proxmox VE:
+        href: https://172.23.51.34:8006
+        description: Virtualization Platform
+        icon: proxmox.png
+        siteMonitor: https://172.23.51.34:8006
     - Truenas Web-UI:
         href: https://172.23.51.32
         description: TrueNAS Storage Management
