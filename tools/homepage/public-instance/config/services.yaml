@@ -31,6 +31,11 @@
         description: File Conversion
         icon: convertx.png
         siteMonitor: http://172.23.51.30:3000
+    - IT-Tools:
+        href: https://it-tools.zaini.cloud
+        description: Various Handy Tools
+        icon: it-tools.png
+        siteMonitor: http://172.23.51.30:8881
     - Yopass:
         href: https://yopass.zaini.cloud
         description: Secret sharing
@@ -59,6 +64,11 @@
         icon: immich.png
         siteMonitor: http://172.23.51.30:2283
 - Tools (Local):
+    - IT-Tools:
+        href: http://172.23.51.30:8881
+        description: Various Handy Tools
+        icon: it-tools.png
+        siteMonitor: http://172.23.51.30:8881
     - Neko:
         href: http://172.23.51.30:8880
         description: Virtual Browser
