@@ -12,6 +12,11 @@ This directory contains services focused on data storage, backup, and security f
 
 - **[Nextcloud](./nextcloud/README.md)** - Comprehensive self-hosted file sync and share platform
 
+### File Sync
+
+- **[Syncthing](./syncthing/README.md)** - Continuous file synchronization program that synchronizes files between two or more computers in real time
+
+
 ### Password Management
 
 - **[Vaultwarden](./vaultwarden/README.md)** - Lightweight self-hosted password manager compatible with Bitwarden clients
@@ -29,4 +34,3 @@ Services are configured to use NFS/SMB mounts from TrueNAS:
 - **NFS Shares**: For example Nextcloud (`/mnt/nfs/family/nextcloud`)
 - **SMB Shares**: For Immich and other services requiring Windows compatibility
 - Automatic mounting via `/etc/fstab`
-

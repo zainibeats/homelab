@@ -4,10 +4,9 @@ This directory contains various utility services that enhance the homelab functi
 
 ## Services Overview
 
-### File operations
+### File Conversion
 
 - **[ConvertX](./convertx/README.md)** - Simple file conversion service with a web interface for converting between various file formats
-- **[Syncthing](./syncthing/README.md)** - Continuous file synchronization program that synchronizes files between two or more computers in real time
 
 ### Version Control
 

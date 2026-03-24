@@ -20,7 +20,7 @@ Services are organized into logical categories for easier management and navigat
 - **[Infrastructure](./infrastructure/README.md)** - Networking, monitoring, proxy, and remote access services
 - **[Media](./media/README.md)** - Media automation, management, and streaming services
 - **[Storage](./storage/README.md)** - Data storage, backup, and security services
-- **[Tools](./tools/README.md)** - Utility services including secret sharing, file sync, local AI, and more
+- **[Tools](./tools/README.md)** - Utility services including secret sharing, file conversion, local AI, and more
 
 ## Storage Configuration
 
