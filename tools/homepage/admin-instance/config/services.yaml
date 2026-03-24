@@ -8,8 +8,7 @@
         href: https://nginx.zaini.cloud
         description: Reverse Proxy Management
         icon: nginx-proxy-manager.png
-        server: local-docker
-        container: nginxproxymanager
+        siteMonitor: http://172.23.20.31:81
 - Infrastructure:
     - Truenas Web-UI:
         href: https://tn.zaini.cloud
@@ -53,14 +52,12 @@
         href: https://grafana.zaini.cloud
         description: Metrics & Visualization
         icon: grafana.png
-        server: local-docker
-        container: grafana
+        siteMonitor: http://172.23.20.31:3000
     - Uptime Kuma:
         href: https://uptime.zaini.cloud
         description: Uptime Monitoring
         icon: uptime-kuma.png
-        server: local-docker
-        container: uptime-kuma
+        siteMonitor: http://172.23.20.31:3001
         widget:
           type: uptimekuma
           url: http://172.23.20.31:3001
@@ -82,8 +79,7 @@
         href: http://172.23.20.31:81
         description: Reverse Proxy Management
         icon: nginx-proxy-manager.png
-        server: local-docker
-        container: nginxproxymanager
+        siteMonitor: http://172.23.20.31:81
 - Infrastructure (Local):
     - Proxmox VE:
         href: https://172.23.51.34:8006
@@ -116,8 +112,7 @@
         href: http://172.23.20.31:8123
         description: Home Automation
         icon: home-assistant.png
-        server: local-docker
-        container: homeassistant
+        siteMonitor: http://172.23.20.31:8123
 - Arr Suite (Local):
     - Prowlarr:
         href: http://172.23.51.30:9696
@@ -154,20 +149,17 @@
         href: http://172.23.20.31:3000
         description: Metrics & Visualization
         icon: grafana.png
-        server: local-docker
-        container: grafana
+        siteMonitor: http://172.23.20.31:3000
     - Prometheus:
         href: http://172.23.20.31:9090
         description: Systems Monitoring
         icon: prometheus.png
-        server: local-docker
-        container: prometheus
+        siteMonitor: http://172.23.20.31:9090
     - Uptime Kuma:
         href: http://172.23.20.31:3001
         description: Uptime Monitoring
         icon: uptime-kuma.png
-        server: local-docker
-        container: uptime-kuma
+        siteMonitor: http://172.23.20.31:3001
         widget:
           type: uptimekuma
           url: http://172.23.20.31:3001
