@@ -1,0 +1,121 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    restart: unless-stopped
+    container_name: gluetun-invidious
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    networks:
+      invidious-net:
+        ipv4_address: 172.172.0.2
+    ports:
+      - "3080:3000" # Invidious web interface
+    volumes:
+      - ./gluetun:/gluetun
+    env_file:
+      - .env
+    healthcheck:
+      test: ping -c 1 www.mullvad.net || exit 1
+      interval: 20s
+      timeout: 10s
+      retries: 5
+
+  invidious:
+    image: quay.io/invidious/invidious:latest
+    restart: unless-stopped
+    network_mode: "service:gluetun"
+    container_name: invidious
+    depends_on:
+      invidious-db:
+        condition: service_healthy
+      gluetun:
+        condition: service_healthy
+    environment:
+      INVIDIOUS_CONFIG: |
+        db:
+          dbname: invidious
+          user: ${POSTGRES_USER}
+          password: ${POSTGRES_PASSWORD}
+          host: 127.0.0.1
+          port: 5432
+        check_tables: true
+        invidious_companion:
+        - private_url: "http://127.0.0.1:8282/companion"
+        invidious_companion_key: "${COMPANION_KEY}"
+        # external_port:
+        # domain:
+        # https_only: false
+        # statistics_enabled: false
+        hmac_key: "${HMAC_KEY}"
+    healthcheck:
+      test: wget -nv --tries=1 --spider http://127.0.0.1:3000/api/v1/stats || exit 1
+      interval: 30s
+      timeout: 5s
+      retries: 2
+    logging:
+      options:
+        max-size: "1G"
+        max-file: "4"
+
+  companion:
+    image: quay.io/invidious/invidious-companion:latest
+    restart: unless-stopped
+    network_mode: "service:gluetun"
+    container_name: invidious-companion
+    depends_on:
+      gluetun:
+        condition: service_healthy
+    environment:
+       - SERVER_SECRET_KEY=${COMPANION_KEY}
+    # Uncomment only if you have configured "public_url" for Invidious companion
+    # Or if you want to use Invidious companion as an API in your program.
+    # Remove "127.0.0.1:" if used from an external IP
+    #ports:
+    #  - "127.0.0.1:8282:8282"
+    logging:
+      options:
+        max-size: "1G"
+        max-file: "4"
+    cap_drop:
+      - ALL
+    read_only: true
+    # cache for youtube library
+    volumes:
+      - companioncache:/var/tmp/youtubei.js:rw
+    security_opt:
+      - no-new-privileges:true
+
+  invidious-db:
+    image: docker.io/library/postgres:14
+    restart: unless-stopped
+    network_mode: "service:gluetun"
+    container_name: invidious-db
+    depends_on:
+      gluetun:
+        condition: service_healthy
+    volumes:
+      - postgresdata:/var/lib/postgresql/data
+      - ./config/sql:/config/sql
+      - ./docker/init-invidious-db.sh:/docker-entrypoint-initdb.d/init-invidious-db.sh
+    environment:
+      POSTGRES_DB: invidious
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  invidious-net:
+    name: invidious-net
+    ipam:
+      config:
+        - subnet: 172.172.0.0/24
+
+volumes:
+  postgresdata:
+  companioncache:
