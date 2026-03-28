@@ -18,6 +18,7 @@ This directory contains services for managing, streaming, and requesting media c
 
 ### Media Streaming
 - **[Jellyfin](./jellyfin/README.md)** - Self-hosted media server for streaming movies, TV shows, music, and more
+- **[Invidious](./invidious/README.md)** - Privacy-focused alternative YouTube frontend, routed through a VPN via Gluetun
 
 ## Common Considerations
 
