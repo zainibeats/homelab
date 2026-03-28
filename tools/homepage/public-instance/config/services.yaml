@@ -9,6 +9,11 @@
         description: Media Request Management
         icon: seerr.png
         siteMonitor: http://172.23.51.30:5055
+    - Invidious:
+        href: https://invidious.zaini.cloud
+        description: Custom Youtube Frontend
+        icon: invidious.png
+        siteMonitor: http://172.23.51.30:3080
 - Storage and Backups:
     - Nextcloud:
         href: https://nextcloud.zaini.cloud
@@ -57,6 +62,11 @@
         description: Media Request Management
         icon: seerr.png
         siteMonitor: http://172.23.51.30:5055
+    - Invidious:
+        href: http://172.23.51.30:3080
+        description: Custom Youtube Frontend
+        icon: invidious.png
+        siteMonitor: http://172.23.51.30:3080
 - Storage and Backups (Local):
     - Immich:
         href: http://172.23.51.30:2283

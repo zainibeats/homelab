@@ -113,6 +113,11 @@
         description: Home Automation
         icon: home-assistant.png
         siteMonitor: http://172.23.20.31:8123
+    - SLZB Web UI:
+        href: http://172.23.60.25:80
+        description: Zigbee Coordinator
+        icon: sh-zigbee
+        siteMonitor: http://172.23.60.25:80
 - Arr Suite (Local):
     - Prowlarr:
         href: http://172.23.51.30:9696
@@ -175,6 +180,11 @@
         description: Homelab Switch Management
         icon: tp-link.png
         ping: http://172.23.20.10
+    - TP-Link Archer AP:
+        href: https://172.23.20.20:443
+        description: Access Point Management
+        icon: tp-link.png
+        siteMonitor: https://172.23.20.20:443
     - Pi-hole:
         href: https://172.23.20.31:4438/admin/login
         description: Ad Blocker
