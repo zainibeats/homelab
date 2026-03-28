@@ -15,12 +15,14 @@ This repository contains configuration files and documentation for my homelab se
 ## Project Organization
 
 Services are organized into logical categories for easier management and navigation:
-- **[Automation](./automation/README.md)** - Home and Docker container automation
-- **[Gaming](./gaming/minecraft-servers/README.md)** - Directory for gaming services, currently hosting only Minecraft servers
-- **[Infrastructure](./infrastructure/README.md)** - Networking, monitoring, proxy, and remote access services
+- **[AI](./ai/README.md)** - Local LLM inference and AI tooling
+- **[Automation](./automation/README.md)** - Home automation and smart device management
+- **[Development](./development/README.md)** - Self-hosted development tools and version control
+- **[Gaming](./gaming/minecraft-servers/README.md)** - Game servers, currently Minecraft
+- **[Infrastructure](./infrastructure/README.md)** - Networking, proxy, VPN, monitoring, dashboards, and container management
 - **[Media](./media/README.md)** - Media automation, management, and streaming services
 - **[Storage](./storage/README.md)** - Data storage, backup, and security services
-- **[Tools](./tools/README.md)** - Utility services including secret sharing, file conversion, local AI, and more
+- **[Utilities](./utilities/README.md)** - General-purpose tools including file conversion, IT utilities, and secret sharing
 
 ## Storage Configuration
 
@@ -62,4 +64,4 @@ This homelab is designed with modularity in mind:
 
 Utilizing **Watchtower** for automatic Docker container updates.
 
-I've configured it to run daily at 5:00 AM to minimize disruption during peak usage hours. See the [Watchtower documentation](./automation/watchtower/README.md) for configuration details and usage instructions.
+I've configured it to run daily at 5:00 AM to minimize disruption during peak usage hours. See the [Watchtower documentation](./infrastructure/watchtower/README.md) for configuration details and usage instructions.

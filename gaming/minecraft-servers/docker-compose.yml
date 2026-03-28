@@ -11,7 +11,7 @@ services:
       EULA: "TRUE"
       # VERSION: ${MINECRAFT_VERSION:-LATEST}
       TYPE: "AUTO_CURSEFORGE"
-      CF_API_KEY: "YOUR_CF_API_KEY"
+      CF_API_KEY: ${CF_API_KEY}
       CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/essential-perfected-fabric"
 
       # --- EXTRA MODS ---

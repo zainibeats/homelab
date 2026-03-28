@@ -8,7 +8,7 @@ services:
       - "3000:8080" ## Or "8080:8080" if you prefer
     environment:
       - "OLLAMA_BASE_URL=http://ollama:11434" ## Points to the ollama service below
-      - "WEBUI_SECRET_KEY=" ## Optional: Change for production
+      - "WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}"
     depends_on:
       - ollama
     restart: unless-stopped

@@ -1,6 +1,6 @@
 # Infrastructure Services
 
-This directory contains infrastructure services that handle networking, remote access, monitoring, and proxy management for the homelab.
+This directory contains infrastructure services that handle networking, remote access, monitoring, dashboards, and proxy management for the homelab.
 
 ## Services Overview
 
@@ -9,8 +9,15 @@ This directory contains infrastructure services that handle networking, remote a
 
 ### Remote Access
 - **[Guacamole](./guacamole/README.md)** - Clientless remote desktop gateway supporting VNC, RDP, and SSH protocols with web-based access
-- **[Wireguard](./wireguard/README.md)** - Wireguard VPN for secure remote access to homelab and services
+- **[Neko](./neko/README.md)** - Virtual browser with VPN integration for watch parties, remote access, and collaborative browsing
+- **[Wireguard](./wireguard/README.md)** - WireGuard VPN for secure remote access to homelab and services
 
 ### Monitoring
-- **[Monitoring](./monitoring/README.md)** - Complete monitoring stack including Prometheus, Grafana, Node Exporter, and cAdvisor for system and container monitoring
-- **[Uptime Kuma](./uptime-kuma/README.md)** - Self-hosted monitoring tool designed to track the uptime and performance
+- **[Monitoring](./monitoring/README.md)** - Complete monitoring stack including Prometheus, Grafana, Loki, and cAdvisor for metrics and log aggregation
+- **[Uptime Kuma](./uptime-kuma/README.md)** - Service availability monitoring with alerting for uptime and response time
+
+### Dashboard
+- **[Homepage](./homepage/README.md)** - Highly customizable dashboard aggregating service status and APIs, with separate admin and public instances
+
+### Container Management
+- **[Watchtower](./watchtower/README.md)** - Automatic Docker container update service that monitors and updates running containers on a schedule
