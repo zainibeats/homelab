@@ -14,7 +14,7 @@ This directory contains services for managing, streaming, and requesting media c
   - **qBittorrent** - Torrent download client (VPN-protected)
   - **NZBGet** - Usenet download client (VPN-protected)
   - **Gluetun** - VPN client for securing download traffic
-  - **Jellyseerr** - Media request management and discovery
+  - **Seerr** - Media request management and discovery
 
 ### Media Streaming
 - **[Jellyfin](./jellyfin/README.md)** - Self-hosted media server for streaming movies, TV shows, music, and more

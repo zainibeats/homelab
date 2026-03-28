@@ -10,7 +10,7 @@ The "Arr Stack" is a collection of services for managing and automating media do
 - **Download Clients**: qBittorrent (torrents) and NZBGet (Usenet)
 - **Media Management**: Sonarr, Radarr, Lidarr, and Bazarr
 - **Indexer Management**: Prowlarr
-- **Additional Tools**: Jellyseerr
+- **Additional Tools**: Seerr
 
 ## Components
 
@@ -24,7 +24,7 @@ The "Arr Stack" is a collection of services for managing and automating media do
 | Radarr | Movie management | 7878 |
 | Lidarr | Music management | 8686 |
 | Bazarr | Subtitle management | 6767 |
-| Jellyseerr | Media Requesting | 5055 |
+| Seerr | Media Requesting | 5055 |
 | Deunhealth | Container health monitor | N/A |
 
 ## Network Architecture
@@ -161,7 +161,7 @@ docker compose up -d
 - Connect to Sonarr and Radarr
 - Configure subtitle providers
 
-### Jellyseerr
+### Seerr
 - Connect to Sonarr and Radarr for automatic scanning/downloading upon approval
 
 ## Troubleshooting
