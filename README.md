@@ -62,4 +62,4 @@ This homelab is designed with modularity in mind:
 
 Utilizing **Watchtower** for automatic Docker container updates.
 
-I've configured it to run daily at 5:00 AM to minimize disruption during peak usage hours. See the [Watchtower documentation](./tools/watchtower/README.md) for configuration details and usage instructions.
+I've configured it to run daily at 5:00 AM to minimize disruption during peak usage hours. See the [Watchtower documentation](./automation/watchtower/README.md) for configuration details and usage instructions.
