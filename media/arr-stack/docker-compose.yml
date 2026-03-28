@@ -133,7 +133,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /mnt/nfs/apps/arr/lidarr:/config
-      - /mnt/WD-ExtHDD/Jellyfin/Music:/data
+      - /mnt/truenas_data/jellyfin_data/music/itunes-archive:/data
     environment:
       - PUID=1000
       - PGID=1000
