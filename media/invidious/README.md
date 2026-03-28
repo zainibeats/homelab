@@ -1,6 +1,6 @@
 # Invidious
 
-[Invidious](https://invidious.io/) is an open-source alternative frontend for YouTube
+Invidiousis an open-source alternative frontend for YouTube
 
 ## Components
 
@@ -25,6 +25,13 @@ The official Invidious docker-compose does not include a VPN. This setup routes 
 1. Docker and Docker Compose installed
 2. A VPN configuration compatible with Gluetun
 3. `pwgen` installed for generating secret keys
+4. The [Invidious repository](https://github.com/iv-org/invidious) cloned into a directory of your choosing. The database container mounts `./config/sql` and `./docker/init-invidious-db.sh` directly from it:
+
+```bash
+git clone https://github.com/iv-org/invidious.git
+```
+
+> **Note:** Replace the `docker-compose.yml` with [this one](./docker-compose.yml).
 
 ## Setup
 
