@@ -16,7 +16,6 @@ This directory contains services focused on data storage, backup, and security f
 
 - **[Syncthing](./syncthing/README.md)** - Continuous file synchronization program that synchronizes files between two or more computers in real time
 
-
 ### Password Management
 
 - **[Vaultwarden](./vaultwarden/README.md)** - Lightweight self-hosted password manager compatible with Bitwarden clients
