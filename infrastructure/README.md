@@ -9,7 +9,6 @@ This directory contains infrastructure services that handle networking, remote a
 
 ### Remote Access
 - **[Guacamole](./guacamole/README.md)** - Clientless remote desktop gateway supporting VNC, RDP, and SSH protocols with web-based access
-- **[Neko](./neko/README.md)** - Virtual browser with VPN integration for watch parties, remote access, and collaborative browsing
 - **[Wireguard](./wireguard/README.md)** - WireGuard VPN for secure remote access to homelab and services
 
 ### Monitoring
@@ -21,3 +20,6 @@ This directory contains infrastructure services that handle networking, remote a
 
 ### Container Management
 - **[Watchtower](./watchtower/README.md)** - Automatic Docker container update service that monitors and updates running containers on a schedule
+
+### Version Control
+- **[Gitea](./gitea/README.md)** - Self-hosted Git service for repository management

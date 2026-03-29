@@ -15,3 +15,7 @@ This directory contains general-purpose utility services.
 ### Secret Sharing
 
 - **[Yopass](./yopass/README.md)** - Secure, self-hosted secret-sharing platform that encrypts data client-side, stores it temporarily in Memcached, and returns a one-time URL that expires automatically
+
+### Virtual Browser
+
+- **[Neko](./neko/README.md)** - Self-hosted virtual browser that streams via WebRTC, with VPN integration for private browsing, watch parties, and collaborative browsing
