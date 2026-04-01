@@ -32,7 +32,7 @@ This homelab is designed with modularity in mind:
       - Services: _Jellyfin and arr stack_
   - `/mnt/exos-20tb/` (Application Storage Pool)
     - `apps/`
-      - Services: _Gitea_
+      - Services: _Gitea and SearXNG_
     - `encrypted/`
       - Services: _Vaultwarden and Syncthing_
     - `ProxmoxData/`
