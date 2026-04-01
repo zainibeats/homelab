@@ -31,6 +31,11 @@
         icon: vaultwarden.png
         siteMonitor: http://172.23.51.30:8088
 - Tools:
+    - SearXNG:
+        href: https://search.zaini.cloud
+        description: Search Engine
+        icon: searxng.png
+        siteMonitor: http://172.23.51.30:8086
     - ConvertX:
         href: https://convertx.zaini.cloud
         description: File Conversion
@@ -74,6 +79,11 @@
         icon: immich.png
         siteMonitor: http://172.23.51.30:2283
 - Tools (Local):
+    - SearXNG:
+        href: http://172.23.51.30:8086
+        description: Search Engine
+        icon: searxng.png
+        siteMonitor: http://172.23.51.30:8086
     - IT-Tools:
         href: http://172.23.51.30:8881
         description: Various Handy Tools
