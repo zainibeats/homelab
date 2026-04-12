@@ -1,7 +1,6 @@
 services:
   jellyfin:
     image: jellyfin/jellyfin
-    # user: uid:gid
     network_mode: 'host'
     restart: 'unless-stopped'
     container_name: jellyfin
@@ -11,17 +10,11 @@ services:
       - JELLYFIN_DATA_DIR=/var/lib/jellyfin
       - JELLYFIN_LOG_DIR=/var/log/jellyfin
     volumes:
-      # Migrated from bare metal install
       - /etc/jellyfin:/etc/jellyfin
       - /var/cache/jellyfin:/var/cache/jellyfin
       - /var/lib/jellyfin:/var/lib/jellyfin
       - /var/log/jellyfin:/var/log/jellyfin
-      # ydlp directory
-      - /home/Media/Other:/home/Media/Other
-      # TrueNAS SMB shares
       - /mnt/truenas_data/jellyfin_data:/mnt/truenas_data/jellyfin_data
-      - /mnt/WD-ExtHDD/Jellyfin:/mnt/WD-ExtHDD/Jellyfin
-    # NVENC support
     runtime: nvidia
     deploy:
       resources:
