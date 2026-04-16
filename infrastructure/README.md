@@ -5,7 +5,7 @@ This directory contains infrastructure services that handle networking, remote a
 ## Services Overview
 
 ### Networking & Proxy
-- **[Nginx Proxy Manager + DDClient](./nginx-ddclient/README.md)** - Reverse proxy management with SSL/TLS certificates and dynamic DNS updates for Cloudflare
+- **[Traefik](./traefik/README.md)** - Edge router and reverse proxy with automated SSL via Cloudflare
 
 ### Remote Access
 - **[Guacamole](./guacamole/README.md)** - Clientless remote desktop gateway supporting VNC, RDP, and SSH protocols with web-based access

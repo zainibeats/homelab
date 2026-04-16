@@ -1,0 +1,33 @@
+services:
+  traefik:
+    image: traefik:v3.6
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - 80:80
+      - 443:443
+      # - 8080:8080
+    env_file:
+      - .env
+    environment:
+      CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN}
+      # TRAEFIK_DASHBOARD_CREDENTIALS: ${TRAEFIK_DASHBOARD_CREDENTIALS}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./letsencrypt/acme.json:/var/traefik/certs/acme.json
+      - /etc/localtime:/etc/localtime:ro
+    command:
+      - "--certificatesresolvers.cloudflare.acme.email=${CF_API_EMAIL}"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik.tls=true
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.services.traefik.loadbalancer.server.port=8080
+      - traefik.http.routers.traefik.rule=Host(`traefik.${SUB_DOMAIN}.${DOMAIN}`)
+      - traefik.http.routers.traefik.tls.certresolver=cloudflare
+      - traefik.http.routers.traefik.service=api@internal
+      - traefik.http.routers.traefik.tls.domains[0].main=${SUB_DOMAIN}.${DOMAIN}
+      - traefik.http.routers.traefik.tls.domains[0].sans=*.${SUB_DOMAIN}.${DOMAIN}
