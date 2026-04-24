@@ -4,14 +4,9 @@
         description: Container Management
         icon: portainer.png
         siteMonitor: https://172.23.51.30:9443
-    - Nginx Proxy Manager:
-        href: https://nginx.zaini.cloud
-        description: Reverse Proxy Management
-        icon: nginx-proxy-manager.png
-        siteMonitor: http://172.23.20.31:81
 - Infrastructure:
     - Truenas Web-UI:
-        href: https://tn.zaini.cloud
+        href: https://truenas.zaini.cloud
         description: TrueNAS Storage Management
         icon: truenas-scale.png
         siteMonitor: http://172.23.51.32:80
@@ -27,6 +22,16 @@
         description: Indexer Manager
         icon: prowlarr.png
         siteMonitor: http://172.23.51.30:9696
+    - Lidarr:
+        href: https://lidarr.zaini.cloud
+        description: Music Automation
+        icon: lidarr.png
+        siteMonitor: http://172.23.51.30:8686
+    - Bazarr:
+        href: https://bazarr.zaini.cloud
+        description: Subtitle Automation
+        icon: bazarr.png
+        siteMonitor: http://172.23.51.30:6767
     - Radarr:
         href: https://radarr.zaini.cloud
         description: Movie Automation
@@ -75,11 +80,6 @@
         description: Container Management
         icon: portainer.png
         siteMonitor: https://172.23.51.30:9443
-    - Nginx Proxy Manager:
-        href: http://172.23.20.31:81
-        description: Reverse Proxy Management
-        icon: nginx-proxy-manager.png
-        siteMonitor: http://172.23.20.31:81
 - Infrastructure (Local):
     - Proxmox VE:
         href: https://172.23.51.34:8006
@@ -102,11 +102,6 @@
         description: File Sync
         icon: syncthing.png
         siteMonitor: http://172.23.51.32:8384
-    - Syncthing - Desktop:
-        href: http://172.23.51.35:8384
-        description: File Sync
-        icon: syncthing.png
-        siteMonitor: http://172.23.51.35:8384
 - IoT and SmartHome:
     - Home Assistant:
         href: http://172.23.20.31:8123
@@ -124,6 +119,11 @@
         description: Indexer Manager
         icon: prowlarr.png
         siteMonitor: http://172.23.51.30:9696
+    - Lidarr:
+        href: http://172.23.51.30:8686
+        description: Music Automation
+        icon: lidarr.png
+        siteMonitor: http://172.23.51.30:8686
     - Bazarr:
         href: http://172.23.51.30:6767
         description: Subtitle Management
@@ -180,13 +180,7 @@
         description: Homelab Switch Management
         icon: tp-link.png
         ping: http://172.23.20.10
-    - TP-Link Archer AP:
-        href: https://172.23.20.20:443
-        description: Access Point Management
-        icon: tp-link.png
-        siteMonitor: https://172.23.20.20:443
     - Pi-hole:
         href: https://172.23.20.31:4438/admin/login
         description: Ad Blocker
         icon: pi-hole.png
-        siteMonitor: https://172.23.20.31:4438
