@@ -1,0 +1,48 @@
+http:
+  routers:
+    qbittorrent-lan:
+      rule: "Host(`qb.subdomain.domain.tld`)"
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+      service: qbittorrent-gluetun-lan
+    prowlarr-lan:
+      rule: "Host(`prowlarr.subdomain.domain.tld`)"
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+      service: prowlarr-gluetun-lan
+    jellyfin-lan:
+      rule: "Host(`jellyfin.subdomain.domain.tld`)"
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+      service: jellyfin-lan-ubuntu
+    vaultwarden-lan:
+      rule: "Host(`vaultwarden.subdomain.domain.tld`)"
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+      service: vaultwarden-lan-ubuntu
+
+  services:
+    qbittorrent-gluetun-lan:
+      loadBalancer:
+        servers:
+          - url: "http://172.23.51.30:8122"
+    prowlarr-gluetun-lan:
+      loadBalancer:
+        servers:
+          - url: "http://172.23.51.30:9696"
+    jellyfin-lan-ubuntu:
+      loadBalancer:
+        servers:
+          - url: "http://172.23.51.30:8096"
+    vaultwarden-lan-ubuntu:
+      loadBalancer:
+        servers:
+          - url: "http://172.23.51.30:8088"
