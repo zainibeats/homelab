@@ -58,3 +58,5 @@ By default, Nextcloud is accessible on port 8080. You can modify this in the `po
 ```
 
 Nextcloud should now be accessible at `http://<your-server-ip>:8080` (or the custom port you configured). Follow the on-screen setup instructions, using `db` as the database host and the database credentials you set in the `docker-compose.yml`. 
+
+> To configure trusted domains: `docker exec --user www-data nextcloud php occ config:system:set trusted_domains 3 --value=nextcloud.domain.tld`

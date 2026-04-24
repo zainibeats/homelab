@@ -10,12 +10,20 @@ services:
       - core-data:/var/cache/searxng/
     networks:
       - traefik-proxy
+      - searxng-net
     labels:
       - traefik.enable=true
+
       - traefik.http.routers.searxng.rule=Host(`search.${DOMAIN}`)
       - traefik.http.routers.searxng.entrypoints=websecure
       - traefik.http.routers.searxng.tls=true
       - traefik.http.routers.searxng.tls.certresolver=cloudflare
+
+      - traefik.http.routers.searxng-lan.rule=Host(`search.${SUBDOMAIN}.${DOMAIN}`)
+      - traefik.http.routers.searxng-lan.entrypoints=websecure
+      - traefik.http.routers.searxng-lan.tls=true
+      - traefik.http.routers.searxng-lan.tls.certresolver=cloudflare
+
       - traefik.http.services.searxng.loadbalancer.server.port=8080
 
   valkey:
@@ -26,11 +34,13 @@ services:
     volumes:
       - valkey-data:/data/
     networks:
-      - traefik-proxy
+      - searxng-net
 
 networks:
   traefik-proxy:
     external: true
+  searxng-net:
+    external: false
 
 volumes:
   core-data:

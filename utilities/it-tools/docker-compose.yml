@@ -9,7 +9,7 @@ services:
       - traefik-proxy
     labels:
       - traefik.enable=true
-      - traefik.http.routers.it-tools.rule=Host(`it-tools.${DOMAIN}`)
+      - traefik.http.routers.it-tools.rule=Host(`it-tools.${SUBDOMAIN}.${DOMAIN}`)
       - traefik.http.routers.it-tools.entrypoints=websecure
       - traefik.http.routers.it-tools.tls=true
       - traefik.http.routers.it-tools.tls.certresolver=cloudflare

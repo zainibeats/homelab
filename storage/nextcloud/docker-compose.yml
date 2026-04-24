@@ -8,6 +8,8 @@ services:
     restart: unless-stopped
     command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
     container_name: nextcloud-db
+    networks:
+      - nextcloud-net
     env_file:
       - .env
     volumes:
@@ -38,14 +40,24 @@ services:
       - MYSQL_HOST=db
     networks:
       - traefik-proxy
+      - nextcloud-net
     labels:
       - traefik.enable=true
+
       - traefik.http.routers.nextcloud.rule=Host(`nextcloud.${DOMAIN}`)
       - traefik.http.routers.nextcloud.entrypoints=websecure
       - traefik.http.routers.nextcloud.tls=true
       - traefik.http.routers.nextcloud.tls.certresolver=cloudflare
+
+      - traefik.http.routers.nextcloud-lan.rule=Host(`nextcloud.${SUBDOMAIN}.${DOMAIN}`)
+      - traefik.http.routers.nextcloud-lan.entrypoints=websecure
+      - traefik.http.routers.nextcloud-lan.tls=true
+      - traefik.http.routers.nextcloud-lan.tls.certresolver=cloudflare
+
       - traefik.http.services.nextcloud.loadbalancer.server.port=80
 
 networks:
   traefik-proxy:
     external: true
+  nextcloud-net:
+     external: false

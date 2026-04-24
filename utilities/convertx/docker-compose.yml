@@ -14,10 +14,17 @@ services:
       - traefik-proxy
     labels:
       - traefik.enable=true
+
       - traefik.http.routers.convertx.rule=Host(`convertx.${DOMAIN}`)
       - traefik.http.routers.convertx.entrypoints=websecure
       - traefik.http.routers.convertx.tls=true
       - traefik.http.routers.convertx.tls.certresolver=cloudflare
+
+      - traefik.http.routers.convertx-lan.rule=Host(`convertx.${SUBDOMAIN}.${DOMAIN}`)
+      - traefik.http.routers.convertx-lan.entrypoints=websecure
+      - traefik.http.routers.convertx-lan.tls=true
+      - traefik.http.routers.convertx-lan.tls.certresolver=cloudflare
+
       - traefik.http.services.convertx.loadbalancer.server.port=3000
 
 networks:

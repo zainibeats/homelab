@@ -24,12 +24,19 @@ services:
       disable: false
     networks:
       - traefik-proxy
+      - immich-net
     labels:
       - traefik.enable=true
       - traefik.http.routers.immich.rule=Host(`immich.${DOMAIN}`)
       - traefik.http.routers.immich.entrypoints=websecure
       - traefik.http.routers.immich.tls=true
       - traefik.http.routers.immich.tls.certresolver=cloudflare
+
+      - traefik.http.routers.immich-lan.rule=Host(`immich.${SUBDOMAIN}.${DOMAIN}`)
+      - traefik.http.routers.immich-lan.entrypoints=websecure
+      - traefik.http.routers.immich-lan.tls=true
+      - traefik.http.routers.immich-lan.tls.certresolver=cloudflare
+
       - traefik.http.services.immich.loadbalancer.server.port=2283
 
   immich-machine-learning:
@@ -39,7 +46,7 @@ services:
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
     # extends: # uncomment this section for hardware acceleration - see https://immich.app/docs/features/ml-hardware-acceleration
     #   file: hwaccel.ml.yml
-    #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where applicable
+    #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where appli>
     volumes:
       - model-cache:/cache
     env_file:
@@ -48,7 +55,7 @@ services:
     healthcheck:
       disable: false
     networks:
-      - traefik-proxy
+      - immich-net
 
   redis:
     container_name: immich_redis
@@ -57,7 +64,7 @@ services:
       test: redis-cli ping || exit 1
     restart: unless-stopped
     networks:
-      - traefik-proxy
+      - immich-net
 
   database:
     container_name: immich_postgres
@@ -75,7 +82,7 @@ services:
       - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
     restart: unless-stopped
     networks:
-      - traefik-proxy
+      - immich-net
 
 volumes:
   model-cache:
@@ -83,3 +90,5 @@ volumes:
 networks:
   traefik-proxy:
     external: true
+  immich-net:
+    external: false
