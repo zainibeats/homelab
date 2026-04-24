@@ -42,22 +42,6 @@ This homelab is designed with modularity in mind:
     - `family/`
       - Services: _Nextcloud_
 
-## Docker Image Management
-
-**Portainer** provides a web-based interface for managing Docker containers, images, networks, and volumes. It offers an intuitive GUI for Docker management tasks that would otherwise require command-line operations.
-
-### Setup
-
-1. Create a Docker volume for Portainer's database:
-   ```bash
-   docker volume create portainer_data
-   ```
-
-2. Run the Portainer container:
-   ```bash
-   docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:lts
-   ```
-
 ## Automatic Updates
 
 Utilizing **Watchtower** for automatic Docker container updates.
