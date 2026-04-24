@@ -1,0 +1,15 @@
+http:
+  routers:
+    truenas:
+      rule: "Host(`truenas.domain.tld`)"
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+      service: truenas-server
+
+  services:
+    truenas-server:
+      loadBalancer:
+        servers:
+          - url: "http://172.23.51.32:80"

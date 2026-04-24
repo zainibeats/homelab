@@ -1,0 +1,15 @@
+http:
+  routers:
+    homeassistant:
+      rule: "Host(`home.domain.tld`)"
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+      service: homeassistant-server
+
+  services:
+    homeassistant-server:
+      loadBalancer:
+        servers:
+          - url: "http://172.23.20.31:8123"
