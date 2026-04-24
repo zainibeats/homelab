@@ -1,5 +1,5 @@
 services:
-  homepage:
+  homepage-admin:
     image: ghcr.io/gethomepage/homepage:latest
     container_name: homepage-admin
     env_file: .env
@@ -13,3 +13,16 @@ services:
     volumes:
       - ./config:/app/config # Make sure your local config directory exists
     restart: unless-stopped
+    networks:
+      - traefik-proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.homepage-admin.rule=Host(`admin.${DOMAIN}`)
+      - traefik.http.routers.homepage-admin.entrypoints=websecure
+      - traefik.http.routers.homepage-admin.tls=true
+      - traefik.http.routers.homepage-admin.tls.certresolver=cloudflare
+      - traefik.http.services.homepage-admin.loadbalancer.server.port=3000
+
+networks:
+  traefik-proxy:
+    external: true

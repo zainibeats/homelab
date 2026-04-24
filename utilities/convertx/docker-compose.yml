@@ -1,6 +1,7 @@
 services:
-  convertx: 
+  convertx:
     image: ghcr.io/c4illin/convertx
+    env_file: .env
     container_name: convertx
     restart: unless-stopped
     ports:
@@ -9,3 +10,16 @@ services:
       - JWT_SECRET=${JWT_SECRET}
     volumes:
       - ./data:/app/data
+    networks:
+      - traefik-proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.convertx.rule=Host(`convertx.${DOMAIN}`)
+      - traefik.http.routers.convertx.entrypoints=websecure
+      - traefik.http.routers.convertx.tls=true
+      - traefik.http.routers.convertx.tls.certresolver=cloudflare
+      - traefik.http.services.convertx.loadbalancer.server.port=3000
+
+networks:
+  traefik-proxy:
+    external: true

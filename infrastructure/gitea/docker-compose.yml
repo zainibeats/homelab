@@ -1,11 +1,8 @@
-networks:
-  gitea:
-    external: false
-
 services:
   server:
     image: docker.gitea.com/gitea:1.25.4
     container_name: gitea
+    env_file: .env
     environment:
       - USER_UID=1010
       - USER_GID=1010
@@ -17,15 +14,23 @@ services:
     restart: unless-stopped
     networks:
       - gitea
+      - traefik-proxy
     volumes:
       - /mnt/nfs/apps/gitea:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
       - "3331:3000"
-      - "222:22"
+      - "2223:22"
     depends_on:
       - db
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.gitea.rule=Host(`git.${DOMAIN}`)
+      - traefik.http.routers.gitea.entrypoints=websecure
+      - traefik.http.routers.gitea.tls=true
+      - traefik.http.routers.gitea.tls.certresolver=cloudflare
+      - traefik.http.services.gitea.loadbalancer.server.port=3000
 
   db:
     image: docker.io/library/mysql:8
@@ -43,3 +48,9 @@ services:
       - gitea
     volumes:
       - /mnt/nfs/apps/gitea/mysql:/var/lib/mysql
+
+networks:
+  gitea:
+    external: false
+  traefik-proxy:
+    external: true

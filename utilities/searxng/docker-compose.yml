@@ -8,6 +8,15 @@ services:
     volumes:
       - /mnt/nfs/apps/searxng/core-config:/etc/searxng/:Z
       - core-data:/var/cache/searxng/
+    networks:
+      - traefik-proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.searxng.rule=Host(`search.${DOMAIN}`)
+      - traefik.http.routers.searxng.entrypoints=websecure
+      - traefik.http.routers.searxng.tls=true
+      - traefik.http.routers.searxng.tls.certresolver=cloudflare
+      - traefik.http.services.searxng.loadbalancer.server.port=8080
 
   valkey:
     container_name: searxng-valkey
@@ -16,6 +25,12 @@ services:
     restart: unless-stopped
     volumes:
       - valkey-data:/data/
+    networks:
+      - traefik-proxy
+
+networks:
+  traefik-proxy:
+    external: true
 
 volumes:
   core-data:

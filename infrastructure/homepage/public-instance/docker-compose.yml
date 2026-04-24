@@ -13,3 +13,16 @@ services:
       - 7575:3000
     volumes:
       - ./config:/app/config # Make sure your local config directory exists
+    networks:
+      - traefik-proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.homepage.rule=Host(`homepage.${DOMAIN}`)
+      - traefik.http.routers.homepage.entrypoints=websecure
+      - traefik.http.routers.homepage.tls=true
+      - traefik.http.routers.homepage.tls.certresolver=cloudflare
+      - traefik.http.services.homepage.loadbalancer.server.port=3000
+
+networks:
+  traefik-proxy:
+    external: true

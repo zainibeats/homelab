@@ -5,6 +5,8 @@ services:
     restart: unless-stopped
     expose:
       - "11211"
+    networks:
+      - traefik-proxy
 
   yopass:
     image: jhaals/yopass
@@ -13,3 +15,16 @@ services:
     ports:
       - "8889:80"
     command: "--memcached=memcached:11211 --port 80"
+    networks:
+      - traefik-proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.yopass.rule=Host(`yopass.${DOMAIN}`)
+      - traefik.http.routers.yopass.entrypoints=websecure
+      - traefik.http.routers.yopass.tls=true
+      - traefik.http.routers.yopass.tls.certresolver=cloudflare
+      - traefik.http.services.yopass.loadbalancer.server.port=80
+
+networks:
+  traefik-proxy:
+    external: true

@@ -5,3 +5,16 @@ services:
     restart: unless-stopped
     ports:
       - 8881:80
+    networks:
+      - traefik-proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.it-tools.rule=Host(`it-tools.${DOMAIN}`)
+      - traefik.http.routers.it-tools.entrypoints=websecure
+      - traefik.http.routers.it-tools.tls=true
+      - traefik.http.routers.it-tools.tls.certresolver=cloudflare
+      - traefik.http.services.it-tools.loadbalancer.server.port=80
+
+networks:
+  traefik-proxy:
+    external: true
