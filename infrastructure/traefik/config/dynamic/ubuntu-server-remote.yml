@@ -1,0 +1,15 @@
+http:
+  routers:
+    vaultwarden:
+      rule: "Host(`vaultwarden.domain.tld`)"
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+      service: vaultwarden-ubuntu
+
+  services:
+    vaultwarden-ubuntu:
+      loadBalancer:
+        servers:
+          - url: "http://172.23.51.30:8088"
