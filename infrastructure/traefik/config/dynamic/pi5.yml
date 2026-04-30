@@ -1,28 +1,28 @@
 http:
   routers:
     homepage-public:
-      rule: "Host(`homepage.home.zaini.cloud`)"
+      rule: "Host(`homepage.subdomain.domain.tld`)"
       entryPoints:
         - websecure
       tls:
         certResolver: cloudflare
       service: homepage-public
     homepage-admin:
-      rule: "Host(`admin.home.zaini.cloud`)"
+      rule: "Host(`admin.subdomain.domain.tld`)"
       entryPoints:
         - websecure
       tls:
         certResolver: cloudflare
       service: homepage-admin-instance
     grafana:
-      rule: "Host(`grafana.home.zaini.cloud`)"
+      rule: "Host(`grafana.subdomain.domain.tld`)"
       entryPoints:
         - websecure
       tls:
         certResolver: cloudflare
       service: grafana-server
     uptime-kuma:
-      rule: "Host(`uptime.home.zaini.cloud`)"
+      rule: "Host(`uptime.subdomain.domain.tld`)"
       entryPoints:
         - websecure
       tls:
