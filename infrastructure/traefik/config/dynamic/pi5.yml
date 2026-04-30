@@ -1,0 +1,48 @@
+http:
+  routers:
+    homepage-public:
+      rule: "Host(`homepage.home.zaini.cloud`)"
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+      service: homepage-public
+    homepage-admin:
+      rule: "Host(`admin.home.zaini.cloud`)"
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+      service: homepage-admin-instance
+    grafana:
+      rule: "Host(`grafana.home.zaini.cloud`)"
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+      service: grafana-server
+    uptime-kuma:
+      rule: "Host(`uptime.home.zaini.cloud`)"
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+      service: uptime-kuma-server
+
+  services:
+    homepage-public-instance:
+      loadBalancer:
+        servers:
+          - url: "http://172.23.20.31:7575"
+    homepage-admin-instance:
+      loadBalancer:
+        servers:
+          - url: "http://172.23.20.31:3330"
+    grafana-server:
+      loadBalancer:
+        servers:
+          - url: "http://172.23.20.31:3000"
+    uptime-kuma-server:
+      loadBalancer:
+        servers:
+          - url: "http://172.23.20.31:3001"
