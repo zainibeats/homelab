@@ -6,7 +6,7 @@ http:
         - websecure
       tls:
         certResolver: cloudflare
-      service: homepage-public
+      service: homepage-public-instance
     homepage-admin:
       rule: "Host(`admin.subdomain.domain.tld`)"
       entryPoints:
