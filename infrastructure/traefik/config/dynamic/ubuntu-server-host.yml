@@ -21,6 +21,13 @@ http:
       tls:
         certResolver: cloudflare
       service: jellyfin-ubuntu
+    homeassistant:
+      rule: "Host(`homeassistant.domain.tld`)"
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+      service: homeassistant-server
 
   services:
     qbittorrent-gluetun:
@@ -35,3 +42,7 @@ http:
       loadBalancer:
         servers:
           - url: "http://172.23.51.30:8096"
+    homeassistant-server:
+      loadBalancer:
+        servers:
+          - url: "http://172.23.51.30:8123"

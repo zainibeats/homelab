@@ -46,10 +46,10 @@
         href: https://qb.zaini.cloud
         description: Torrent Client
         icon: qbittorrent.png
-        siteMonitor: http://172.23.51.30:8123
+        siteMonitor: http://172.23.51.30:8122
         widget:
           type: qbittorrent
-          url: http://172.23.51.30:8123
+          url: http://172.23.51.30:8122
           username: "{{HOMEPAGE_VAR_QBIT_USER}}"
           password: "{{HOMEPAGE_VAR_QBIT_PWD}}"
 - Monitoring:
@@ -104,15 +104,14 @@
         siteMonitor: http://172.23.51.32:8384
 - IoT and SmartHome:
     - Home Assistant:
-        href: http://172.23.20.31:8123
+        href: http://172.23.51.30:8123
         description: Home Automation
         icon: home-assistant.png
-        siteMonitor: http://172.23.20.31:8123
+        siteMonitor: http://172.23.51.30:8123
     - SLZB Web UI:
         href: http://172.23.60.25:80
         description: Zigbee Coordinator
         icon: sh-zigbee
-        siteMonitor: http://172.23.60.25:80
 - Arr Suite (Local):
     - Prowlarr:
         href: http://172.23.51.30:9696
@@ -140,13 +139,13 @@
         icon: sonarr.png
         siteMonitor: http://172.23.51.30:8989
     - qBittorrent:
-        href: http://172.23.51.30:8123
+        href: http://172.23.51.30:8122
         description: Torrent Client
         icon: qbittorrent.png
-        siteMonitor: http://172.23.51.30:8123
+        siteMonitor: http://172.23.51.30:8122
         widget:
           type: qbittorrent
-          url: http://172.23.51.30:8123
+          url: http://172.23.51.30:8122
           username: "{{HOMEPAGE_VAR_QBIT_USER}}"
           password: "{{HOMEPAGE_VAR_QBIT_PWD}}"
 - Monitoring (Local):

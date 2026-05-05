@@ -28,6 +28,14 @@ http:
       tls:
         certResolver: cloudflare
       service: vaultwarden-lan-ubuntu
+    homeassistant-lan:
+      rule: "Host(`homeassistant.subdomain.domain.tld`)"
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+      service: homeassistant-lan-ubuntu
+
 
   services:
     qbittorrent-gluetun-lan:
@@ -46,3 +54,7 @@ http:
       loadBalancer:
         servers:
           - url: "http://172.23.51.30:8088"
+    homeassistant-lan-ubuntu:
+      loadBalancer:
+        servers:
+          - url: "http://172.23.51.30:8123"
