@@ -7,12 +7,13 @@ services:
     restart: no
     ports:
       - "25565:25565"
+    env_file: .env
     environment:
       EULA: "TRUE"
       # VERSION: ${MINECRAFT_VERSION:-LATEST}
-      TYPE: "AUTO_CURSEFORGE"
+      TYPE: ${TYPE}
       CF_API_KEY: ${CF_API_KEY}
-      CF_PAGE_URL: "https://www.curseforge.com/minecraft/modpacks/essential-perfected-fabric"
+      CF_PAGE_URL: ${CF_PAGE_URL}
 
       # --- EXTRA MODS ---
       # Add slugs or IDs here (separated by commas or spaces)
@@ -24,31 +25,31 @@ services:
 
       # --- VANILLA TWEAKS ---
       # Paste your share code from the website here
-      # VANILLATWEAKS_SHARECODE: "YOUR_SHARE_CODE"
+      # VANILLATWEAKS_SHARECODE: ${VANILLATWEAKS_SHARECODE}
       VANILLATWEAKS_FILE: /config/vanillatweaks-datapacks.json,/config/vanillatweaks-resourcepacks.json
       REMOVE_OLD_VANILLATWEAKS: "TRUE"
 
       # --- PERFORMANCE & SYSTEM ---
-      MEMORY: "14336M"
-      USE_AIKAR_FLAGS: "true"
-      USE_MEOWICE_FLAGS: "true"
-      TZ: "America/Los_Angeles"
+      MEMORY: ${MEMORY}
+      USE_AIKAR_FLAGS: ${USE_AIKAR_FLAGS}
+      USE_MEOWICE_FLAGS: ${USE_MEOWICE_FLAGS}
+      TZ: ${TZ}
 
       # --- SERVER SETTINGS ---
-      MAX_PLAYERS: "5"
-      MOTD: "Welcome to My Server"
-      DIFFICULTY: "2"
-      PVP: "false"
-      LEVEL: "My Server"
+      MAX_PLAYERS: ${MAX_PLAYERS}
+      MOTD: ${MOTD}
+      DIFFICULTY: ${DIFFICULTY}
+      PVP: ${PVP}
+      LEVEL: ${LEVEL}
       ENABLE_WHITELIST: "true"
-      SEED: ""
+      SEED: ${SEED}
       OPS: |-
-        $USERNAME
+        ${OPERATOR1}
       WHITELIST: |-
-        $USERNAME
+        ${OPERATOR1}
+        ${USER1}
 
     volumes:
       - "./data:/data"
       - ./config/vanillatweaks-datapacks.json:/config/vanillatweaks-datapacks.json:ro
       - ./config/vanillatweaks-resourcepacks.json:/config/vanillatweaks-resourcepacks.json:ro
-
