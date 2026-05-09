@@ -9,10 +9,17 @@ services:
       - traefik-proxy
     labels:
       - traefik.enable=true
-      - traefik.http.routers.it-tools.rule=Host(`it-tools.${SUBDOMAIN}.${DOMAIN}`)
+
+      - traefik.http.routers.it-tools.rule=Host(`it-tools.${DOMAIN}`)
       - traefik.http.routers.it-tools.entrypoints=websecure
       - traefik.http.routers.it-tools.tls=true
       - traefik.http.routers.it-tools.tls.certresolver=cloudflare
+
+      - traefik.http.routers.it-tools-lan.rule=Host(`it-tools.${SUBDOMAIN}.${DOMAIN}`)
+      - traefik.http.routers.it-tools-lan.entrypoints=websecure
+      - traefik.http.routers.it-tools-lan.tls=true
+      - traefik.http.routers.it-tools-lan.tls.certresolver=cloudflare
+
       - traefik.http.services.it-tools.loadbalancer.server.port=80
 
 networks:

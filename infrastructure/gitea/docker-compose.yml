@@ -26,10 +26,17 @@ services:
       - db
     labels:
       - traefik.enable=true
+
       - traefik.http.routers.gitea.rule=Host(`git.${DOMAIN}`)
       - traefik.http.routers.gitea.entrypoints=websecure
       - traefik.http.routers.gitea.tls=true
       - traefik.http.routers.gitea.tls.certresolver=cloudflare
+
+      - traefik.http.routers.gitea-lan.rule=Host(`git.${SUBDOMAIN}.${DOMAIN}`)
+      - traefik.http.routers.gitea-lan.entrypoints=websecure
+      - traefik.http.routers.gitea-lan.tls=true
+      - traefik.http.routers.gitea-lan.tls.certresolver=cloudflare
+
       - traefik.http.services.gitea.loadbalancer.server.port=3000
 
   db:

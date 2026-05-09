@@ -35,7 +35,13 @@ http:
       tls:
         certResolver: cloudflare
       service: homeassistant-lan-ubuntu
-
+    neko-lan:
+      rule: "Host(`neko.home.domain.tld`)"
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+      service: neko-lan-ubuntu
 
   services:
     qbittorrent-gluetun-lan:
@@ -58,3 +64,7 @@ http:
       loadBalancer:
         servers:
           - url: "http://172.23.51.30:8123"
+    neko-lan-ubuntu:
+      loadBalancer:
+        servers:
+          - url: "http://172.23.51.30:8880"

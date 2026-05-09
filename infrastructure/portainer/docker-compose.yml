@@ -16,9 +16,11 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`portainer.${DOMAIN}`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.services.frontend.loadbalancer.server.port=9000"
       - "traefik.http.routers.frontend.service=frontend"
       - "traefik.http.routers.frontend.tls.certresolver=cloudflare"
+      - "traefik.http.services.frontend.loadbalancer.server.port=9000"
+      - "traefik.http.routers.frontend-lan.rule=Host(`portainer.${SUBDOMAIN}.${DOMAIN}`)"
+      - "traefik.http.routers.frontend-lan.tls=true"
 
 networks:
   traefik-proxy:
