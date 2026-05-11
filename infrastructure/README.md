@@ -6,10 +6,12 @@ This directory contains infrastructure services that handle networking, remote a
 
 ### Networking & Proxy
 - **[Traefik](./traefik/README.md)** - Edge router and reverse proxy with automated SSL via Cloudflare
+- **[DDClient](./ddclient/README.md)** - Dynamic DNS updater for Cloudflare using ddclient docker image
 
 ### Remote Access
 - **[Guacamole](./guacamole/README.md)** - Clientless remote desktop gateway supporting VNC, RDP, and SSH protocols with web-based access
 - **[Wireguard](./wireguard/README.md)** - WireGuard VPN for secure remote access to homelab and services
+- **[NetBird Client](./netbird-client/README.md)** - NetBird client for secure mesh networking with the homelab
 
 ### Monitoring
 - **[Monitoring](./monitoring/README.md)** - Complete monitoring stack including Prometheus, Grafana, Loki, and cAdvisor for metrics and log aggregation

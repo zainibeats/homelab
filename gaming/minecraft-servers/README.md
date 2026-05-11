@@ -25,7 +25,7 @@ A single [docker-compose.yml](./docker-compose.yml) file defines the Minecraft c
 
 ### Remote VPN Access
 
-WireGuard is required for secure access from outside the local network. The full setup steps are in the [WireGuard README](../../infrastructure/wireguard/README.md). An example minecraft server specifi configuration can be found [here](../../infrastructure/wireguard/templates/minecraft-server-example.conf)
+WireGuard is required for secure access from outside the local network. The full setup steps are in the [WireGuard README](../../infrastructure/wireguard/README.md). An example Minecraft server specific configuration can be found [here](../../infrastructure/wireguard/templates/minecraft-server-example.conf)
 
 In brief:
 
@@ -33,6 +33,18 @@ In brief:
 2. Enable IP forwarding and configure firewall rules that allow traffic from the VPN subnet to reach port `25565`.  
 3. Generate server and client keys, then create peer configurations.  
 4. Start the service: `sudo systemctl enable wg-quick@wg0 && sudo systemctl start wg-quick@wg0`.
+
+### NetBird Compose
+
+[docker-compose.netbird.yml](./docker-compose.netbird.yml) is an alternate deployment that runs the Minecraft server with a NetBird client container. This option uses NetBird for remote access and does not require the WireGuard setup above.
+
+This requires a NetBird server to be set up first. I run mine on an Oracle Cloud Always Free 4-core ARM VPS (VM.Standard.A1.Flex) using NetBird's [Self-Hosting NetBird with Authentik](https://netbird.io/knowledge-hub/selfhost-netbird-with-authentik) guide.
+
+Set `NB_SETUP_KEY` and `NB_MANAGEMENT_URL` in `.env`, then start it with:
+
+```bash
+docker compose -f docker-compose.netbird.yml up -d
+```
 
 ---
 
@@ -103,6 +115,7 @@ docker compose down
 
 1. **Inside LAN** – Players can join using the host’s IP address (`<HOST_IP>:25565`).  
 2. **Over VPN** – Connect a client to the WireGuard network and use the VPN IP of the host (`10.8.0.1:25565` or whatever subnet you configured).
+3. **Over NetBird** – When using `docker-compose.netbird.yml`, connect through NetBird instead of WireGuard.
 
 
 
