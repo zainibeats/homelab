@@ -2,21 +2,32 @@ services:
   open-webui:
     image: ghcr.io/open-webui/open-webui:main
     container_name: open-webui
-    volumes:
-      - open-webui:/app/backend/data
-    ports:
-      - "3000:8080" ## Or "8080:8080" if you prefer
-    environment:
-      - "OLLAMA_BASE_URL=http://ollama:11434" ## Points to the ollama service below
-      - "WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}"
+    restart: unless-stopped
     depends_on:
       - ollama
-    restart: unless-stopped
+    ## Optional: If accessing local endpoints outside of your Docker network (e.g. LM Studio)
+    # network_mode: host
+    ports:
+      - "8080:8080"
+    environment:
+      - 'OLLAMA_BASE_URL=http://ollama:11434'
+      - 'WEBUI_SECRET_KEY={WEBUI_SECRET_KEY}'
+    volumes:
+      - open-webui:/app/backend/data
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 
   ollama:
-    image: ollama/ollama
+    image: ollama/ollama:latest
     container_name: ollama
-    ## Optional: If accessing ollama from local ip address is required
+    restart: unless-stopped
+    tty: true
+    ## Optional: If accessing local endpoints outside of your Docker network (e.g. LM Studio)
     # network_mode: host
     volumes:
       - ollama:/root/.ollama
@@ -25,12 +36,8 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              count: all ## Or specify device IDs: ['0']
+              count: all
               capabilities: [gpu]
-    restart: unless-stopped
-    ## Expose is not strictly needed for service-to-service comms in compose
-    # expose:
-    #   - 11434
 
 volumes:
   open-webui:
