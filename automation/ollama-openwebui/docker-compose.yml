@@ -1,14 +1,12 @@
 services:
   open-webui:
-    image: ghcr.io/open-webui/open-webui:main
+    image: ghcr.io/open-webui/open-webui
     container_name: open-webui
     restart: unless-stopped
     depends_on:
       - ollama
-    ## Optional: If accessing local endpoints outside of your Docker network (e.g. LM Studio)
-    # network_mode: host
     ports:
-      - "8080:8080"
+      - "3000:8080"
     environment:
       - 'OLLAMA_BASE_URL=http://ollama:11434'
       - 'WEBUI_SECRET_KEY={WEBUI_SECRET_KEY}'
@@ -27,10 +25,10 @@ services:
     container_name: ollama
     restart: unless-stopped
     tty: true
-    ## Optional: If accessing local endpoints outside of your Docker network (e.g. LM Studio)
-    # network_mode: host
+    network_mode: host
     volumes:
       - ollama:/root/.ollama
+      - ${MODELS_DIR}:/models
     deploy:
       resources:
         reservations:
