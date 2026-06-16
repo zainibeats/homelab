@@ -21,17 +21,17 @@ services:
     labels:
       - traefik.enable=true
 
-      - traefik.http.routers.convertx.rule=Host(`open-webui.${DOMAIN}`)
-      - traefik.http.routers.convertx.entrypoints=websecure
-      - traefik.http.routers.convertx.tls=true
-      - traefik.http.routers.convertx.tls.certresolver=cloudflare
+      - traefik.http.routers.open-webui.rule=Host(`open-webui.${DOMAIN}`)
+      - traefik.http.routers.open-webui.entrypoints=websecure
+      - traefik.http.routers.open-webui.tls=true
+      - traefik.http.routers.open-webui.tls.certresolver=cloudflare
 
-      - traefik.http.routers.convertx-lan.rule=Host(`open-webui.${SUBDOMAIN}.${DOMAIN}`)
-      - traefik.http.routers.convertx-lan.entrypoints=websecure
-      - traefik.http.routers.convertx-lan.tls=true
-      - traefik.http.routers.convertx-lan.tls.certresolver=cloudflare
+      - traefik.http.routers.open-webui-lan.rule=Host(`open-webui.${SUBDOMAIN}.${DOMAIN}`)
+      - traefik.http.routers.open-webui-lan.entrypoints=websecure
+      - traefik.http.routers.open-webui-lan.tls=true
+      - traefik.http.routers.open-webui-lan.tls.certresolver=cloudflare
 
-      - traefik.http.services.convertx.loadbalancer.server.port=8080
+      - traefik.http.services.open-webui.loadbalancer.server.port=8080
 
 volumes:
   open-webui:
