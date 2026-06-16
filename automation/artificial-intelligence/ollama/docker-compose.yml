@@ -1,0 +1,25 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    tty: true
+    restart: unless-stopped
+    networks:
+      - tmdb-net
+    volumes:
+      - ollama:/root/.ollama
+      - ${MODELS_DIR}:/models
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all # Or specify device IDs like ['0']
+              capabilities: [gpu]
+
+volumes:
+  ollama:
+
+networks:
+  tmdb-net:
+    external: true
