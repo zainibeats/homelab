@@ -2,16 +2,16 @@ services:
   syncthing:
     image: syncthing/syncthing
     container_name: syncthing
-    hostname: <CHOOSE_HOSTNAME> # (e.g., TrueNAS-Backup)
+    hostname: ${HOSTNAME}
+    network_mode: host
+    restart: unless-stopped
     environment:
       - PUID=1000
       - PGID=1000
     volumes:
-      - /<CHOOSE_PATH_FOR_SYNCTHING_DATA>/syncthing:/var/syncthing
-      # If directory above is not on host machine (eg. external drive), use the following:
-      - /<CHOOSE_PATH_FOR_SYNCTHING_CONFIG>/syncthing/config:/var/syncthing/config
-    network_mode: host
-    restart: unless-stopped
+      - ${SYNCTHING_DATA}:/var/syncthing
+      ## If directory above is not on host machine (e.g. external drive), use the following:
+      - ./config:/var/syncthing/config
     healthcheck:
       test: curl -fkLsS -m 2 127.0.0.1:8384/rest/noauth/health | grep -o --color=never OK || exit 1
       interval: 1m

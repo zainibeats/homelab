@@ -2,10 +2,9 @@ services:
   ollama:
     image: ollama/ollama:latest
     container_name: ollama
+    network_mode: host
     tty: true
     restart: unless-stopped
-    networks:
-      - tmdb-net
     volumes:
       - ollama:/root/.ollama
       - ${MODELS_DIR}:/models
@@ -20,6 +19,3 @@ services:
 volumes:
   ollama:
 
-networks:
-  tmdb-net:
-    external: true
