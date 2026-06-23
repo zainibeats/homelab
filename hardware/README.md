@@ -2,7 +2,7 @@
 
 This section documents the physical hardware that powers my home lab. It covers current devices, network architecture, power‑management strategies, and future build plans. 
 
-> For my build processes, insights, stories, photos and more, visit my [blog](https://blog.czaini.net).
+> For my build processes, insights, stories, photos and more, visit my [blog](https://czaini.net/blog).
 
 ---
 
