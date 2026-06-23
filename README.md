@@ -2,7 +2,7 @@
 
 This repository contains configuration files and documentation for my homelab setup, including Docker Compose configurations, infrastructure details, and hardware specifications. Further details about the hardware and network powering this homelab are available in the [Hardware](./hardware/README.md) readme.
 
-> For my build processes, insights, stories, photos, and more, visit my [blog](https://blog.czaini.net).
+> For my build processes, insights, stories, photos, and more, visit my [blog](https://czaini.net/blog).
 
 ## Infrastructure Overview
 | Device                     | Purpose                                       | OS                     
