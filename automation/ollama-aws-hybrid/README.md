@@ -1,6 +1,6 @@
 # Ollama AWS Hybrid Deployment
 
-> **Experimental** — This is an exploratory setup and not the primary Ollama deployment. For the standard local-only configuration, see [ollama-openwebui](../ollama-openwebui/README.md).
+> **Experimental** — This is an exploratory setup and not the primary Ollama deployment. For the standard local-only configuration, see [ai-stack](../ai-stack/README.md).
 
 This project provides a hybrid LLM deployment that runs your large language models locally on a home machine while exposing a user‑friendly web interface via an AWS EC2 instance. The setup uses **Gluetun** to establish a WireGuard tunnel from the EC2 host to the local Ollama service, allowing Open WebUI to connect to the models securely over the internet.
 
