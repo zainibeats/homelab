@@ -49,18 +49,18 @@ variable "ingress_public_ip_cidr" {
       can(cidrnetmask(cidr_block)) &&
       endswith(cidr_block, "/32")
     ])
-    error_message = "Address must be in CIDR notation and must end in /32"
+    error_message = "Address must be a list of strings in CIDR notation and must end in /32 (e.g. ['8.8.8.8/32'])"
   }
 }
 
 variable "key_name" {
   description = "Public key name"
   type        = string
-  default     = "ollama-key"
+  default     = "open-webui-key"
 }
 
 variable "public_key" {
   description = "Public key path"
   type        = string
-  default     = "~/.ssh/ollama-key.pub"
+  default     = "~/.ssh/open-webui-key.pub"
 }

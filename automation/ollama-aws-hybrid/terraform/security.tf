@@ -5,13 +5,23 @@ resource "aws_security_group" "open_webui_sg" {
   vpc_id      = aws_vpc.open_webui_vpc.id
 
   ingress {
+    description = "HTTPS from specified public IP"
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = var.ingress_public_ip_cidr
   }
 
+  ingress {
+    description = "SSH from specified public IP"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = var.ingress_public_ip_cidr
+  }
+
   egress {
+    description = "Allow all outbound traffic"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
