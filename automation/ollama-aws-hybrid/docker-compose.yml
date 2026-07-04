@@ -51,7 +51,7 @@ services:
     volumes:
       - open-webui:/app/backend/data
     environment:
-      - "OLLAMA_BASE_URL=http://192.168.1.100:11434" # Points to the ollama service. Must add 'network_mode: host' to environment on local ollama instance to use local ip
+      - "OLLAMA_BASE_URL=${OLLAMA_BASE_URL}" # Points to the ollama service. Must add 'network_mode: host' to environment on local ollama instance to use local ip
       - "WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}"
     depends_on:
       - gluetun
