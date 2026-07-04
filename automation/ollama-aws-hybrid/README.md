@@ -66,9 +66,10 @@ Traefik requires these values in `.env`:
 
 Create a DNS record for `OPENWEBUI_HOST` that points to the EC2 instance's
 public address. Then copy `.env.example` to `.env`, replace every placeholder,
-and start the stack:
+ensure Traefik's certificate store is private, and start the stack:
 
 ```shell
+chmod 600 ./letsencrypt/acme.json
 docker compose up -d
 ```
 
