@@ -11,6 +11,7 @@ This project provides a hybrid LLM deployment that runs your large language mode
 **EC2 Instance**:
 - Gluetun runs inside the instance and creates a secure tunnel to the local network.
 - Open‑WebUI runs inside the same compose stack and shares a container network with Gluetun (`network_mode: "service:gluetun"`), so it can communicate with the tunnel.
+- Traefik terminates HTTPS with a certificate obtained through Cloudflare's DNS challenge and proxies requests to Open WebUI through Gluetun's shared network namespace.
 
 **Local**:
 - Ollama is exposed on the LAN (e.g., `http://192.168.1.100:11434`) and is reachable from the EC2 instance through the WireGuard tunnel.
@@ -37,3 +38,9 @@ services:
 ### Environment Variables
 
 **IMPORTANT**: Any IP that is being used for the health check during the gluetun startup must be included in `WIREGUARD_ALLOWED_IPS`. For simplicity (and to whitelist Cloudflare DNS), I've opted for 1.1.1.1/32 in the example [env file](./.env.example). Without a passing the healthcheck, the VPN connection will be unstable.
+
+Set `OPENWEBUI_HOST` to the DNS hostname that resolves to the EC2 instance. The
+Cloudflare token must be able to edit DNS records for that hostname's zone so
+Traefik can complete the DNS-01 certificate challenge. Only TCP port 443 needs
+to be exposed by the instance; restrict it to your trusted public CIDR in the
+Terraform security group.

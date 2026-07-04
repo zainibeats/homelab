@@ -1,4 +1,22 @@
 services:
+  traefik:
+    image: traefik:v3.6
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "443:443"
+    environment:
+      CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN}
+      TRAEFIK_CERTIFICATESRESOLVERS_CLOUDFLARE_ACME_EMAIL: ${ACME_EMAIL}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+      - traefik-certs:/var/traefik/certs
+    networks:
+      - traefik-proxy
+
   gluetun:
     image: qmcgaw/gluetun
     container_name: gluetun
@@ -11,14 +29,19 @@ services:
       - net.ipv6.conf.all.disable_ipv6=0
     devices:
       - /dev/net/tun:/dev/net/tun
-    ports:
-      - 3000:8080
     volumes:
       - ./gluetun:/gluetun
     env_file:
       - .env
     networks:
-      - openwebui-net
+      - traefik-proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.open-webui.rule=Host(`${OPENWEBUI_HOST}`)
+      - traefik.http.routers.open-webui.entrypoints=websecure
+      - traefik.http.routers.open-webui.tls=true
+      - traefik.http.routers.open-webui.tls.certresolver=cloudflare
+      - traefik.http.services.open-webui.loadbalancer.server.port=8080
 
   open-webui:
     image: ghcr.io/open-webui/open-webui:main
@@ -35,7 +58,9 @@ services:
 
 volumes:
   open-webui:
+  traefik-certs:
 
 networks:
-  openwebui-net:
+  traefik-proxy:
+    name: traefik-proxy
     driver: bridge
