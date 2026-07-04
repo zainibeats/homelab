@@ -2,3 +2,4 @@
 logs/
 */syncthing/config/*
 *.pem
+.terraform/
