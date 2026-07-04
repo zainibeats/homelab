@@ -41,5 +41,5 @@ resource "aws_key_pair" "open_webui_kp" {
 }
 
 locals {
-  public_key_content = file(pathexpand(var.public_key))
+  public_key_content = file(pathexpand(var.public_key_path))
 }

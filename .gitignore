@@ -3,3 +3,7 @@ logs/
 */syncthing/config/*
 *.pem
 .terraform/
+*.tfstate
+terraform.tfstate.backup
+terraform.tfvars
+.terraform.tfstate.lock.info

@@ -20,6 +20,16 @@ resource "aws_internet_gateway" "open_webui_igw" {
   }
 }
 
+# Elastic IP
+resource "aws_eip" "open_webui_eip" {
+  instance = aws_instance.open_webui_ec2_instance.id
+
+  tags = {
+    Environment = var.environment
+    Name        = "open-webui-${var.environment}-eip"
+  }
+}
+
 # Route Table
 resource "aws_route_table" "open_webui_rt" {
   vpc_id = aws_vpc.open_webui_vpc.id

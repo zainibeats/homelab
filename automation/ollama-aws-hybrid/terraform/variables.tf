@@ -7,7 +7,6 @@ variable "region" {
 variable "profile" {
   type        = string
   description = "AWS profile"
-  default     = "vs-code"
 }
 
 variable "environment" {
@@ -59,8 +58,20 @@ variable "key_name" {
   default     = "open-webui-key"
 }
 
-variable "public_key" {
+variable "public_key_path" {
   description = "Public key path"
   type        = string
   default     = "~/.ssh/open-webui-key.pub"
+}
+
+variable "private_key_path" {
+  description = "Private key path"
+  type        = string
+  default     = "~/.ssh/open-webui-key"
+}
+
+variable "username" {
+  description = "Username for the EC2 instance"
+  type        = string
+  default     = "ubuntu"
 }
