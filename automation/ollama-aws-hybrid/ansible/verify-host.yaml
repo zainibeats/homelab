@@ -1,0 +1,13 @@
+- name: Verify Open WebUI host prerequisites
+  hosts: open_webui
+  gather_facts: true
+
+  tasks:
+    - name: Display operating system distribution
+      ansible.builtin.debug:
+        var: ansible_distribution
+    - name: Gather service facts
+      ansible.builtin.service_facts:
+    - name: Display service details
+      ansible.builtin.debug:
+        var: ansible_facts.services
