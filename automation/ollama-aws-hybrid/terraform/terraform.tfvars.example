@@ -1,0 +1,2 @@
+ingress_public_ip_cidr = ["1.1.1.1/32"]
+profile                = "vs-code"
