@@ -1,12 +1,12 @@
 variable "region" {
   type        = string
-  description = "Region for VPC"
+  description = "AWS region for the deployment"
   default     = "us-west-2"
 }
 
-variable "profile" {
+variable "aws_profile" {
   type        = string
-  description = "AWS profile"
+  description = "AWS CLI profile used by the provider"
 }
 
 variable "environment" {
@@ -38,13 +38,18 @@ variable "instance_type" {
   default     = "t3.small"
 }
 
-variable "ingress_public_ip_cidr" {
+variable "availability_zone_id" {
+  description = "Availability zone ID for the EC2 instance"
+  type        = string
+}
+
+variable "trusted_ipv4_cidrs" {
   type        = list(string)
-  description = "CIDR block(s) for ip address allowed for ingress in security group"
+  description = "Trusted IPv4 addresses allowed through the security group, expressed as /32 CIDRs"
 
   validation {
     condition = alltrue([
-      for cidr_block in var.ingress_public_ip_cidr :
+      for cidr_block in var.trusted_ipv4_cidrs :
       can(cidrnetmask(cidr_block)) &&
       endswith(cidr_block, "/32")
     ])
@@ -52,8 +57,8 @@ variable "ingress_public_ip_cidr" {
   }
 }
 
-variable "key_name" {
-  description = "Public key name"
+variable "ssh_key_name" {
+  description = "Name assigned to the EC2 SSH key pair"
   type        = string
   default     = "open-webui-key"
 }
@@ -70,8 +75,8 @@ variable "private_key_path" {
   default     = "~/.ssh/open-webui-key"
 }
 
-variable "username" {
-  description = "Username for the EC2 instance"
+variable "ssh_username" {
+  description = "Username used to connect to the EC2 instance over SSH"
   type        = string
   default     = "ubuntu"
 }

@@ -37,6 +37,54 @@ alternative should not be assumed to reduce the public IPv4 cost.
 **Local**:
 - Ollama is exposed on the LAN (e.g., `http://192.168.1.100:11434`) and is reachable from the EC2 instance through the WireGuard tunnel.
 
+## Terraform
+
+The configuration in [`terraform/`](./terraform/) creates the AWS resources
+for the EC2 host: a VPC, public subnet, internet gateway, route table, security
+group, SSH key pair, EC2 instance, encrypted EBS root volume, and Elastic IP.
+
+Before starting, configure an AWS CLI profile and create the SSH key referenced
+by `public_key_path`. Then create your local variables file:
+
+```shell
+cd terraform
+cp terraform.tfvars.example terraform.tfvars
+```
+
+Update `terraform.tfvars` with `aws_profile`, one or more trusted public IPv4
+addresses in `/32` CIDR notation under `trusted_ipv4_cidrs`, and an
+`availability_zone_id`. Use an availability-zone ID such as `usw2-az2`, not a
+zone name such as `us-west-2b`. Do not commit `terraform.tfvars` or Terraform
+state files.
+
+Review and deploy the infrastructure:
+
+```shell
+terraform init
+terraform fmt -check
+terraform validate
+terraform plan
+terraform apply
+```
+
+After the apply completes, use the
+`public_ip` output to create an `A` record for
+`OPENWEBUI_HOST` in the Cloudflare dashboard. The Elastic IP keeps this address
+stable across EC2 stop/start cycles. The `ssh_command` output provides the
+command for connecting to the instance.
+
+To remove the AWS resources when they are no longer needed, review the destroy
+plan before confirming it:
+
+```shell
+terraform plan -destroy
+terraform destroy
+```
+
+This project currently uses local Terraform state. That is suitable for an
+experimental single-user deployment; shared or production use should move the
+state to an encrypted remote backend with locking.
+
 ## Configuration
 
 **EC2 Instance**:

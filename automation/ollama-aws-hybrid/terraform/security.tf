@@ -1,23 +1,23 @@
-# Security Group
-resource "aws_security_group" "open_webui_sg" {
-  name        = "open-webui-sg"
-  description = "allow HTTPS from specified public IP only"
-  vpc_id      = aws_vpc.open_webui_vpc.id
+# Open WebUI security group
+resource "aws_security_group" "open_webui" {
+  name        = "open-webui-${var.environment}-sg"
+  description = "Allow HTTPS and SSH from trusted IPv4 addresses"
+  vpc_id      = aws_vpc.main.id
 
   ingress {
-    description = "HTTPS from specified public IP"
+    description = "HTTPS from trusted IPv4 addresses"
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = var.ingress_public_ip_cidr
+    cidr_blocks = var.trusted_ipv4_cidrs
   }
 
   ingress {
-    description = "SSH from specified public IP"
+    description = "SSH from trusted IPv4 addresses"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = var.ingress_public_ip_cidr
+    cidr_blocks = var.trusted_ipv4_cidrs
   }
 
   egress {
@@ -32,14 +32,4 @@ resource "aws_security_group" "open_webui_sg" {
     Environment = var.environment
     Name        = "open-webui-${var.environment}-sg"
   }
-}
-
-# Keypair
-resource "aws_key_pair" "open_webui_kp" {
-  key_name   = var.key_name
-  public_key = local.public_key_content
-}
-
-locals {
-  public_key_content = file(pathexpand(var.public_key_path))
 }
