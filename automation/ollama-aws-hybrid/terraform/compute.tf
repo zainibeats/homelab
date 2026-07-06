@@ -5,6 +5,7 @@ resource "aws_instance" "open_webui" {
   key_name               = aws_key_pair.open_webui.key_name
   vpc_security_group_ids = [aws_security_group.open_webui.id]
   subnet_id              = aws_subnet.public.id
+  user_data              = file("cloud-init.yaml")
 
   root_block_device {
     volume_type           = "gp3"
