@@ -136,3 +136,37 @@ docker compose up -d
 Traefik discovers the route from labels on the Gluetun service. This is
 intentional: Open WebUI uses `network_mode: "service:gluetun"`, so it shares
 Gluetun's network namespace and is reachable through Gluetun on port `8080`.
+
+## Ansible
+
+The playbooks in [`ansible/`](./ansible/) verify the EC2 prerequisites and
+deploy the Compose and Traefik configuration. Create a local inventory from the
+example and replace the EC2 address and SSH key path:
+
+```shell
+cd ansible
+cp open-webui-ec2-instance.example.yaml open-webui-ec2-instance.yaml
+```
+
+Create the runtime environment file from the project example, fill in every
+placeholder, and encrypt the complete file before running the deployment:
+
+```shell
+cp ../.env.example files/runtime.env
+ansible-vault encrypt files/runtime.env
+```
+
+`files/runtime.env` is ignored by Git. Keep the Vault password outside this
+repository. The deployment decrypts the file while copying it to the EC2 host
+as `/home/ubuntu/ollama-aws-hybrid/.env` with mode `0600`; the remote file is
+plaintext and must retain its restrictive permissions.
+
+Verify the host, then deploy the configuration:
+
+```shell
+ansible-playbook verify-host.yaml
+ansible-playbook --ask-vault-pass setup.yaml
+```
+
+Run `setup.yaml` a second time to confirm idempotency. The second run should
+report no changes when the deployed configuration is already current.
