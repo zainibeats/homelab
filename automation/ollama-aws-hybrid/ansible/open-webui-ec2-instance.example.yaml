@@ -3,7 +3,7 @@ all:
     open_webui:
       hosts:
         open_webui_ec2_instance:
-          ansible_host: EC2_PUBLIC_IP
+          ansible_host: REPLACE_WITH_EC2_PUBLIC_IP
           ansible_user: ubuntu
           ansible_ssh_private_key_file: ~/.ssh/open-webui-key
           ansible_python_interpreter: /usr/bin/python3
