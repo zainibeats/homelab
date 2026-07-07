@@ -8,6 +8,9 @@
         var: ansible_distribution
     - name: Gather service facts
       ansible.builtin.service_facts:
-    - name: Display service details
-      ansible.builtin.debug:
-        var: ansible_facts.services
+    - name: Verify Docker is running and enabled
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['docker.service'].state == 'running'
+          - ansible_facts.services['docker.service'].status == 'enabled'
+        fail_msg: Docker is not running and/or not enabled
