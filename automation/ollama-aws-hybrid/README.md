@@ -2,7 +2,7 @@
 
 > **Experimental** — This is an exploratory setup and not the primary Ollama deployment. For the standard local-only configuration, see [ai-stack](../ai-stack/README.md).
 
-This project provides a hybrid LLM deployment that runs your large language models locally on a home machine while exposing a user‑friendly web interface via an AWS EC2 instance. The setup uses **Gluetun** to establish a WireGuard tunnel from the EC2 host to the local Ollama service, allowing Open WebUI to connect to the models securely over the internet.
+This project provides a hybrid LLM deployment that runs your large language models locally on a home machine while exposing a user‑friendly web interface via an AWS EC2 instance. Public clients connect to Open WebUI over HTTPS, and Open WebUI reaches the local Ollama service through a WireGuard tunnel managed by **Gluetun**.
 
 The preferred workflow uses Terraform to provision the EC2 host, cloud-init to
 install Docker and Docker Compose, and Ansible to configure and run the Compose
@@ -18,7 +18,7 @@ not need to expose an HTTP listener on port 80.
 <img src="https://assets.czaini.net/images/aws-ollama-diagram.jpg" width="50%" height="auto"/>
 
 **EC2 Instance**:
-- Gluetun runs inside the instance and creates a secure tunnel to the local network.
+- Gluetun runs inside the instance and creates a WireGuard tunnel to the local network.
 - Open‑WebUI runs inside the same compose stack and shares a container network with Gluetun (`network_mode: "service:gluetun"`), so it can communicate with the tunnel.
 - Traefik terminates HTTPS with a certificate obtained through Cloudflare's DNS challenge and proxies requests to Open WebUI through Gluetun's shared network namespace.
 
@@ -79,9 +79,10 @@ terraform apply
 ```
 
 After the apply completes, wait for cloud-init to finish installing Docker,
-then use the `public_ip` output to create an `A` record for `OPENWEBUI_HOST` in
-the Cloudflare dashboard. The Elastic IP keeps this address stable across EC2
-stop/start cycles. The `ssh_command` output provides the command for
+then use the `public_ip` output to create an `A` record for
+`open-webui.${DOMAIN}` in the Cloudflare dashboard. The Elastic IP keeps this
+address stable across EC2 stop/start cycles. The `ssh_command` output provides
+the command for
 connecting to the instance.
 
 To remove the AWS resources when they are no longer needed, review the destroy
@@ -123,24 +124,25 @@ services:
 
 **IMPORTANT**: Any IP that is being used for the health check during the gluetun startup must be included in `WIREGUARD_ALLOWED_IPS`. For simplicity (and to whitelist Cloudflare DNS), I've opted for 1.1.1.1/32 in the example [env file](./.env.example). Without a passing the healthcheck, the VPN connection will be unstable.
 
-Set `OPENWEBUI_HOST` to the DNS hostname that resolves to the EC2 instance. The
-Cloudflare token must be able to edit DNS records for that hostname's zone so
-Traefik can complete the DNS-01 certificate challenge. Only TCP port 443 needs
-to be exposed by the instance; restrict it to your trusted public CIDR in the
-Terraform security group.
+Set `DOMAIN` to the base DNS zone for the deployment. Traefik routes
+`open-webui.${DOMAIN}` to Open WebUI, so that hostname must resolve to the EC2
+instance. The Cloudflare token must be able to edit DNS records for that zone
+so Traefik can complete the DNS-01 certificate challenge. Only TCP port 443
+needs to be exposed by the instance; restrict it to your trusted public CIDR in
+the Terraform security group.
 
 Traefik requires these values in `.env`:
 
-- `OPENWEBUI_HOST`: hostname used to reach Open WebUI, such as
-  `ollama.example.com`.
+- `DOMAIN`: base DNS zone used to build the Open WebUI hostname, such as
+  `example.com` for `open-webui.example.com`.
 - `CF_DNS_API_TOKEN`: Cloudflare API token with DNS edit access to the relevant
   zone.
 - `ACME_EMAIL`: email address used for ACME certificate registration.
 - `WEBUI_SECRET_KEY`: long, random secret used by Open WebUI.
 
-Create a DNS record for `OPENWEBUI_HOST` that points to the EC2 instance's
-public address. DNS propagation and the first Traefik certificate request can
-take a few minutes.
+Create a DNS record for `open-webui.${DOMAIN}` that points to the EC2
+instance's public address. DNS propagation and the first Traefik certificate
+request can take a few minutes.
 
 For a manual deployment, copy `.env.example` to `.env`, replace every
 placeholder, ensure Traefik's certificate store is private, and start the
