@@ -4,6 +4,11 @@
 
 This project provides a hybrid LLM deployment that runs your large language models locally on a home machine while exposing a user‑friendly web interface via an AWS EC2 instance. The setup uses **Gluetun** to establish a WireGuard tunnel from the EC2 host to the local Ollama service, allowing Open WebUI to connect to the models securely over the internet.
 
+The preferred workflow uses Terraform to provision the EC2 host, cloud-init to
+install Docker and Docker Compose, and Ansible to configure and run the Compose
+stack. The Compose files can still be used manually if you prefer to provision
+or configure the host yourself.
+
 Public traffic enters the EC2 instance over HTTPS through **Traefik**. Traefik
 obtains certificates using Cloudflare's DNS-01 challenge, so the instance does
 not need to expose an HTTP listener on port 80.
@@ -42,6 +47,8 @@ alternative should not be assumed to reduce the public IPv4 cost.
 The configuration in [`terraform/`](./terraform/) creates the AWS resources
 for the EC2 host: a VPC, public subnet, internet gateway, route table, security
 group, SSH key pair, EC2 instance, encrypted EBS root volume, and Elastic IP.
+The EC2 instance uses [`cloud-init.yaml`](./terraform/cloud-init.yaml) to
+install Docker and Docker Compose during first boot.
 
 Before starting, configure an AWS CLI profile and create the SSH key referenced
 by `public_key_path`. Then create your local variables file:
@@ -57,6 +64,10 @@ addresses in `/32` CIDR notation under `trusted_ipv4_cidrs`, and an
 zone name such as `us-west-2b`. Do not commit `terraform.tfvars` or Terraform
 state files.
 
+`trusted_ipv4_cidrs` currently allows both SSH and HTTPS access to the EC2
+instance. Only include public client IPs that should have that access. For a
+broader deployment, split SSH and HTTPS into separate security group inputs.
+
 Review and deploy the infrastructure:
 
 ```shell
@@ -67,11 +78,11 @@ terraform plan
 terraform apply
 ```
 
-After the apply completes, use the
-`public_ip` output to create an `A` record for
-`OPENWEBUI_HOST` in the Cloudflare dashboard. The Elastic IP keeps this address
-stable across EC2 stop/start cycles. The `ssh_command` output provides the
-command for connecting to the instance.
+After the apply completes, wait for cloud-init to finish installing Docker,
+then use the `public_ip` output to create an `A` record for `OPENWEBUI_HOST` in
+the Cloudflare dashboard. The Elastic IP keeps this address stable across EC2
+stop/start cycles. The `ssh_command` output provides the command for
+connecting to the instance.
 
 To remove the AWS resources when they are no longer needed, review the destroy
 plan before confirming it:
@@ -96,7 +107,10 @@ _See full configuration [here](./docker-compose.yml)_
 
 **Local**:
 
-- The local compose stack should include Open WebUI to adjust permissions, troubleshoot, etc. 
+- Ollama must listen on an address reachable from the WireGuard client.
+- Allow only the WireGuard client IP to reach Ollama on TCP port `11434`.
+- The local compose stack can still include Open WebUI for local
+  troubleshooting and permission changes.
 
 ```yaml
 # Running on local node
@@ -125,8 +139,12 @@ Traefik requires these values in `.env`:
 - `WEBUI_SECRET_KEY`: long, random secret used by Open WebUI.
 
 Create a DNS record for `OPENWEBUI_HOST` that points to the EC2 instance's
-public address. Then copy `.env.example` to `.env`, replace every placeholder,
-ensure Traefik's certificate store is private, and start the stack:
+public address. DNS propagation and the first Traefik certificate request can
+take a few minutes.
+
+For a manual deployment, copy `.env.example` to `.env`, replace every
+placeholder, ensure Traefik's certificate store is private, and start the
+stack:
 
 ```shell
 chmod 600 ./letsencrypt/acme.json
@@ -161,7 +179,7 @@ repository. The deployment decrypts the file while copying it to the EC2 host
 as `/home/ubuntu/ollama-aws-hybrid/.env` with mode `0600`; the remote file is
 plaintext and must retain its restrictive permissions.
 
-Verify the host, then deploy the configuration:
+Verify the host, then prepare the application directory:
 
 ```shell
 ansible-playbook verify-host.yaml
@@ -170,3 +188,15 @@ ansible-playbook --ask-vault-pass setup.yaml
 
 Run `setup.yaml` a second time to confirm idempotency. The second run should
 report no changes when the deployed configuration is already current.
+
+Deploy the stack:
+
+```shell
+ansible-playbook deploy.yaml
+```
+
+To stop the stack while preserving volumes:
+
+```shell
+ansible-playbook teardown.yaml
+```

@@ -37,7 +37,7 @@ services:
       - traefik-proxy
     labels:
       - traefik.enable=true
-      - traefik.http.routers.open-webui.rule=Host(`${OPENWEBUI_HOST}`)
+      - traefik.http.routers.open-webui.rule=Host(`open-webui.${DOMAIN}`)
       - traefik.http.routers.open-webui.entrypoints=websecure
       - traefik.http.routers.open-webui.tls=true
       - traefik.http.routers.open-webui.tls.certresolver=cloudflare
