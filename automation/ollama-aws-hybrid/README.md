@@ -35,9 +35,7 @@ As an alternative, [`ddclient`](../../infrastructure/ddclient/README.md) can
 update the Cloudflare DNS record when the instance's dynamically assigned
 public IP changes. This avoids reserving an Elastic IP, but introduces a period
 of downtime while the instance starts, `ddclient` detects the new address, and
-DNS caches expire. AWS charges for public IPv4 addresses whether they are
-dynamically assigned to EC2 or allocated as Elastic IP addresses, so this
-alternative should not be assumed to reduce the public IPv4 cost.
+DNS caches expire.
 
 **Local**:
 - Ollama is exposed on the LAN (e.g., `http://192.168.1.100:11434`) and is reachable from the EC2 instance through the WireGuard tunnel.
@@ -176,8 +174,7 @@ cp ../.env.example files/runtime.env
 ansible-vault encrypt files/runtime.env
 ```
 
-`files/runtime.env` is ignored by Git. Keep the Vault password outside this
-repository. The deployment decrypts the file while copying it to the EC2 host
+The deployment decrypts the file while copying it to the EC2 host
 as `/home/ubuntu/ollama-aws-hybrid/.env` with mode `0600`; the remote file is
 plaintext and must retain its restrictive permissions.
 
