@@ -1,17 +1,17 @@
-- name: Deploys Docker containers - Open WebUI, Traefik, and Gluetun
+- name: Prepare host for Open WebUI Compose stack
   hosts: open_webui
   gather_facts: true
   become: true
 
   tasks:
-    - name: Create Docker directory
+    - name: Create application directory
       ansible.builtin.file:
         state: directory
         owner: ubuntu
         group: ubuntu
         mode: "0755"
         path: /home/ubuntu/ollama-aws-hybrid
-    - name: Copy compose yaml
+    - name: Copy Docker Compose file
       ansible.builtin.copy:
         owner: ubuntu
         group: ubuntu
@@ -25,28 +25,28 @@
         group: ubuntu
         mode: "0755"
         path: /home/ubuntu/ollama-aws-hybrid/config
-    - name: Copy Traefik config
+    - name: Copy Traefik static configuration
       ansible.builtin.copy:
         owner: ubuntu
         group: ubuntu
         mode: "0644"
         src: ../config/traefik.yml
         dest: /home/ubuntu/ollama-aws-hybrid/config/traefik.yml
-    - name: Create Letsencrypt directory
+    - name: Create Let's Encrypt directory
       ansible.builtin.file:
         state: directory
         owner: ubuntu
         group: ubuntu
         mode: "0755"
         path: /home/ubuntu/ollama-aws-hybrid/letsencrypt
-    - name: Create acme json file
+    - name: Create Traefik ACME storage file
       ansible.builtin.file:
         state: touch
         owner: ubuntu
         group: ubuntu
         mode: "0600"
         path: /home/ubuntu/ollama-aws-hybrid/letsencrypt/acme.json
-    - name: Copy runtime.env
+    - name: Copy encrypted runtime environment file
       ansible.builtin.copy:
         owner: ubuntu
         group: ubuntu

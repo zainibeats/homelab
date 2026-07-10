@@ -3,7 +3,7 @@
   gather_facts: true
 
   tasks:
-    - name: Display operating system distribution
+    - name: Show operating system distribution
       ansible.builtin.debug:
         var: ansible_facts["distribution"]
     - name: Gather service facts
@@ -14,11 +14,11 @@
           - ansible_facts.services['docker.service'].state == 'running'
           - ansible_facts.services['docker.service'].status == 'enabled'
         fail_msg: Docker is not running and/or not enabled
-    - name: Check Docker Compose version and capture output
+    - name: Check Docker Compose version
       ansible.builtin.command:
         cmd: docker compose version
       register: docker_compose_result
       changed_when: false
-    - name: Display captured Docker Compose version output
+    - name: Show Docker Compose version
       ansible.builtin.debug:
         var: docker_compose_result.stdout

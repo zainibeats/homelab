@@ -1,10 +1,10 @@
-- name: Stop Open WebUI Compose stack
+- name: Deploy Open WebUI Compose stack
   hosts: open_webui
   gather_facts: false
   become: true
 
   tasks:
-    - name: Stop and remove Compose stack
+    - name: Start Compose stack
       community.docker.docker_compose_v2:
         project_src: /home/ubuntu/ollama-aws-hybrid
-        state: absent
+        state: present
