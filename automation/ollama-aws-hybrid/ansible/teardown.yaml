@@ -1,0 +1,10 @@
+- name: Stops Docker Compose stack - Open WebUI, Traefik, and Gluetun
+  hosts: open_webui
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Run `docker compose down`
+      community.docker.docker_compose_v2:
+        project_src: /home/ubuntu/ollama-aws-hybrid
+        state: absent
