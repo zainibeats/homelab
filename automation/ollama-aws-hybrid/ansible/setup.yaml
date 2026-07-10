@@ -32,6 +32,20 @@
         mode: "0644"
         src: ../config/traefik.yml
         dest: /home/ubuntu/ollama-aws-hybrid/config/traefik.yml
+    - name: Create Letsencrypt directory
+      ansible.builtin.file:
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: "0755"
+        path: /home/ubuntu/ollama-aws-hybrid/letsencrypt
+    - name: Create acme json file
+      ansible.builtin.file:
+        state: touch
+        owner: ubuntu
+        group: ubuntu
+        mode: "0600"
+        path: /home/ubuntu/ollama-aws-hybrid/letsencrypt/acme.json
     - name: Copy runtime.env
       ansible.builtin.copy:
         owner: ubuntu
