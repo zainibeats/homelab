@@ -1,6 +1,7 @@
 all:
   children:
-    linux_servers:
+
+    debian_servers:
       hosts:
         ubuntu_server:
           ansible_host: UBUNTU_SERVER_IP
@@ -12,7 +13,6 @@ all:
         azure_jump_server:
           ansible_host: AZURE_JUMP_SERVER_IP
           ansible_user: azureuser
-
 
     homelab_servers:
       hosts:
@@ -27,4 +27,3 @@ all:
   vars:
     ansible_user: ansible
     ansible_ssh_private_key_file: ~/.ssh/homelab_ansible
-    ansible_python_interpreter: /usr/bin/python3
