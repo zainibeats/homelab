@@ -1,7 +1,7 @@
 services:
   minecraft-server:
     image: itzg/minecraft-server:latest
-    container_name: minecraft-01-server
+    container_name: minecraft-server-01
     tty: true
     stdin_open: true
     restart: unless-stopped
@@ -9,7 +9,7 @@ services:
       - "25565:25565"
     networks:
       services:
-        ipv4_address: 172.100.20.10
+        ipv4_address: 172.100.1.10
     env_file: .env
     environment:
       EULA: "TRUE"
@@ -47,7 +47,7 @@ services:
       - ./netbird:/var/lib/netbird
     networks:
       services:
-        ipv4_address: 172.100.20.2
+        ipv4_address: 172.100.1.2
 
 networks:
   services:
@@ -55,5 +55,5 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.100.20.0/24
-          gateway: 172.100.20.1
+        - subnet: 172.100.1.0/24
+          gateway: 172.100.1.1
