@@ -1,0 +1,44 @@
+services:
+  palworld:
+    image: thijsvanloef/palworld-server-docker:latest
+    restart: unless-stopped
+    container_name: palworld-server-01
+    stop_grace_period: 30s # Set to however long you are willing to wait for the container to gracefully stop
+    ports:
+      - 8211:8211/udp
+      - 27015:27015/udp
+    env_file:
+       -  .env
+    volumes:
+       - ./data:/palworld/
+    networks:
+      services:
+        ipv4_address: 172.110.20.10
+
+  netbird:
+    image: netbirdio/netbird:latest
+    container_name: netbird-client
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_RESOURCE
+    env_file: .env
+    environment:
+      - NB_SETUP_KEY=${NB_SETUP_KEY}
+      - NB_MANAGEMENT_URL=${NB_MANAGEMENT_URL}
+      - NB_HOSTNAME=vps-services
+    volumes:
+      - ./netbird:/var/lib/netbird
+    networks:
+      services:
+        ipv4_address: 172.110.20.2
+
+networks:
+  services:
+    name: services
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.110.20.0/24
+          gateway: 172.110.20.1
