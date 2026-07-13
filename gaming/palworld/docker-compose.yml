@@ -13,7 +13,7 @@ services:
        - ./data:/palworld/
     networks:
       services:
-        ipv4_address: 172.110.20.10
+        ipv4_address: 172.110.2.10
 
   netbird:
     image: netbirdio/netbird:latest
@@ -32,7 +32,7 @@ services:
       - ./netbird:/var/lib/netbird
     networks:
       services:
-        ipv4_address: 172.110.20.2
+        ipv4_address: 172.110.2.2
 
 networks:
   services:
@@ -40,5 +40,5 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.110.20.0/24
-          gateway: 172.110.20.1
+        - subnet: 172.110.2.0/24
+          gateway: 172.110.2.1
