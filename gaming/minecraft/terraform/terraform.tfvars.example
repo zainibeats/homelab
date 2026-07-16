@@ -1,0 +1,20 @@
+
+
+compartment_id             = "ocid1.compartment.oc1..example"
+ssh_authorized_keys        = "ssh-rsa AAAA... user@example"
+instance_name              = "minecraft-02"
+vnic_name                  = "minecraft-02"
+assign_public_ip           = true
+image_id                   = "ocid1.image.oc1.us-sanjose-1.aaaaaaaampcjyzx2yxao74lngzxd7quaezhitmirxpnifuspwobw56t26nbq"
+boot_volume_size_in_gbs    = 47
+boot_volume_vpus_per_gb    = 10
+memory_in_gbs              = 24
+ocpus                      = 4
+availability_domain        = "ahrg:US-SANJOSE-1-AD-1"
+vcn_dns_label              = "minecraft_vcn_dns_label"
+subnet_dns_label           = "minecraft_subnet_dns_label"
+tenancy_ocid               = "ocid1.tenancy.oc1..aaaa..."
+user_ocid                  = "ocid1.user.oc1..aaaa..."
+fingerprint                = "aa:11:b2:2b... 22:c3:3c:44"
+private_key_path           = "~/.ssh/oci_api_key.pem"
+region                     = "us-sanjose-1"
