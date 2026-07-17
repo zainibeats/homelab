@@ -1,39 +1,44 @@
 services:
-  mc:
+  minecraft-server:
     image: itzg/minecraft-server:latest
-    container_name: my-server
+    container_name: minecraft-server-01
     tty: true
     stdin_open: true
-    restart: no
+    restart: unless-stopped
     ports:
       - "25565:25565"
+    networks:
+      services:
+        ipv4_address: 172.100.1.10
     env_file: .env
     environment:
       EULA: "TRUE"
-      # VERSION: ${MINECRAFT_VERSION:-LATEST}
-      TYPE: ${TYPE}
-      CF_API_KEY: ${CF_API_KEY}
-      CF_PAGE_URL: ${CF_PAGE_URL}
-
-      # --- EXTRA MODS ---
-      # Add slugs or IDs here (separated by commas or spaces)
-      # Example adds 'JourneyMap' and 'Mouse Tweaks'
-      # CURSEFORGE_FILES: |
-        # geckolib
-        # aquaculture
-        # naturalist
-
-      # --- VANILLA TWEAKS ---
-      # Paste your share code from the website here
-      # VANILLATWEAKS_SHARECODE: ${VANILLATWEAKS_SHARECODE}
-      VANILLATWEAKS_FILE: /config/vanillatweaks-datapacks.json,/config/vanillatweaks-resourcepacks.json
-      REMOVE_OLD_VANILLATWEAKS: "TRUE"
-
-      # --- PERFORMANCE & SYSTEM ---
-      MEMORY: ${MEMORY}
-      USE_AIKAR_FLAGS: ${USE_AIKAR_FLAGS}
-      USE_MEOWICE_FLAGS: ${USE_MEOWICE_FLAGS}
       TZ: ${TZ}
+
+      # --- OPTIONAL MODPACK SETTINGS ---
+      # Uncomment these when running a CurseForge modpack.
+      # TYPE: ${TYPE}
+      # CF_API_KEY: ${CF_API_KEY}
+      # CF_PAGE_URL: ${CF_PAGE_URL}
+
+      # --- OPTIONAL EXTRA MODS ---
+      # Add CurseForge slugs or project/file IDs here, separated by commas,
+      # spaces, or newlines.
+      # CURSEFORGE_FILES: |
+      #   geckolib
+      #   aquaculture
+      #   naturalist
+
+      # --- OPTIONAL VANILLA TWEAKS ---
+      # Mount the matching files under volumes before enabling these values.
+      # VANILLATWEAKS_SHARECODE: ${VANILLATWEAKS_SHARECODE}
+      # VANILLATWEAKS_FILE: /config/vanillatweaks-datapacks.json,/config/vanillatweaks-resourcepacks.json
+      # REMOVE_OLD_VANILLATWEAKS: "TRUE"
+
+      # --- OPTIONAL PERFORMANCE SETTINGS ---
+      # MEMORY: ${MEMORY}
+      # USE_AIKAR_FLAGS: ${USE_AIKAR_FLAGS}
+      # USE_MEOWICE_FLAGS: ${USE_MEOWICE_FLAGS}
 
       # --- SERVER SETTINGS ---
       MAX_PLAYERS: ${MAX_PLAYERS}
@@ -48,8 +53,36 @@ services:
       WHITELIST: |-
         ${OPERATOR1}
         ${USER1}
-
     volumes:
       - "./data:/data"
-      - ./config/vanillatweaks-datapacks.json:/config/vanillatweaks-datapacks.json:ro
-      - ./config/vanillatweaks-resourcepacks.json:/config/vanillatweaks-resourcepacks.json:ro
+      # Uncomment these when using VANILLATWEAKS_FILE above.
+      # - ./config/vanillatweaks-datapacks.json:/config/vanillatweaks-datapacks.json:ro
+      # - ./config/vanillatweaks-resourcepacks.json:/config/vanillatweaks-resourcepacks.json:ro
+
+  netbird:
+    image: netbirdio/netbird:latest
+    container_name: netbird-client
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_RESOURCE
+    env_file: .env
+    environment:
+      - NB_SETUP_KEY=${NB_SETUP_KEY}
+      - NB_MANAGEMENT_URL=${NB_MANAGEMENT_URL}
+      - NB_HOSTNAME=vps-services
+    volumes:
+      - ./netbird:/var/lib/netbird
+    networks:
+      services:
+        ipv4_address: 172.100.1.2
+
+networks:
+  services:
+    name: services
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.100.1.0/24
+          gateway: 172.100.1.1
