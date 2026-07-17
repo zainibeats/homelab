@@ -60,11 +60,11 @@ resource "oci_core_instance" "minecraft" {
     assign_ipv6ip             = false
     assign_private_dns_record = false
     assign_public_ip          = var.assign_public_ip
-    display_name              = var.vnic_name
+    display_name              = local.vnic_name
     subnet_id                 = oci_core_subnet.minecraft_public_subnet.id
   }
 
-  display_name = var.instance_name
+  display_name = local.instance_name
 
   instance_options {
     are_legacy_imds_endpoints_disabled = true

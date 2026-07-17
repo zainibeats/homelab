@@ -1,18 +1,29 @@
 variable "compartment_id" {
   type        = string
-  description = "Full OCI compartment OCID where the Minecraft resources will be created."
+  description = "Full OCI compartment OCID where the game server resources will be created."
+}
+
+variable "service_name" {
+  type        = string
+  description = "Short name for the game server, used to derive OCI display names."
+  default     = "minecraft"
+
+  validation {
+    condition     = can(regex("^[a-z][a-z0-9-]*$", var.service_name))
+    error_message = "service_name must start with a lowercase letter and contain only lowercase letters, numbers, and hyphens."
+  }
 }
 
 variable "vnic_name" {
   type        = string
-  description = "Display name of virtual NIC"
-  default     = "minecraft-vnic"
+  description = "Optional display name of virtual NIC. Defaults to <service_name>-vnic."
+  default     = null
 }
 
 variable "instance_name" {
   type        = string
-  description = "Display name of the instance"
-  default     = "minecraft-01"
+  description = "Optional display name of the instance. Defaults to <service_name>-01."
+  default     = null
 }
 
 variable "availability_domain" {
@@ -70,26 +81,26 @@ variable "vcn_cidr" {
 
 variable "vcn_display_name" {
   type        = string
-  description = "Display name for VCN"
-  default     = "minecraft-vcn"
+  description = "Optional display name for VCN. Defaults to <service_name>-vcn."
+  default     = null
 }
 
 variable "vcn_dns_label" {
   type        = string
-  description = "DNS label for the VCN"
-  default     = "minecraftvcn"
+  description = "Optional DNS label for the VCN. Defaults to service_name with hyphens removed plus vcn."
+  default     = null
 }
 
 variable "subnet_dns_label" {
   type        = string
-  description = "DNS label for the public subnet"
-  default     = "mcsubnet"
+  description = "Optional DNS label for the public subnet. Defaults to service_name with hyphens removed plus subnet."
+  default     = null
 }
 
 variable "public_subnet_name" {
   type        = string
-  description = "Display name for public subnet"
-  default     = "minecraft-public-subnet"
+  description = "Optional display name for public subnet. Defaults to <service_name>-public-subnet."
+  default     = null
 }
 
 variable "public_subnet_cidr" {
@@ -100,8 +111,8 @@ variable "public_subnet_cidr" {
 
 variable "internet_gateway_name" {
   type        = string
-  description = "Display name for Internet Gateway"
-  default     = "Internet Gateway minecraft-vcn"
+  description = "Optional display name for Internet Gateway. Defaults to Internet Gateway <service_name>-vcn."
+  default     = null
 }
 
 variable "shape" {
