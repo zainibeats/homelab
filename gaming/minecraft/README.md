@@ -9,7 +9,7 @@ My self-hosted Minecraft server running in Docker with NetBird for remote access
 - Docker Engine
 - Docker Compose
 
-The instructions assume the host is a Debian/Ubuntu VM that already has Docker installed.  
+The instructions assume the host is a Debian/Ubuntu VM that already has Docker installed.
 
 ---
 
@@ -24,9 +24,9 @@ A single [docker-compose.yml](./docker-compose.yml) file defines the Minecraft c
 
 ### NetBird Remote Access
 
-This requires a NetBird server to be set up first. I run mine on an Oracle Cloud Always Free 4-core ARM VPS (VM.Standard.A1.Flex) using NetBird's [Self-Hosting NetBird with Authentik](https://netbird.io/knowledge-hub/selfhost-netbird-with-authentik) guide.
+NetBird is the preferred remote access method for this server. See the shared [Gaming Services README](../README.md#remote-access) for the NetBird setup details.
 
-Set `NB_SETUP_KEY` and `NB_MANAGEMENT_URL` in `.env`, then start the default stack with:
+Set `NB_SETUP_KEY` and `NB_MANAGEMENT_URL` in `.env`, then start the stack with:
 
 ```bash
 docker compose up -d
@@ -34,14 +34,7 @@ docker compose up -d
 
 ### WireGuard Alternative
 
-WireGuard is required for secure access from outside the local network. The full setup steps are in the [WireGuard README](../../infrastructure/wireguard/README.md). An example Minecraft server specific configuration can be found [here](../../infrastructure/wireguard/templates/minecraft-server-example.conf)
-
-In brief:
-
-1. Install WireGuard on the host (`apt install wireguard iptables`).  
-2. Enable IP forwarding and configure firewall rules that allow traffic from the VPN subnet to reach port `25565`.  
-3. Generate server and client keys, then create peer configurations.  
-4. Start the service: `sudo systemctl enable wg-quick@wg0 && sudo systemctl start wg-quick@wg0`.
+WireGuard can still be used as a fallback when NetBird is not available. The full setup steps are in the [WireGuard README](../../infrastructure/wireguard/README.md), and an example Minecraft-specific configuration is available in the [Minecraft WireGuard template](../../infrastructure/wireguard/templates/minecraft-server-example.conf).
 
 ---
 
@@ -81,7 +74,7 @@ The default compose stack keeps the modpack-specific variables commented out. Un
 
 ### Volume Layout
 
-- `./data` – Persistent world data, server properties, player data.  
+- `./data` - Persistent world data, server properties, player data.
 - `config/vanillatweaks-datapacks.json` & `...resourcepacks.json` - Optional vanilla datapack/resourcepack overrides.
 
 When Vanilla Tweaks is enabled, keep these mounts read-only to prevent accidental modification by the container.
@@ -103,8 +96,8 @@ Place JSON files in the `config/` directory, uncomment the matching read-only vo
 
 ### Performance Flags
 
-The `itzg/minecraft-server` image supports a number of JVM flags.  
-- `USE_AIKAR_FLAGS=true` enables Aikar’s recommended flags for CPU‑bound workloads.  
+The `itzg/minecraft-server` image supports a number of JVM flags.
+- `USE_AIKAR_FLAGS=true` enables Aikar’s recommended flags for CPU-bound workloads.
 - `USE_MEOWICE_FLAGS=true` adds Meowice’s lightweight optimizations (optional).
 
 ---
@@ -132,8 +125,6 @@ docker compose down
 2. **Over NetBird** - Connect through NetBird and use the Minecraft server address exposed on that network.
 3. **Over WireGuard** - If you choose the WireGuard alternative, connect a client to the WireGuard network and use the VPN IP of the host (`10.8.0.1:25565` or whatever subnet you configured).
 
-
-
 ---
 
 ## Troubleshooting
@@ -142,7 +133,8 @@ docker compose down
 |---------|--------------|-----|
 | Server never starts | Missing EULA acceptance | Set `EULA=TRUE`. |
 | Mods not loading | Incorrect CurseForge API key or URL | Verify `CF_API_KEY` and `CF_PAGE_URL`. |
-| VPN traffic blocked | Firewall rules missing | Re‑run `wg-quick up wg0` and check `iptables -L FORWARD`. |
-| Player cannot connect via VPN | Port forwarding issue on router | Ensure UDP 51820 (or your custom port) is forwarded to the host. |
+| NetBird client not visible | Missing or invalid NetBird enrollment values | Verify `NB_SETUP_KEY` and `NB_MANAGEMENT_URL`, then restart the stack. |
+| WireGuard traffic blocked | Firewall rules missing | Re-run `wg-quick up wg0` and check `iptables -L FORWARD`. |
+| Player cannot connect over WireGuard | Port forwarding issue on router | Ensure UDP 51820, or your custom port, is forwarded to the host. |
 
-For detailed WireGuard troubleshooting, refer to the [WireGuard README](../../infrastructure/wireguard/README.md).
+For shared remote access guidance, refer to the [Gaming Services README](../README.md#remote-access).
