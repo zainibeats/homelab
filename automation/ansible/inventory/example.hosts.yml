@@ -1,0 +1,29 @@
+all:
+  children:
+
+    debian_servers:
+      hosts:
+        ubuntu_server:
+          ansible_host: UBUNTU_SERVER_IP
+          ansible_port: 2222
+        raspberry_pi:
+          ansible_host: RASPBERRY_PI_IP
+        proxmox_ve:
+          ansible_host: PROXMOX_VE_IP
+        azure_jump_server:
+          ansible_host: AZURE_JUMP_SERVER_IP
+          ansible_user: azureuser
+
+    homelab_servers:
+      hosts:
+        ubuntu_server:
+        raspberry_pi:
+        proxmox_ve:
+
+    cloud_servers:
+      hosts:
+        azure_jump_server:
+
+  vars:
+    ansible_user: ansible
+    ansible_ssh_private_key_file: ~/.ssh/homelab_ansible
