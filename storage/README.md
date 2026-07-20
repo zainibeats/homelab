@@ -20,16 +20,6 @@ This directory contains services focused on data storage, backup, and security f
 
 - **[Vaultwarden](./vaultwarden/README.md)** - Lightweight self-hosted password manager compatible with Bitwarden clients
 
-## Considerations
+## Storage Notes
 
-### Backup Strategy
-These services integrate with TrueNAS for reliable data backup:
-- **Vaultwarden**: Stored on encrypted TrueNAS dataset (`encrypted/vaultwarden`)
-- **Nextcloud**: Stored on family dataset (`family/nextcloud`)
-- **Immich**: Dedicated dataset (`immich/`)
-
-### Network Storage Integration
-Services are configured to use NFS/SMB mounts from TrueNAS:
-- **NFS Shares**: For example Nextcloud (`/mnt/nfs/family/nextcloud`)
-- **SMB Shares**: For Immich and other services requiring Windows compatibility
-- Automatic mounting via `/etc/fstab`
+These services use NAS-backed storage with separate datasets for application data, photos, private files, and backups.
