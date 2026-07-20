@@ -1,6 +1,6 @@
 # Homelab
 
-This repository contains configuration files and documentation for my homelab setup, including Docker Compose configurations, infrastructure details, and hardware specifications. Further details about the hardware and network powering this homelab are available in the [Hardware](./hardware/README.md) readme.
+This repository contains configuration files and documentation for my homelab setup, including Docker Compose configurations, service documentation, and hardware that powers the environment. Further details about the hardware inventory are available in the [Hardware](./hardware/README.md) readme.
 
 > For my build processes, insights, stories, photos, and more, visit my [blog](https://czaini.net/blog).
 
@@ -22,25 +22,9 @@ Services are organized into logical categories for easier management and navigat
 - **[Storage](./storage/README.md)** - Data storage, backup, and security services
 - **[Utilities](./utilities/README.md)** - General-purpose tools including file conversion, IT utilities, secret sharing, and virtual browser
 
-## Storage Configuration
+## Storage Overview
 
-This homelab is designed with modularity in mind:
-
-- **TrueNAS Datasets**:
-  - `/mnt/Ironwolf-Pro-8TB-Mirror/` (Media Storage Pool)
-    - `jellyfin_data/`
-      - Services: _Jellyfin and arr stack_
-  - `/mnt/exos-20tb/` (Application Storage Pool)
-    - `apps/`
-      - Services: _Gitea and SearXNG_
-    - `encrypted/`
-      - Services: _Vaultwarden and Syncthing_
-    - `ProxmoxData/`
-      - Services: _NFS share for Proxmox host (compute node)_
-    - `immich/`
-      - Services: _Immich_
-    - `family/`
-      - Services: _Nextcloud_
+Storage is provided by a dedicated NAS and separated by workload type. Media, application data, backups, virtual machine storage, photos, and private files are organized into separate datasets and shares so services can be managed and backed up independently.
 
 ## Automatic Updates
 
