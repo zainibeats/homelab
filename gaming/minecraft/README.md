@@ -19,7 +19,7 @@ The instructions assume the host is a Debian/Ubuntu VM that already has Docker i
 
 A single [docker-compose.yml](./docker-compose.yml) file defines the Minecraft container and NetBird client. This is the default deployment path for remote access.
 
-> **Note**  
+> **Note**
 > `$USERNAME` should be replaced with your Minecraft username or the UUID of operators/whitelisted players.
 
 ### NetBird Remote Access

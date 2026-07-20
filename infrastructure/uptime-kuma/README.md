@@ -1,6 +1,6 @@
 # Uptime Kuma
 
-Uptime Kuma is a lightweight, self‑hosted uptime monitoring solution that runs in a single Docker container. It checks HTTP, TCP, DNS, and ping endpoints and can also monitor Docker containers via the Docker socket.
+Uptime Kuma is a lightweight, self-hosted uptime monitoring solution that runs in a single Docker container. It checks HTTP, TCP, DNS, and ping endpoints and can also monitor Docker containers via the Docker socket.
 
 ## Quick Start
 
@@ -8,7 +8,7 @@ Uptime Kuma is a lightweight, self‑hosted uptime monitoring solution that ru
 docker compose up -d
 ```
 
-The service is exposed on port **3001**. Data is persisted in the `./data` directory, and the Docker socket is mounted read‑only for container monitoring.
+The service is exposed on port **3001**. Data is persisted in the `./data` directory, and the Docker socket is mounted read-only for container monitoring.
 
 ## Directory Structure
 

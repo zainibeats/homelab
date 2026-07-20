@@ -10,9 +10,9 @@ SearXNG is a privacy-respecting, self-hosted metasearch engine that aggregates r
 
 ## Environment Variables
 
-- **SEARXNG_SECRET** – Secret key used by SearXNG. Generate with `openssl rand -hex 16`
-- **DOMAIN** – Traefik domain label
-- **SUBDOMAIN** – Traefik subdomain label
+- **SEARXNG_SECRET** - Secret key used by SearXNG. Generate with `openssl rand -hex 16`
+- **DOMAIN** - Traefik domain label
+- **SUBDOMAIN** - Traefik subdomain label
 
 ## Ports
 
@@ -20,7 +20,7 @@ SearXNG is a privacy-respecting, self-hosted metasearch engine that aggregates r
 
 ## Open WebUI Integration
 
-SearXNG can be used as the web‑search backend for Open WebUI, but it must return results in JSON. Add the following to `core-config/settings.yml`:
+SearXNG can be used as the web-search backend for Open WebUI, but it must return results in JSON. Add the following to `core-config/settings.yml`:
 
 ```yaml
 formats:
@@ -28,4 +28,4 @@ formats:
   - json
 ```
 
-*See the [Open WebUI](../../automation/ollama-openwebui/README.md) integration guide for details.*
+See the [Open WebUI](../../automation/ai-stack/README.md) integration guide for details.

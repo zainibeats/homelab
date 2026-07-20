@@ -29,7 +29,7 @@ NEKO_PASSWORD_ADMIN=your_admin_password
 NEKO_NAT1TO1=your_external_ip
 ```
 
-### Custom Wireguard 
+### Custom WireGuard
 
 For a custom WireGuard configuration (e.g., remote home access), add these to your `.env` file:
 

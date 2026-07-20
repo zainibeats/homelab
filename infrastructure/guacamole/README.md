@@ -17,7 +17,7 @@ Before starting the services, you need to configure the database passwords:
 1. Replace `<POSTGRES_PASSWORD>` in the docker-compose.yml file with a secure password
 2. Ensure both the `postgres` and `guacamole` services use the same password
 
-### 4. Port Configuration
+### 2. Port Configuration
 
 The service is configured to run on port **8088** for use with reverse proxy. If not using a reverse proxy, uncomment the direct port mapping (8080:8080) and comment out the current port mapping.
 

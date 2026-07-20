@@ -12,13 +12,13 @@ docker pull linuxserver/ddclient:latest
 
 ## Configuration
 
-All configuration is provided via the `ddclient.conf` file located in the `config/` directory.  
+All configuration is provided via the `ddclient.conf` file located in the `config/` directory.
 Typical settings include:
 
-- `daemon=300` – check every 5 minutes
-- `syslog=yes` – log updates to syslog
-- `ssl=yes` – enable SSL for API calls
-- `use=web, web=ipify-ipv4` – obtain the public IP from ipify
+- `daemon=300` - check every 5 minutes
+- `syslog=yes` - log updates to syslog
+- `ssl=yes` - enable SSL for API calls
+- `use=web, web=ipify-ipv4` - obtain the public IP from ipify
 - Cloudflare block:
   ```conf
   protocol=cloudflare
@@ -30,7 +30,5 @@ Typical settings include:
   ```
 
 Replace `<your-domain>`, `<api-token>`, and the subdomain placeholder with your actual values.
-
----
 
 For more details, consult the official [DDClient documentation](https://github.com/ddclient/ddclient).

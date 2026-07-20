@@ -14,7 +14,7 @@ This Watchtower instance is configured to run automatically at **5:00 AM daily**
 
 ```bash
 # Start Watchtower with the configured schedule
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Manual Updates

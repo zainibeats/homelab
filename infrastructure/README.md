@@ -10,7 +10,7 @@ This directory contains infrastructure services that handle networking, remote a
 
 ### Remote Access
 - **[Guacamole](./guacamole/README.md)** - Clientless remote desktop gateway supporting VNC, RDP, and SSH protocols with web-based access
-- **[Wireguard](./wireguard/README.md)** - WireGuard VPN for secure remote access to homelab and services
+- **[WireGuard](./wireguard/README.md)** - WireGuard VPN for secure remote access to homelab and services
 - **[NetBird Client](./netbird-client/README.md)** - NetBird client for secure mesh networking with the homelab
 
 ### Monitoring

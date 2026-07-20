@@ -1,21 +1,21 @@
 # Invidious
 
-Invidiousis an open-source alternative frontend for YouTube
+Invidious is an open-source alternative frontend for YouTube.
 
 ## Components
 
 | Service | Description |
 |---------|-------------|
-| Gluetun | VPN client — all outbound traffic routes through this container |
+| Gluetun | VPN client; all outbound traffic routes through this container |
 | Invidious | Main web interface |
 | Invidious Companion | Handles video streaming via `youtubei.js` |
 | PostgreSQL 14 | Database backend for Invidious |
 
 ## How This Differs from the Official Stack
 
-The official Invidious docker-compose does not include a VPN. This setup routes **all container traffic** through a Gluetun VPN container:
+The official Invidious Docker Compose stack does not include a VPN. This setup routes **all container traffic** through a Gluetun VPN container:
 
-- `invidious`, `companion`, and `invidious-db` all use `network_mode: "service:gluetun"` — they share Gluetun's network stack and have no direct network access of their own
+- `invidious`, `companion`, and `invidious-db` all use `network_mode: "service:gluetun"`; they share Gluetun's network stack and have no direct network access of their own
 - The only exposed port is on the Gluetun container: `3080` (mapped to Invidious's internal port `3000`)
 - A dedicated Docker network (`invidious-net`, subnet `172.172.0.0/24`) is used with a static IP for Gluetun (`172.172.0.2`)
 - The companion service is included and wired to Invidious via `http://127.0.0.1:8282/companion` (loopback within the shared network namespace)

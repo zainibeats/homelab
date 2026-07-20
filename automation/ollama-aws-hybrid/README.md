@@ -98,7 +98,7 @@ state to an encrypted remote backend with locking.
 ## Configuration
 
 **EC2 Instance**:
-- `OLLAMA_BASE_URL` must point to the **local** Ollama instance.  
+- `OLLAMA_BASE_URL` must point to the **local** Ollama instance.
 - The EC2 security group should allow TCP port `443` only from your trusted
   public CIDR. Port `3000` is not published by the Compose stack.
 
