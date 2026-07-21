@@ -20,6 +20,9 @@ This directory contains infrastructure services that handle networking, remote a
 ### Dashboard
 - **[Homepage](./homepage/README.md)** - Highly customizable dashboard aggregating service status and APIs, with separate admin and public instances
 
+### Documentation
+- **[Wiki.js](./wiki-js/README.md)** - Self-hosted documentation and knowledge base platform backed by PostgreSQL and exposed through Traefik
+
 ### Container Management
 - **[Watchtower](./watchtower/README.md)** - Automatic Docker container update service that monitors and updates running containers on a schedule
 - **[Portainer](./portainer/README.md)** - Lightweight UI for managing Docker environments, including containers, images, networks, and volumes
