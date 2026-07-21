@@ -1,6 +1,12 @@
 ---
 # For configuration options and examples, please see:
 # https://gethomepage.dev/configs/bookmarks
+- Documentation:
+    - Zaini.Cloud Wiki:
+        - abbr: WIKI
+          href: https://wiki.zaini.cloud
+          icon: mdi-file-document-outline
+
 - Repos:
     - Homelab:
         - href: https://github.com/zainibeats/homelab

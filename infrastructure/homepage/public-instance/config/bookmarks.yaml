@@ -3,9 +3,9 @@
 # https://gethomepage.dev/configs/bookmarks
 
 - Documentation:
-    - Zaini.Cloud Docs:
-        - abbr: DOCS
-          href: https://nextcloud.zaini.cloud/s/xxxxxxxx
+    - Zaini.Cloud Wiki:
+        - abbr: WIKI
+          href: https://wiki.zaini.cloud
           icon: mdi-file-document-outline
           description: "What is this stuff?"
 
