@@ -11,3 +11,4 @@ terraform.tfvars
 automation/ollama-aws-hybrid/ansible/open-webui-ec2-instance.yaml
 automation/ollama-aws-hybrid/ansible/check.output
 automation/ansible/inventory/hosts.yml
+*.tfstate.*
