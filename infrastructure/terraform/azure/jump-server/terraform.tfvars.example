@@ -1,0 +1,37 @@
+subscription_id    = "00000000-0000-0000-0000-000000000000"
+environment        = "dev"
+service_name       = "jump-server"
+location           = "canadacentral"
+trusted_ipv4_cidrs = ["1.1.1.1/32"]
+public_key_path    = "~/.ssh/azure.pub"
+private_key_path   = "~/.ssh/azure"
+
+# Optional overrides. Leave these commented to use names derived from
+# service_name and environment, such as jump-server-dev-rg.
+# admin_username                       = "azureuser"
+# vm_size                              = "Standard_B2ats_v2"
+# resource_group_name                  = "jump-server-dev-rg"
+# vm_resource_group_name               = "jump-server-dev-rg"
+# virtual_network_name                 = "jump-server-dev-vnet"
+# network_security_group_name          = "jump-server-dev-nsg"
+# network_interface_name               = "jump-server-dev-nic"
+# public_ip_name                       = "jump-server-dev-pip"
+# ssh_key_name                         = "jump-server-dev-ssh-key"
+# vm_name                              = "jump-server-dev-vm"
+# private_subnet_name                  = "Private"
+# ssh_security_rule_name               = "azureuser"
+# ssh_security_rule_description        = "Allow SSH from trusted IP"
+# enable_aad_ssh_login                 = true
+
+# Recovery-only extension. Leave disabled unless you are intentionally running
+# a VMAccessForLinux repair operation with explicit recovery settings.
+# enable_vm_access                     = false
+
+# enable_azure_monitor_agent           = false
+
+# VM Insights requires an existing Log Analytics workspace. The workspace may
+# live in a separate resource group; use its full Azure resource ID here.
+# enable_vm_insights_rule              = false
+# data_collection_rule_resource_group_name = "jump-server-dev-rg"
+# data_collection_rule_name            = "MSVMI-canadacentral-jump-server"
+# log_analytics_workspace_resource_id  = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/example-rg/providers/Microsoft.OperationalInsights/workspaces/example-law"
