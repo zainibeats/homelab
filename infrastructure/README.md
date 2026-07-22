@@ -33,4 +33,4 @@ This directory contains infrastructure services that handle networking, remote a
 ### Infrastructure as Code
 - **[Azure Jump Server](./terraform/azure/jump-server/README.md)** - Terraform-managed Azure Linux jump server for SSH access to other cloud resources
 - **[OCI Free Tier Host](./terraform/oci/free-tier-host/README.md)** - Reusable Terraform configuration for a single OCI Free Tier host
-- **[Ollama AWS Hybrid](./terraform/aws/ollama-aws-hybrid/)** - Terraform-managed AWS EC2 host for the hybrid Ollama deployment
+- **[Ollama AWS Hybrid](./terraform/aws/ollama-aws-hybrid/README.md)** - Terraform-managed AWS EC2 host for the hybrid Ollama deployment
