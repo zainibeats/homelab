@@ -16,8 +16,8 @@ This repository contains configuration files and documentation for my homelab se
 
 Services are organized into logical categories for easier management and navigation:
 - **[Automation](./automation/README.md)** - Home automation, Ansible host management, and AI platforms
-- **[Gaming](./gaming/README.md)** - Game server stacks and OCI Free Tier Terraform automation; currently hosting Minecraft
-- **[Infrastructure](./infrastructure/README.md)** - Networking, proxy, VPN, monitoring, dashboards, version control, and container management
+- **[Gaming](./gaming/README.md)** - Game server stacks and runtime documentation; currently hosting Minecraft
+- **[Infrastructure](./infrastructure/README.md)** - Networking, proxy, VPN, monitoring, dashboards, version control, container management, and Terraform-managed cloud infrastructure
 - **[Media](./media/README.md)** - Media automation, management, and streaming services
 - **[Storage](./storage/README.md)** - Data storage, backup, and security services
 - **[Utilities](./utilities/README.md)** - General-purpose tools including file conversion, IT utilities, secret sharing, and virtual browser
