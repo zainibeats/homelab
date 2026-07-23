@@ -30,6 +30,7 @@ services:
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
       DB_NAME: ${DB_NAME}
+      TZ: ${TZ}
     restart: unless-stopped
     ports:
       - "8839:3000"
