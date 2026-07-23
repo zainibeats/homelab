@@ -1,99 +1,99 @@
 - Media:
     - Jellyfin:
-        href: https://jellyfin.zaini.cloud
+        href: "https://jellyfin.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Media Streaming Server
         icon: jellyfin.png
-        siteMonitor: http://172.23.51.30:8096
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8096"
     - Seerr:
-        href: https://seerr.zaini.cloud
+        href: "https://seerr.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Media Request Management
         icon: seerr.png
-        siteMonitor: http://172.23.51.30:5055
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:5055"
     - Invidious:
-        href: https://invidious.zaini.cloud
+        href: "https://invidious.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Custom Youtube Frontend
         icon: invidious.png
-        siteMonitor: http://172.23.51.30:3080
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:3080"
 - Storage and Backups:
     - Nextcloud:
-        href: https://nextcloud.zaini.cloud
+        href: "https://nextcloud.{{HOMEPAGE_VAR_DOMAIN}}"
         description: File Sync & Share
         icon: nextcloud.png
-        siteMonitor: http://172.23.51.30:8080
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8080"
     - Immich:
-        href: https://immich.zaini.cloud
+        href: "https://immich.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Photo & Video Backup
         icon: immich.png
-        siteMonitor: http://172.23.51.30:2283
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:2283"
     - Vaultwarden:
-        href: https://vaultwarden.zaini.cloud
+        href: "https://vaultwarden.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Password Manager
         icon: vaultwarden.png
-        siteMonitor: http://172.23.51.30:8088
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8088"
 - Tools:
     - SearXNG:
-        href: https://search.zaini.cloud
+        href: "https://search.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Search Engine
         icon: searxng.png
-        siteMonitor: http://172.23.51.30:8086
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8086"
     - ConvertX:
-        href: https://convertx.zaini.cloud
+        href: "https://convertx.{{HOMEPAGE_VAR_DOMAIN}}"
         description: File Conversion
         icon: convertx.png
-        siteMonitor: http://172.23.51.30:3000
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:3000"
     - IT-Tools:
-        href: https://it-tools.zaini.cloud
+        href: "https://it-tools.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Various Handy Tools
         icon: it-tools.png
-        siteMonitor: http://172.23.51.30:8881
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8881"
     - Yopass:
-        href: https://yopass.zaini.cloud
+        href: "https://yopass.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Secret sharing
         icon: yopass.png
-        siteMonitor: http://172.23.51.30:8889
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8889"
     - Neko:
-        href: https://neko.zaini.cloud
+        href: "https://neko.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Virtual Browser
         icon: neko.png
-        siteMonitor: http://172.23.51.30:8880
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8880"
 - Media (Local):
     - Jellyfin:
-        href: http://172.23.51.30:8096
+        href: "http://{{HOMEPAGE_VAR_APP_HOST}}:8096"
         description: Media Streaming Server
         icon: jellyfin.png
-        siteMonitor: http://172.23.51.30:8096
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8096"
     - Seerr:
-        href: http://172.23.51.30:5055
+        href: "http://{{HOMEPAGE_VAR_APP_HOST}}:5055"
         description: Media Request Management
         icon: seerr.png
-        siteMonitor: http://172.23.51.30:5055
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:5055"
     - Invidious:
-        href: http://172.23.51.30:3080
+        href: "http://{{HOMEPAGE_VAR_APP_HOST}}:3080"
         description: Custom Youtube Frontend
         icon: invidious.png
-        siteMonitor: http://172.23.51.30:3080
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:3080"
 - Storage and Backups (Local):
     - Immich:
-        href: http://172.23.51.30:2283
+        href: "http://{{HOMEPAGE_VAR_APP_HOST}}:2283"
         description: Photo & Video Backup
         icon: immich.png
-        siteMonitor: http://172.23.51.30:2283
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:2283"
 - Tools (Local):
     - SearXNG:
-        href: http://172.23.51.30:8086
+        href: "http://{{HOMEPAGE_VAR_APP_HOST}}:8086"
         description: Search Engine
         icon: searxng.png
-        siteMonitor: http://172.23.51.30:8086
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8086"
     - IT-Tools:
-        href: http://172.23.51.30:8881
+        href: "http://{{HOMEPAGE_VAR_APP_HOST}}:8881"
         description: Various Handy Tools
         icon: it-tools.png
-        siteMonitor: http://172.23.51.30:8881
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8881"
     - Neko:
-        href: http://172.23.51.30:8880
+        href: "http://{{HOMEPAGE_VAR_APP_HOST}}:8880"
         description: Virtual Browser
         icon: neko.png
-        siteMonitor: http://172.23.51.30:8880
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8880"
 - Stocks:
     - Watchlist:
         widget:

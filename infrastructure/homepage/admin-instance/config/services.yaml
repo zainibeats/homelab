@@ -1,185 +1,185 @@
 - Management:
     - Portainer:
-        href: https://portainer.zaini.cloud
+        href: "https://portainer.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Container Management
         icon: portainer.png
-        siteMonitor: https://172.23.51.30:9443
+        siteMonitor: "https://{{HOMEPAGE_VAR_APP_HOST}}:9443"
 - Infrastructure:
     - Truenas Web-UI:
-        href: https://truenas.zaini.cloud
+        href: "https://truenas.{{HOMEPAGE_VAR_DOMAIN}}"
         description: TrueNAS Storage Management
         icon: truenas-scale.png
-        siteMonitor: http://172.23.51.32:80
+        siteMonitor: "http://{{HOMEPAGE_VAR_STORAGE_HOST}}:80"
 - Tools:
     - Gitea:
-        href: https://git.zaini.cloud
+        href: "https://git.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Local Git Server
         icon: gitea.png
-        siteMonitor: http://172.23.51.30:3331
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:3331"
 - Arr Suite:
     - Prowlarr:
-        href: https://prowlarr.zaini.cloud
+        href: "https://prowlarr.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Indexer Manager
         icon: prowlarr.png
-        siteMonitor: http://172.23.51.30:9696
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:9696"
     - Lidarr:
-        href: https://lidarr.zaini.cloud
+        href: "https://lidarr.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Music Automation
         icon: lidarr.png
-        siteMonitor: http://172.23.51.30:8686
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8686"
     - Bazarr:
-        href: https://bazarr.zaini.cloud
+        href: "https://bazarr.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Subtitle Automation
         icon: bazarr.png
-        siteMonitor: http://172.23.51.30:6767
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:6767"
     - Radarr:
-        href: https://radarr.zaini.cloud
+        href: "https://radarr.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Movie Automation
         icon: radarr.png
-        siteMonitor: http://172.23.51.30:7878
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:7878"
     - Sonarr:
-        href: https://sonarr.zaini.cloud
+        href: "https://sonarr.{{HOMEPAGE_VAR_DOMAIN}}"
         description: TV Show Automation
         icon: sonarr.png
-        siteMonitor: http://172.23.51.30:8989
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8989"
     - qBittorrent:
-        href: https://qb.zaini.cloud
+        href: "https://qb.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Torrent Client
         icon: qbittorrent.png
-        siteMonitor: http://172.23.51.30:8122
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8122"
         widget:
           type: qbittorrent
-          url: http://172.23.51.30:8122
+          url: "http://{{HOMEPAGE_VAR_APP_HOST}}:8122"
           username: "{{HOMEPAGE_VAR_QBIT_USER}}"
           password: "{{HOMEPAGE_VAR_QBIT_PWD}}"
 - Monitoring:
     - Grafana:
-        href: https://grafana.zaini.cloud
+        href: "https://grafana.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Metrics & Visualization
         icon: grafana.png
-        siteMonitor: http://172.23.20.31:3000
+        siteMonitor: "http://{{HOMEPAGE_VAR_MONITOR_HOST}}:3000"
     - Uptime Kuma:
-        href: https://uptime.zaini.cloud
+        href: "https://uptime.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Uptime Monitoring
         icon: uptime-kuma.png
-        siteMonitor: http://172.23.20.31:3001
+        siteMonitor: "http://{{HOMEPAGE_VAR_MONITOR_HOST}}:3001"
         widget:
           type: uptimekuma
-          url: http://172.23.20.31:3001
+          url: "http://{{HOMEPAGE_VAR_MONITOR_HOST}}:3001"
           slug: apps
 - Network:
     - UDR7 Router:
         href: https://account.ui.com
         description: Remote Site Management
         icon: ubiquiti.png
-        ping: http://192.168.1.1
+        ping: "http://{{HOMEPAGE_VAR_ROUTER_HOST}}"
 
 - Management (Local):
     - Portainer:
-        href: https://172.23.51.30:9443
+        href: "https://{{HOMEPAGE_VAR_APP_HOST}}:9443"
         description: Container Management
         icon: portainer.png
-        siteMonitor: https://172.23.51.30:9443
+        siteMonitor: "https://{{HOMEPAGE_VAR_APP_HOST}}:9443"
 - Infrastructure (Local):
     - Proxmox VE:
-        href: https://172.23.51.34:8006
+        href: "https://{{HOMEPAGE_VAR_PROXMOX_HOST}}:8006"
         description: Virtualization Platform
         icon: proxmox.png
-        siteMonitor: https://172.23.51.34:8006
+        siteMonitor: "https://{{HOMEPAGE_VAR_PROXMOX_HOST}}:8006"
     - Truenas Web-UI:
-        href: https://172.23.51.32
+        href: "https://{{HOMEPAGE_VAR_STORAGE_HOST}}"
         description: TrueNAS Storage Management
         icon: truenas-scale.png
-        siteMonitor: http://172.23.51.32:80
+        siteMonitor: "http://{{HOMEPAGE_VAR_STORAGE_HOST}}:80"
     - Supermicro IPMI Web-UI:
-        href: http://172.23.20.32
+        href: "http://{{HOMEPAGE_VAR_IPMI_HOST}}"
         description: Server Remote Management
         icon: supermicro.png
-        ping: http://172.23.20.32
+        ping: "http://{{HOMEPAGE_VAR_IPMI_HOST}}"
 - Tools (Local):
     - Syncthing - TrueNAS:
-        href: http://172.23.51.32:8384
+        href: "http://{{HOMEPAGE_VAR_STORAGE_HOST}}:8384"
         description: File Sync
         icon: syncthing.png
-        siteMonitor: http://172.23.51.32:8384
+        siteMonitor: "http://{{HOMEPAGE_VAR_STORAGE_HOST}}:8384"
 - IoT and SmartHome:
     - Home Assistant:
-        href: http://172.23.51.30:8123
+        href: "http://{{HOMEPAGE_VAR_APP_HOST}}:8123"
         description: Home Automation
         icon: home-assistant.png
-        siteMonitor: http://172.23.51.30:8123
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8123"
     - SLZB Web UI:
-        href: http://172.23.60.25:80
+        href: "http://{{HOMEPAGE_VAR_ZIGBEE_HOST}}:80"
         description: Zigbee Coordinator
         icon: sh-zigbee
 - Arr Suite (Local):
     - Prowlarr:
-        href: http://172.23.51.30:9696
+        href: "http://{{HOMEPAGE_VAR_APP_HOST}}:9696"
         description: Indexer Manager
         icon: prowlarr.png
-        siteMonitor: http://172.23.51.30:9696
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:9696"
     - Lidarr:
-        href: http://172.23.51.30:8686
+        href: "http://{{HOMEPAGE_VAR_APP_HOST}}:8686"
         description: Music Automation
         icon: lidarr.png
-        siteMonitor: http://172.23.51.30:8686
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8686"
     - Bazarr:
-        href: http://172.23.51.30:6767
+        href: "http://{{HOMEPAGE_VAR_APP_HOST}}:6767"
         description: Subtitle Management
         icon: bazarr.png
-        siteMonitor: http://172.23.51.30:6767
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:6767"
     - Radarr:
-        href: http://172.23.51.30:7878
+        href: "http://{{HOMEPAGE_VAR_APP_HOST}}:7878"
         description: Movie Automation
         icon: radarr.png
-        siteMonitor: http://172.23.51.30:7878
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:7878"
     - Sonarr:
-        href: http://172.23.51.30:8989
+        href: "http://{{HOMEPAGE_VAR_APP_HOST}}:8989"
         description: TV Show Automation
         icon: sonarr.png
-        siteMonitor: http://172.23.51.30:8989
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8989"
     - qBittorrent:
-        href: http://172.23.51.30:8122
+        href: "http://{{HOMEPAGE_VAR_APP_HOST}}:8122"
         description: Torrent Client
         icon: qbittorrent.png
-        siteMonitor: http://172.23.51.30:8122
+        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8122"
         widget:
           type: qbittorrent
-          url: http://172.23.51.30:8122
+          url: "http://{{HOMEPAGE_VAR_APP_HOST}}:8122"
           username: "{{HOMEPAGE_VAR_QBIT_USER}}"
           password: "{{HOMEPAGE_VAR_QBIT_PWD}}"
 - Monitoring (Local):
     - Grafana:
-        href: http://172.23.20.31:3000
+        href: "http://{{HOMEPAGE_VAR_MONITOR_HOST}}:3000"
         description: Metrics & Visualization
         icon: grafana.png
-        siteMonitor: http://172.23.20.31:3000
+        siteMonitor: "http://{{HOMEPAGE_VAR_MONITOR_HOST}}:3000"
     - Prometheus:
-        href: http://172.23.20.31:9090
+        href: "http://{{HOMEPAGE_VAR_MONITOR_HOST}}:9090"
         description: Systems Monitoring
         icon: prometheus.png
-        siteMonitor: http://172.23.20.31:9090
+        siteMonitor: "http://{{HOMEPAGE_VAR_MONITOR_HOST}}:9090"
     - Uptime Kuma:
-        href: http://172.23.20.31:3001
+        href: "http://{{HOMEPAGE_VAR_MONITOR_HOST}}:3001"
         description: Uptime Monitoring
         icon: uptime-kuma.png
-        siteMonitor: http://172.23.20.31:3001
+        siteMonitor: "http://{{HOMEPAGE_VAR_MONITOR_HOST}}:3001"
         widget:
           type: uptimekuma
-          url: http://172.23.20.31:3001
+          url: "http://{{HOMEPAGE_VAR_MONITOR_HOST}}:3001"
           slug: apps
 - Network (Local):
     - UDR7 Router:
-        href: https://192.168.1.1
+        href: "https://{{HOMEPAGE_VAR_ROUTER_HOST}}"
         description: Router Management
         icon: ubiquiti.png
-        ping: http://192.168.1.1
+        ping: "http://{{HOMEPAGE_VAR_ROUTER_HOST}}"
     - Sx3008F Switch:
-        href: https://172.23.20.10
+        href: "https://{{HOMEPAGE_VAR_SWITCH_HOST}}"
         description: Homelab Switch Management
         icon: tp-link.png
-        ping: http://172.23.20.10
+        ping: "http://{{HOMEPAGE_VAR_SWITCH_HOST}}"
     - Pi-hole:
-        href: https://172.23.20.31:4438/admin/login
+        href: "https://{{HOMEPAGE_VAR_MONITOR_HOST}}:4438/admin/login"
         description: Ad Blocker
         icon: pi-hole.png
