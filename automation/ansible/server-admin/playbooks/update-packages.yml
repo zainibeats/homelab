@@ -1,5 +1,5 @@
 - name: Update system packages
-  hosts: homelab_servers
+  hosts: cloud_servers
   gather_facts: true
   become: true
 
