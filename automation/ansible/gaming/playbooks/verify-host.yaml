@@ -1,0 +1,51 @@
+- name: Verify OCI game host prerequisites
+  hosts: game_servers
+  gather_facts: true
+
+  vars:
+    selected_game_stack: "{{ game_stack | default('minecraft') }}"
+    selected_stack: "{{ gaming_stack_paths[selected_game_stack] }}"
+    selected_app_dir: "{{ selected_stack.app_dir }}"
+
+  pre_tasks:
+    - name: Ensure selected game stack is supported
+      ansible.builtin.assert:
+        that:
+          - selected_game_stack in gaming_allowed_stacks
+        fail_msg: "Set game_stack to one of: {{ gaming_allowed_stacks | join(', ') }}"
+
+  tasks:
+    - name: Show operating system distribution
+      ansible.builtin.debug:
+        var: ansible_facts["distribution"]
+
+    - name: Gather service facts
+      ansible.builtin.service_facts:
+
+    - name: Verify Docker is running and enabled
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.services['docker.service'].state == 'running'
+          - ansible_facts.services['docker.service'].status == 'enabled'
+        fail_msg: Docker is not running and/or not enabled
+
+    - name: Check Docker Compose version
+      ansible.builtin.command:
+        cmd: docker compose version
+      register: docker_compose_result
+      changed_when: false
+
+    - name: Show Docker Compose version
+      ansible.builtin.debug:
+        var: docker_compose_result.stdout
+
+    - name: Check selected game app directory
+      ansible.builtin.stat:
+        path: "{{ selected_app_dir }}/docker-compose.yml"
+      register: selected_compose_file
+
+    - name: Verify selected game has been set up
+      ansible.builtin.assert:
+        that:
+          - selected_compose_file.stat.exists
+        fail_msg: "Run setup.yaml for game_stack={{ selected_game_stack }} first"

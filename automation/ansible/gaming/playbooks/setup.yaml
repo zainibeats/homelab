@@ -1,0 +1,153 @@
+- name: Prepare OCI game host for selected Compose stack
+  hosts: game_servers
+  gather_facts: true
+  become: true
+
+  vars:
+    selected_game_stack: "{{ game_stack | default('minecraft') }}"
+    selected_stack: "{{ gaming_stack_paths[selected_game_stack] }}"
+    selected_app_dir: "{{ selected_stack.app_dir }}"
+    selected_source_dir: "{{ playbook_dir }}/../../../../gaming/{{ selected_game_stack }}"
+    selected_env_vault_file: "{{ playbook_dir }}/../files/{{ selected_game_stack }}.env.vault"
+    docker_apt_arch_map:
+      aarch64: arm64
+      armv7l: armhf
+      x86_64: amd64
+    docker_apt_arch: "{{ docker_apt_arch_map[ansible_architecture] | default(ansible_architecture) }}"
+
+  pre_tasks:
+    - name: Ensure selected game stack is supported
+      ansible.builtin.assert:
+        that:
+          - selected_game_stack in gaming_allowed_stacks
+        fail_msg: "Set game_stack to one of: {{ gaming_allowed_stacks | join(', ') }}"
+
+    - name: Ensure Debian-based operating system
+      ansible.builtin.assert:
+        that:
+          - ansible_os_family == 'Debian'
+        fail_msg: OS must be Debian-based
+
+    - name: Check local Vault environment file exists
+      ansible.builtin.stat:
+        path: "{{ selected_env_vault_file }}"
+      delegate_to: localhost
+      become: false
+      register: selected_env_vault
+
+    - name: Require Vault environment file
+      ansible.builtin.assert:
+        that:
+          - selected_env_vault.stat.exists
+        fail_msg: "Create encrypted env file first: ansible-vault create files/{{ selected_game_stack }}.env.vault"
+
+  tasks:
+    - name: Install Docker repository prerequisites
+      ansible.builtin.apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+          - python3-apt
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Create apt keyring directory
+      ansible.builtin.file:
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+        path: /etc/apt/keyrings
+
+    - name: Install Docker apt signing key
+      ansible.builtin.get_url:
+        url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+        dest: /etc/apt/keyrings/docker.asc
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Configure Docker apt repository
+      ansible.builtin.apt_repository:
+        repo: "deb [arch={{ docker_apt_arch }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+        filename: docker
+        state: present
+        update_cache: true
+
+    - name: Install Docker Engine and Compose plugin
+      ansible.builtin.apt:
+        name:
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-ce
+          - docker-ce-cli
+          - docker-compose-plugin
+          - python3-docker
+        state: present
+
+    - name: Ensure Docker service is running and enabled
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Add SSH user to docker group
+      ansible.builtin.user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: true
+
+    - name: Create gaming base directory
+      ansible.builtin.file:
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+        path: "{{ gaming_base_dir }}"
+
+    - name: Create selected game directories
+      ansible.builtin.file:
+        state: directory
+        owner: "{{ gaming_owner }}"
+        group: "{{ gaming_group }}"
+        mode: "0755"
+        path: "{{ item }}"
+      loop:
+        - "{{ selected_app_dir }}"
+        - "{{ selected_app_dir }}/data"
+        - "{{ selected_app_dir }}/netbird"
+
+    - name: Copy Docker Compose file
+      ansible.builtin.copy:
+        owner: "{{ gaming_owner }}"
+        group: "{{ gaming_group }}"
+        mode: "0644"
+        src: "{{ selected_source_dir }}/docker-compose.yml"
+        dest: "{{ selected_app_dir }}/docker-compose.yml"
+
+    - name: Check for local config directory
+      ansible.builtin.stat:
+        path: "{{ selected_source_dir }}/config"
+      delegate_to: localhost
+      become: false
+      register: selected_config_dir
+
+    - name: Copy game config directory
+      ansible.builtin.copy:
+        owner: "{{ gaming_owner }}"
+        group: "{{ gaming_group }}"
+        mode: preserve
+        src: "{{ selected_source_dir }}/config"
+        dest: "{{ selected_app_dir }}/"
+      when: selected_config_dir.stat.exists
+
+    - name: Copy encrypted runtime environment file
+      ansible.builtin.copy:
+        owner: "{{ gaming_owner }}"
+        group: "{{ gaming_group }}"
+        mode: "0600"
+        decrypt: true
+        src: "{{ selected_env_vault_file }}"
+        dest: "{{ selected_app_dir }}/.env"
