@@ -10,5 +10,5 @@ terraform.tfvars
 .terraform.tfstate.lock.info
 automation/ollama-aws-hybrid/ansible/open-webui-ec2-instance.yaml
 automation/ollama-aws-hybrid/ansible/check.output
-automation/ansible/inventory/hosts.yml
+automation/ansible/server-admin/inventory/hosts.yml
 *.tfstate.*
