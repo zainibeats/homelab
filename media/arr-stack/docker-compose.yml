@@ -92,8 +92,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /mnt/nfs/apps/arr/sonarr:/config
-      - /mnt/truenas_data/jellyfin_data:/data
-      - /mnt/truenas_data/jellyfin_data/tv:/tv
+      - /mnt/nfs/jellyfin:/data
+      - /mnt/nfs/jellyfin/tv:/tv
     ports:
       - 8989:8989
     networks:
@@ -126,8 +126,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /mnt/nfs/apps/arr/radarr:/config
-      - /mnt/truenas_data/jellyfin_data:/data
-      - /mnt/truenas_data/jellyfin_data/movies:/movies
+      - /mnt/nfs/jellyfin:/data
+      - /mnt/nfs/jellyfin/movies:/movies
     ports:
       - 7878:7878
     networks:
@@ -156,7 +156,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /mnt/nfs/apps/arr/lidarr:/config
-      - /mnt/truenas_data/jellyfin_data/music/itunes-archive:/data
+      - /mnt/nfs/jellyfin/music/itunes-archive:/data
     environment:
       - PUID=1000
       - PGID=1000
@@ -193,7 +193,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /mnt/nfs/apps/arr/bazarr:/config
-      - /mnt/truenas_data/jellyfin_data:/data
+      - /mnt/nfs/jellyfin:/data
     ports:
       - 6767:6767
     networks:

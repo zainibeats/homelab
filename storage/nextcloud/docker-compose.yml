@@ -30,7 +30,7 @@ services:
       - db
     volumes:
       - nextcloud:/var/www/html
-      - /mnt/nfs/family/nextcloud:/var/www/html/data
+      - /mnt/nfs/apps/nextcloud:/var/www/html/data
     environment:
       - PUID=$PUID
       - PGID=$PGID
