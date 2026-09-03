@@ -1,22 +1,25 @@
 services:
   traefik:
-    image: traefik:v3.6
+    image: traefik:v3.7.1
     container_name: traefik
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
     networks:
       - traefik-proxy
+    ports:
+      - 80:80
+      - 443:443
     env_file:
       - .env
     environment:
       CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /etc/localtime:/etc/localtime:ro
       - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
-      - ./config/dynamic:/etc/traefik/dynamic:ro
       - ./letsencrypt/acme.json:/var/traefik/certs/acme.json
+      - /etc/localtime:/etc/localtime:ro
+      - ./config/dynamic:/etc/traefik/dynamic:ro
     labels:
       - traefik.enable=true
       - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
