@@ -1,30 +1,30 @@
 # Design Document: Obsidian Second Brain
 
 ## Overview
-This document outlines the architectural understanding and tagging strategy for the Obsidian vault located at `/mnt/backup/syncthing/notes/obsidian-tasknotes`. This vault serves as a "Second Brain," acting as a central repository for knowledge, project management, and personal development. Task management within the vault is handled by the **TaskNotes** plugin, which manages its own `TaskNotes/` directory at the vault root. For task schema, CLI, and API details, see the `tasknotes` skill — don't duplicate that reference here.
+Architectural overview and tagging strategy for the Obsidian "Second Brain" vault (`/mnt/backup/syncthing/notes/obsidian-vault`). Task management is handled by the **TaskNotes** plugin in `TaskNotes/`. For task schema, CLI, and API details, refer to the `tasknotes` skill.
 
 ## Organizational Structure
-The vault follows the **PARA method** (Projects, Areas, Resources, Archives), providing a clear distinction between active work and long-term reference material:
+Uses the **PARA method**:
 
-*   **0-Inbox**: Raw, unprocessed notes and initial captures.
-*   **1-Projects**: Active endeavors with a specific goal and end date (e.g., Learning Goals, Shopping).
-*   **2-Areas**: Ongoing responsibilities and domains of interest that require long-term maintenance (e.g., Dev, Education, Homelab).
-*   **3-Resources**: Collections of interests, research, and reference material (e.g., Blog notes, Career paths, CCNA, Prompt Library).
-*   **4-Archives**: Completed projects, inactive areas, and historical references.
+*   **0-Inbox**: Raw/unprocessed captures.
+*   **1-Projects**: Active goals with end dates (e.g., Learning Goals).
+*   **2-Areas**: Ongoing responsibilities (e.g., Dev, Homelab).
+*   **3-Resources**: Reference material (e.g., CCNA, Prompt Library).
+*   **4-Archives**: Completed/inactive items.
 
-**`TaskNotes/`** sits alongside these five folders at the vault root — it is not a numbered PARA folder and is auto-managed by the plugin, not manually organized:
-*   **TaskNotes/Tasks/**: individual task notes (one file per task), created here automatically regardless of which PARA area they relate to.
-*   **TaskNotes/Views/**: Bases-powered view definitions (Task List, Kanban, Calendar, Mini Calendar) — plain `.base` files, safe to inspect but not meant to be reorganized into PARA.
+**`TaskNotes/`** (auto-managed, not part of PARA):
+*   **Tasks/**: Individual task notes.
+*   **Views/**: `.base` view definitions (Kanban, Calendar, etc.).
 
-## Task Model (TaskNotes) — vault-specific notes only
-This vault runs TaskNotes on **default settings** — default statuses (`open`/`in-progress`/`done`), default priorities (`low`/`normal`/`high`), default `tags: [task]`. Don't assume custom values; check an existing task file if in doubt. Full frontmatter schema, required fields, recurrence, and dependency syntax are covered by the `tasknotes` skill.
+## Task Model (TaskNotes)
+Uses **default settings**: statuses (`open`, `in-progress`, `done`), priorities (`low`, `normal`, `high`), and `tags: [task]`. Verify via existing tasks if uncertain. Refer to the `tasknotes` skill for full schema/syntax.
 
-**Note on `dateCreated`/`dateModified`:** this vault's TaskNotes install writes these as full ISO 8601 timestamps with timezone offset (e.g. `2026-05-31T10:49:12.895-07:00`), not bare `YYYY-MM-DD`. Match this format on any task you create or edit, even if other guidance suggests otherwise.
+**Timestamps:** `dateCreated`/`etc.` use full ISO 8601 with offset (e.g., `2026-05-31T10:49:12.895-07:00`). Match this format.
 
-**PARA relationship:** a task's physical location does not need to match its PARA folder. All tasks live under `TaskNotes/Tasks/`; the `projects:` field (a `[[wikilink]]` to the relevant note in `1-Projects/` or `2-Areas/`) is what ties a task back into PARA. Don't move task files into PARA folders manually.
+**PARA Linkage:** Tasks reside in `TaskNotes/Tasks/`. Use the `projects:` field (`[[wikilink]]` to `1-Projects/` or `2-Areas/`) to link them to PARA. Do not move task files into PARA folders manually.
 
-### Tag synergy with the Graph View strategy
-Task `tags:` and note `tags:` are the same underlying field. A task tagged with one of the granular topic tags from the Tagging Strategy below (e.g. `#terraform`, `#aws`) automatically shows up in that topic's thematic cluster in Graph View *and* is filterable as a task by that same tag — no extra bookkeeping needed. When tagging a task, prefer the existing granular topic tags over inventing task-only tags, so this overlap keeps working.
+### Tag Synergy
+Task `tags:` and note `tags:` are identical. Using granular topic tags (e.g., `#aws`) ensures tasks appear in their respective Graph View clusters and remain filterable by tag without extra effort. Prefer existing topic tags over task-specific ones.
 
 ## Tagging Strategy & Graph View Goals
 
@@ -56,9 +56,19 @@ As the vault grows, this design document will be updated to reflect new themes, 
 ## Rules to follow
 - You may use the printf bash command to add/edit tags
 - Always keep your responses concise to the user
+- Prioritize organizing and synthesizing information over verbatim transcription; only use word-for-word text when explicitly instructed.
 - Ask clarifying questions if the user's intent is ambiguous
 - If something, such as editing a shell script that is being used as a test or tool, would be better off edited to your preference, go ahead and change it. For example, if you think the script can be more efficient with a different approach, go ahead and change that script for yourself. Do not make entire new scripts.
 - Frontmatter-only edits to a task (status, priority, due date) are routine; don't rewrite a task's body or delete a task file without asking first.
+- Always ask before moving notes or tasks out of the Archive (`@4-Archives/` or `@TaskNotes/Archive/`) or adding significant new information to them.
 - Don't invent status or priority values for a task — match whatever the vault is already using.
-- The MCP server should be tested for interacting with TaskNotes before any other method.
+- Prefer using the MCP server (via the tasknotes skill) for all TaskNotes interactions; avoid manual file edits to maintain consistency and leverage version control.
+
+## Common Phrase Aliases
+
+- **“check my inbox”** → `@0-Inbox/`
+- **“show projects”**   → `@1-Projects/`
+- **“list tasks”**      → `@TaskNotes/Tasks/`
+- **“open resources”**  → `@3-Resources/`
+
 - For full TaskNotes CLI/API/schema details, see the `tasknotes` skill rather than duplicating that reference here.
