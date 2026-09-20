@@ -21,8 +21,13 @@ services:
       - traefik.http.routers.homepage.entrypoints=websecure
       - traefik.http.routers.homepage.tls=true
       - traefik.http.routers.homepage.tls.certresolver=cloudflare
-      - traefik.http.services.homepage.loadbalancer.server.port=3000
 
+      - traefik.http.routers.homepage-lan.rule=Host(`homepage.${SUBDOMAIN}.${DOMAIN}`)
+      - traefik.http.routers.homepage-lan.entrypoints=websecure
+      - traefik.http.routers.homepage-lan.tls=true
+      - traefik.http.routers.homepage-lan.tls.certresolver=cloudflare
+
+      - traefik.http.services.homepage.loadbalancer.server.port=3000
 networks:
   traefik-proxy:
     external: true
