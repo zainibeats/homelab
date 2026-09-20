@@ -26,4 +26,4 @@
 
 - greeting:
     text_size: x4
-    text: Welcome to Zaini.Cloud
+    text: Welcome to {{HOMEPAGE_VAR_DOMAIN}}
