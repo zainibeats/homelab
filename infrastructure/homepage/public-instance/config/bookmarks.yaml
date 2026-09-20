@@ -5,7 +5,7 @@
 - Documentation:
     - Zaini.Cloud Wiki:
         - abbr: WIKI
-          href: https://wiki.zaini.cloud
+          href: "https://wiki.{{HOMEPAGE_VAR_DOMAIN}}"
           icon: mdi-file-document-outline
           description: "What is this stuff?"
 
