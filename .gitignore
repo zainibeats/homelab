@@ -18,6 +18,7 @@ automation/ansible/server-admin/inventory/hosts.yml
 *.tfstate.*
 **/convertx/data/
 **/arr-stack/*/
+**/uptime-kuma/data/
 **/home-assistant/*/
 **/home-assistant/.*/
 **/home-assistant/scripts.yaml
