@@ -36,6 +36,10 @@ This setup allows you to run large language models (LLMs) locally using Ollama a
 5. **WebUI Secret Key (Optional)**
    For production environments, set the `WEBUI_SECRET_KEY` to a secure, random string.
 
+## Context / Agent Skills
+
+`context/` holds Claude Code context bundles (`AGENTS.md` + skills) for external tools this repo doesn't deploy itself — currently an Obsidian TaskNotes vault. See [`context/tasknotes-obsidian/README.md`](context/tasknotes-obsidian/README.md) for details. Not wired into the Docker stack; kept here for version control.
+
 ## Custom Models
 
 To use custom models from your local directory, create them using a Modelfile:

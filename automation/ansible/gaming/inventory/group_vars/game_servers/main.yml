@@ -1,0 +1,20 @@
+gaming_base_dir: /opt/gaming
+gaming_owner: "{{ ansible_user }}"
+gaming_group: "{{ ansible_user }}"
+
+gaming_allowed_stacks:
+  - minecraft
+  - palworld
+
+gaming_stack_paths:
+  minecraft:
+    app_dir: "{{ gaming_base_dir }}/minecraft"
+    ports:
+      - "25565/tcp"
+  palworld:
+    app_dir: "{{ gaming_base_dir }}/palworld"
+    ports:
+      - "8211/udp"
+      - "27015/udp"
+
+gaming_stop_other_stack: true

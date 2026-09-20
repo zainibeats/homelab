@@ -1,0 +1,23 @@
+- name: Stop selected game Compose stack
+  hosts: game_servers
+  gather_facts: false
+  become: true
+
+  vars:
+    selected_game_stack: "{{ game_stack | default('minecraft') }}"
+    selected_stack: "{{ gaming_stack_paths[selected_game_stack] }}"
+    selected_app_dir: "{{ selected_stack.app_dir }}"
+
+  pre_tasks:
+    - name: Ensure selected game stack is supported
+      ansible.builtin.assert:
+        that:
+          - selected_game_stack in gaming_allowed_stacks
+        fail_msg: "Set game_stack to one of: {{ gaming_allowed_stacks | join(', ') }}"
+
+  tasks:
+    - name: Stop selected Compose stack
+      community.docker.docker_compose_v2:
+        project_src: "{{ selected_app_dir }}"
+        state: absent
+        remove_orphans: true

@@ -15,7 +15,7 @@ services:
     devices:
       - /dev/net/tun:/dev/net/tun
     networks:
-      wirebrave:
+      neko-network:
         ipv4_address: 172.77.0.2
     ports:
       - "8880:8080" # Neko web interface
@@ -61,12 +61,14 @@ services:
           ! video/x-h264,stream-format=byte-stream
           ! appsink name=appsink
       NEKO_CAPTURE_VIDEO_CODEC: "h264"
-      NEKO_SCREEN: 1920x1080@30
-      NEKO_PASSWORD: ${NEKO_PASSWORD}
-      NEKO_PASSWORD_ADMIN: ${NEKO_PASSWORD_ADMIN}
-      NEKO_EPR: 52000-52100
-      NEKO_NAT1TO1: ${NEKO_NAT1TO1}
-      NEKO_ICELITE: 1
+      NEKO_DESKTOP_SCREEN: 1920x1080@30
+      NEKO_MEMBER_MULTIUSER_USER_PASSWORD: ${NEKO_MEMBER_MULTIUSER_USER_PASSWORD}
+      NEKO_MEMBER_MULTIUSER_ADMIN_PASSWORD: ${NEKO_MEMBER_MULTIUSER_ADMIN_PASSWORD}
+      NEKO_MEMBER_PROVIDER: multiuser
+      NEKO_WEBRTC_EPR: 52000-52100
+      NEKO_WEBRTC_NAT1TO1: ${NEKO_WEBRTC_NAT1TO1}
+      NEKO_WEBRTC_IP_RETRIEVAL_URL: ${NEKO_WEBRTC_IP_RETRIEVAL_URL}
+      NEKO_WEBRTC_ICELITE: 1
       NEKO_HWENC: nvenc
     deploy:
       resources:

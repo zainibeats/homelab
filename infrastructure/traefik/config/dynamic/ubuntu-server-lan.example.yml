@@ -36,7 +36,7 @@ http:
         certResolver: cloudflare
       service: homeassistant-lan-ubuntu
     neko-lan:
-      rule: "Host(`neko.home.domain.tld`)"
+      rule: "Host(`neko.subdomain.domain.tld`)"
       entryPoints:
         - websecure
       tls:

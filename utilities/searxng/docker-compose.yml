@@ -15,6 +15,7 @@ services:
     networks:
       - traefik-proxy
       - searxng-net
+      - tmdb-net
     labels:
       - traefik.enable=true
 
@@ -45,6 +46,8 @@ networks:
     external: true
   searxng-net:
     external: false
+  tmdb-net:
+    external: true
 
 volumes:
   core-data:

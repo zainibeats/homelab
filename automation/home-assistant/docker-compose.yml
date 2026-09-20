@@ -1,16 +1,13 @@
 services:
   homeassistant:
-    image: lscr.io/linuxserver/homeassistant:latest
     container_name: homeassistant
-    network_mode: host
-    restart: unless-stopped
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=<YOUR_TIMEZONE>
+    image: "ghcr.io/home-assistant/home-assistant:stable"
     volumes:
-      - <CHOOSE_PATH_FOR_HOMEASSISTANT_DATA>/homeassistant/data:/config
-    # ports:
-    #   - 8123:8123
-    # devices:
-    #   - /path/to/device:/path/to/device #optional
+      - ./config:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    environment:
+      TZ: America/Los_Angeles
