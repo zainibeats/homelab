@@ -9,3 +9,12 @@ services:
       WATCHTOWER_CLEANUP: true
       TZ: America/Los_Angeles
     restart: unless-stopped
+    networks:
+      - watchtower_net
+
+networks:
+  watchtower_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/24
