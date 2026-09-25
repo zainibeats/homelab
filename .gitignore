@@ -56,4 +56,4 @@ ubuntu-server-host.yml
 ubuntu-server-lan.yml
 ubuntu-server-remote.yml
 ubuntu-server.yml
-
+**/monitoring/docker-compose.yml
