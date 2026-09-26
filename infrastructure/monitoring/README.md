@@ -26,7 +26,7 @@ This directory contains a Docker Compose setup for a basic monitoring stack usin
 3. **Grafana Configuration & Data**: Grafana mounts volumes for its data (`~/promgrafnode/grafana`) and provisioning (`~/promgrafnode/grafana/provisioning/datasources`). The necessary directories should have been created in step 1.
    - You can place datasource configuration files in `~/promgrafnode/grafana/provisioning/datasources`, such as a file that automatically adds the Prometheus datasource.
 
-4. **Permissions (PUID/PGID)**: The `prometheus` and `grafana` services are configured to run with user/group ID `1002`. Ensure the host directories (`~/promgrafnode/*`) have appropriate permissions for this user/group, or update the `user` directive in the `docker-compose.yml` to match a user/group that owns the directories.
+4. **Permissions (PUID/PGID)**: The `prometheus` and `grafana` services are configured to run with user/group ID `1000`. Ensure the host directories (`~/promgrafnode/*`) have appropriate permissions for this user/group, or update the `user` directive in the `docker-compose.yml` to match a user/group that owns the directories.
 
 5. **Volumes**: Ensure the host paths used for volumes exist and have the correct permissions:
    - `~/promgrafnode/prometheus/prometheus.yml`
@@ -84,4 +84,4 @@ This directory contains a Docker Compose setup for a basic monitoring stack usin
 - **Prometheus**: `http://<your-server-ip>:9090`
 - **Grafana**: `http://<your-server-ip>:3000` (Default login: admin/admin)
 - **Node Exporter Metrics**: `http://<your-server-ip>:9100/metrics`
-- **cAdvisor**: `http://<your-server-ip>:8081`
+- **cAdvisor**: `http://<your-server-ip>:8080` (Requires `redis` service)
