@@ -1,21 +1,39 @@
+# Environment and Secrets
 .env
-.cache/
 runtime.env
+secrets.yaml
+*.pem
+
+# Logs and Cache
+.cache/
 logs/
 *.log
 *.log.*
 .*.lock
-*/syncthing/config/*
-*.pem
+
+# Terraform and Infrastructure
 .terraform/
 *.tfstate
 terraform.tfstate.backup
 terraform.tfvars
 .terraform.tfstate.lock.info
+*.tfstate.*
+
+# Automation and Configuration
 automation/ollama-aws-hybrid/ansible/open-webui-ec2-instance.yaml
 automation/ollama-aws-hybrid/ansible/check.output
 automation/ansible/server-admin/inventory/hosts.yml
-*.tfstate.*
+app.ini
+traefik.yml
+pi5.yml
+truenas.yml
+ubuntu-server-host.yml
+ubuntu-server-lan.yml
+ubuntu-server-remote.yml
+ubuntu-server.yml
+**/monitoring/docker-compose.yml
+
+# Data and Storage
 **/convertx/data/
 **/arr-stack/*/
 **/uptime-kuma/data/
@@ -30,8 +48,6 @@ automation/ansible/server-admin/inventory/hosts.yml
 **/home-assistant/scenes.yaml
 **/home-assistant/*.db
 zigbee.db
-app.ini
-secrets.yaml
 **/immich/postgres/
 **/invidious/*/
 **/invidious/.ameba.yml
@@ -49,12 +65,7 @@ secrets.yaml
 **/invidious/videojs-dependencies.yml
 **/neko/*/
 **/open-webui/*/
-traefik.yml
-pi5.yml
-truenas.yml
-ubuntu-server-host.yml
-ubuntu-server-lan.yml
-ubuntu-server-remote.yml
-ubuntu-server.yml
-**/monitoring/docker-compose.yml
+
+# Miscellaneous
+*/syncthing/config/*
 obsidian-vault
