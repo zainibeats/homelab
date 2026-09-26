@@ -38,7 +38,12 @@ This setup allows you to run large language models (LLMs) locally using Ollama a
 
 ## Context / Agent Skills
 
-`context/` holds Claude Code context bundles (`AGENTS.md` + skills) for external tools this repo doesn't deploy itself — currently an Obsidian TaskNotes vault. See [`context/tasknotes-obsidian/README.md`](context/tasknotes-obsidian/README.md) for details. Not wired into the Docker stack; kept here for version control.
+`context/` holds Claude Code context bundles (`AGENTS.md` + skills) for external tools this repo doesn't deploy itself. Currently, this includes:
+
+- **TaskNotes Obsidian**: See [`context/tasknotes-obsidian/README.md`](context/tasknotes-obsidian/README.md) for details.
+- **Inbox Processing**: See [`context/inbox-processing/SKILL.md`](context/inbox-processing/SKILL.md) for details.
+
+Not wired into the Docker stack; kept here for version control.
 
 ## Custom Models
 
