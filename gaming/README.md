@@ -9,6 +9,7 @@ NetBird is the preferred way to access game servers remotely. Individual game st
 ### Game Servers
 - **[Minecraft](./minecraft/README.md)** - Docker Compose stack for a Minecraft server
 - **[Palworld](./palworld/README.md)** - Docker Compose stack for a Palworld dedicated server
+- **[Valheim](./valheim/README.md)** - Docker Compose stack for a Valheim server
 
 ## Common Considerations
 

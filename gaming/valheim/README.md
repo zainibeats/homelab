@@ -1,10 +1,10 @@
-# Palworld Server
+# Valheim Server
 
-Docker Compose stack for a Palworld dedicated server with a NetBird client for private remote access.
+Docker Compose stack for a Valheim server with a NetBird client for private remote access.
 
 ## Deployment
 
-Copy the example environment file and update the Palworld and NetBird settings:
+Copy the example environment file and update the Valheim and NetBird settings:
 
 ```bash
 cp .env.example .env
@@ -24,10 +24,11 @@ For shared remote access guidance, see the [Gaming Services README](../README.md
 
 ## Ports
 
-- `8211/udp` - Palworld game port
-- `27015/udp` - Query port
+- `2456-2458/udp` - Valheim game ports
+- `9001/tcp` - Valheim query port
 
 ## Data
 
-- `./data` - Persistent Palworld server data
+- `./config` - Valheim server configuration
+- `./data` - Persistent Valheim server data
 - `./netbird` - NetBird client state
