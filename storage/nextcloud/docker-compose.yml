@@ -34,7 +34,7 @@ services:
     environment:
       - PUID=$PUID
       - PGID=$PGID
-      - MYSQ_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
       - MYSQL_HOST=db
