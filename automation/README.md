@@ -1,6 +1,6 @@
 # Automation
 
-This directory contains automation-focused services and tooling for home automation, Ansible host management, and AI platforms.
+This directory contains automation-focused services and tooling for home automation, Ansible host management, and the AI stack.
 
 ## Services Overview
 
@@ -12,7 +12,10 @@ This directory contains automation-focused services and tooling for home automat
 
 - **[Ansible](./ansible/README.md)** - Shared Ansible inventory and playbooks for managing homelab and cloud servers
 
-### AI Platforms
+### AI Infrastructure
 
-- **[Ollama + Open WebUI](./ai-stack/README.md)** - Local LLM inference with a web-based chat interface
-- **[Ollama AWS Hybrid](./ollama-aws-hybrid/README.md)** - Hybrid Ollama setup combining local and AWS-hosted inference
+This directory houses the infrastructure for LLM inference (models and interfaces), agentic context, and hybrid cloud setups.
+
+- **[AI Stack](./ai-stack/README.md)** - Local LLM inference with a web-based chat interface
+- **[Ollama AWS Hybrid (Experimental)](./ollama-aws-hybrid/README.md)** - Hybrid Ollama setup combining local and AWS-hosted inference
+- **[Context & Skills](./ai-stack/context/)** - Claude Code context bundles and skills
