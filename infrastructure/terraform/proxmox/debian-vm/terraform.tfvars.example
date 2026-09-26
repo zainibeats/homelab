@@ -1,0 +1,27 @@
+proxmox_endpoint  = "https://pve.example.lan:8006/"
+proxmox_api_token = "terraform@pam!terraform=00000000-0000-0000-0000-000000000000"
+template_vm_id     = 110
+vm_id              = 130
+cpu_cores          = 2
+memory_mb          = 2048
+disk_size_gb       = 32
+ipv4_cidr          = "172.20.50.130/24"
+ipv4_gateway       = "172.20.50.1"
+dns_servers        = ["172.20.50.1"]
+node_name          = "compute"
+
+# Optional overrides. Defaults are in variables.tf.
+# proxmox_insecure   = true
+# vm_name            = "debian-vm"
+# datastore_id       = "local-lvm"
+# network_bridge     = "vmbr0"
+# admin_username     = "debian"
+# public_key_path    = "~/.ssh/id_ed25519.pub"
+# private_key_path   = "~/.ssh/id_ed25519"
+
+# Must match the template's boot disk (check Hardware in the PVE UI).
+# disk_interface     = "scsi0"
+
+# Only enable if qemu-guest-agent is installed in the template, otherwise
+# apply waits for the agent until it times out.
+# qemu_agent_enabled = false
