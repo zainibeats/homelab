@@ -9,6 +9,7 @@ It isn't deployed by any Docker Compose file in `ai-stack/` — it's kept here f
 - **`AGENTS.md`** — vault-specific design notes: the PARA folder structure, TaskNotes' role within it, and the tagging strategy used to drive Obsidian's Graph View.
 - **`skills/`** — a portable Claude Code skill (`tasknotes`) for creating, querying, and updating tasks. It probes the environment (MCP server, HTTP API, or direct filesystem access) and routes to whichever is available, with full schema/CLI/API details in `skills/references/`. Pulled from [vanillaflava/tasknotes-skill](https://github.com/vanillaflava/tasknotes-skill), not authored in this repo.
 - **`.mcp.json`** — registers the TaskNotes MCP server (`http://localhost:8080/mcp`, `lifecycle: lazy`) as a project-scoped MCP server. The TaskNotes plugin's MCP Server toggle (Settings → TaskNotes → Integrations) must be enabled for the server to actually respond; see `skills/references/tasknotes-help.md` for setup and troubleshooting. If the agent tool and Obsidian are on the same machine, a local firewall may still need an allow rule for port 8080 from `127.0.0.1` before the connection succeeds.
+- **Related Context**: See [Inbox Processing](../inbox-processing/README.md) for a complementary skill that manages "quick capture" flows using these same tools.
 
 ## Deployment layout
 
