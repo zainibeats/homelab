@@ -44,7 +44,7 @@ Update the following environment variables in `docker-compose.yml`:
 
 ### 3. Port Configuration
 
-By default, Nextcloud is accessible on port 8080. You can modify this in the `ports` section of the `app` service if needed.
+By default, Nextcloud is accessible on port 8080 via the internal mapping. However, it is also configured with Traefik labels for domain-based access via port 80/443.
 
 ## Setup
 

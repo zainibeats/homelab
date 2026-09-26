@@ -11,6 +11,7 @@ This directory contains services focused on data storage, backup, and security f
 ### Cloud Storage
 
 - **[Nextcloud](./nextcloud/README.md)** - Comprehensive self-hosted file sync and share platform
+  *Note: Data is stored on NFS share at `/mnt/nfs/apps/nextcloud`.*
 
 ### File Sync
 
@@ -19,6 +20,10 @@ This directory contains services focused on data storage, backup, and security f
 ### Password Management
 
 - **[Vaultwarden](./vaultwarden/README.md)** - Lightweight self-hosted password manager compatible with Bitwarden clients
+
+### Personal Context
+
+- **[Obsidian Vault](./obsidian-vault)** - A symbolic link to my personal notes and tasks. This directory is ignored by git and is not visible to the public, but provides extra context for humans and AI agents regarding the homelab.
 
 ## Storage Notes
 
