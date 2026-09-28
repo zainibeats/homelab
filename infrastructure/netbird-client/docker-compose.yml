@@ -1,21 +1,29 @@
 services:
   netbird-client:
-      container_name: netbird-client
-      hostname: ${HOSTNAME}
-      cap_add:
-          - NET_ADMIN
-          - SYS_ADMIN
-          - SYS_RESOURCE
-      devices:
-          # Required when using userspace mode or when kernel module is not available
-          - /dev/net/tun
-      network_mode: host
-      environment:
-          NB_SETUP_KEY: ${SETUP_KEY}
-          NB_MANAGEMENT_URL: ${NB_MANAGEMENT_URL}
-      volumes:
-          - netbird-client:/var/lib/netbird
-      image: netbirdio/netbird:latest
-volumes:
-  netbird-client:
-      name: netbird-client
+    image: netbirdio/netbird:latest
+    container_name: netbird-client
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_RESOURCE
+    env_file: .env
+    environment:
+      - NB_SETUP_KEY=${NB_SETUP_KEY}
+      - NB_MANAGEMENT_URL=${NB_MANAGEMENT_URL}
+      - NB_HOSTNAME=${HOSTNAME}
+    volumes:
+      - ./netbird:/var/lib/netbird
+    networks:
+      services:
+        ipv4_address: 172.110.2.10
+
+networks:
+  services:
+    name: services
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.110.2.0/24
+          gateway: 172.110.2.1
+
