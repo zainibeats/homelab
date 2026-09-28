@@ -16,7 +16,7 @@ services:
       - ./netbird:/var/lib/netbird
     networks:
       services:
-        ipv4_address: 172.110.2.10
+        ipv4_address: ${NETBIRD_CLIENT_IP:-172.110.2.10}
 
 networks:
   services:
@@ -24,6 +24,6 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.110.2.0/24
-          gateway: 172.110.2.1
+        - subnet: ${SERVICES_SUBNET:-172.110.2.0/24}
+          gateway: ${SERVICES_GATEWAY:-172.110.2.1}
 

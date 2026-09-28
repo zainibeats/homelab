@@ -9,6 +9,9 @@ NetBird Client provides a lightweight VPN client that connects your host to the 
 | `HOSTNAME` | Host name to register in NetBird. Defaults to container hostname if unset. |
 | `SETUP_KEY` | NetBird setup key for onboarding the client. |
 | `NB_MANAGEMENT_URL` | URL of the NetBird management server. |
+| `SERVICES_SUBNET` | Subnet of the `services` network. Defaults to `172.110.2.0/24`, which is not a private range; a subnet routed through NetBird must be private and must not overlap any client's local networks. |
+| `SERVICES_GATEWAY` | Gateway of the `services` network. Defaults to `172.110.2.1`. |
+| `NETBIRD_CLIENT_IP` | Static IP of the client on `services`. Defaults to `172.110.2.10`. |
 
 All variables are supplied via `.env` or Docker Compose.
 
