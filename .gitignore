@@ -34,6 +34,9 @@ ubuntu-server.yml
 **/monitoring/docker-compose.yml
 
 # Data and Storage
+*/*/netbird/
+**/matrix/synapse/
+**/matrix/postgres-data/
 **/convertx/data/
 **/arr-stack/*/
 **/uptime-kuma/data/
