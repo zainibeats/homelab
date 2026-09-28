@@ -1,0 +1,123 @@
+name: matrix
+
+# Private Matrix stack (Synapse + Element Web + MatrixRTC via LiveKit),
+# routed by an existing Traefik, reachable only over NetBird.
+# Values come from .env (copy .env.example).
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    container_name: synapse-postgres
+    environment:
+      POSTGRES_USER: synapse
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: synapse
+      # Synapse requires C collation
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    networks: [internal]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U synapse -d synapse"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  synapse:
+    image: matrixdotorg/synapse:latest   # pin a specific version once it works
+    restart: unless-stopped
+    container_name: synapse
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./synapse:/data
+    networks: [internal, traefik]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_NETWORK}
+      # Shared middleware: only NetBird peers (and local Docker containers) may connect.
+      # Referenced by the other services as netbird-only@docker.
+      - traefik.http.middlewares.netbird-only.ipallowlist.sourcerange=${ALLOWED_RANGES}
+      - traefik.http.routers.synapse.rule=Host(`${MATRIX_HOST}`)
+      - traefik.http.routers.synapse.entrypoints=${TRAEFIK_ENTRYPOINT}
+      - traefik.http.routers.synapse.tls.certresolver=${TRAEFIK_CERTRESOLVER}
+      - traefik.http.routers.synapse.middlewares=netbird-only
+      - traefik.http.services.synapse.loadbalancer.server.port=8008
+
+  element-web:
+    image: vectorim/element-web:latest
+    restart: unless-stopped
+    container_name: element-web
+    volumes:
+      - ./element/config.json:/app/config.json:ro
+    networks: [traefik]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_NETWORK}
+      - traefik.http.routers.element.rule=Host(`${CHAT_HOST}`)
+      - traefik.http.routers.element.entrypoints=${TRAEFIK_ENTRYPOINT}
+      - traefik.http.routers.element.tls.certresolver=${TRAEFIK_CERTRESOLVER}
+      - traefik.http.routers.element.middlewares=netbird-only@docker
+      - traefik.http.services.element.loadbalancer.server.port=80
+
+  livekit:
+    image: livekit/livekit-server:latest
+    restart: unless-stopped
+    container_name: livekit
+    command: --config /etc/livekit.yaml
+    environment:
+      LIVEKIT_KEYS: "${LIVEKIT_KEY}: ${LIVEKIT_SECRET}"
+    volumes:
+      - ./livekit/livekit.yaml:/etc/livekit.yaml:ro
+    # No published ports: NetBird peers reach media (7881/tcp, 7882/udp) directly
+    # at LIVEKIT_IP on the routed "services" network.
+    networks:
+      traefik:
+      nbroute:
+        ipv4_address: ${LIVEKIT_IP}
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_NETWORK}
+      # /livekit/sfu -> LiveKit signalling (prefix stripped), per the Element Call self-hosting guide
+      - traefik.http.middlewares.lk-sfu-strip.stripprefix.prefixes=/livekit/sfu
+      - traefik.http.routers.lk-sfu.rule=Host(`${RTC_HOST}`) && PathPrefix(`/livekit/sfu`)
+      - traefik.http.routers.lk-sfu.entrypoints=${TRAEFIK_ENTRYPOINT}
+      - traefik.http.routers.lk-sfu.tls.certresolver=${TRAEFIK_CERTRESOLVER}
+      - traefik.http.routers.lk-sfu.middlewares=netbird-only@docker,lk-sfu-strip
+      - traefik.http.services.lk-sfu.loadbalancer.server.port=7880
+
+  lk-jwt-service:
+    image: ghcr.io/element-hq/lk-jwt-service:latest
+    restart: unless-stopped
+    container_name: lk-jwt-service
+    environment:
+      LIVEKIT_JWT_BIND: ":8080"
+      LIVEKIT_URL: wss://${RTC_HOST}/livekit/sfu
+      LIVEKIT_KEY: ${LIVEKIT_KEY}
+      LIVEKIT_SECRET: ${LIVEKIT_SECRET}
+      LIVEKIT_FULL_ACCESS_HOMESERVERS: ${MATRIX_HOST}
+    networks: [traefik]
+    # Reach Synapse and LiveKit through Traefik (its IP on TRAEFIK_NETWORK)
+    extra_hosts:
+      - "${MATRIX_HOST}:172.30.0.10"
+      - "${RTC_HOST}:172.30.0.10"
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_NETWORK}
+      # /livekit/jwt -> MatrixRTC authorization service (prefix stripped)
+      - traefik.http.middlewares.lk-jwt-strip.stripprefix.prefixes=/livekit/jwt
+      - traefik.http.routers.lk-jwt.rule=Host(`${RTC_HOST}`) && PathPrefix(`/livekit/jwt`)
+      - traefik.http.routers.lk-jwt.entrypoints=${TRAEFIK_ENTRYPOINT}
+      - traefik.http.routers.lk-jwt.tls.certresolver=${TRAEFIK_CERTRESOLVER}
+      - traefik.http.routers.lk-jwt.middlewares=netbird-only@docker,lk-jwt-strip
+      - traefik.http.services.lk-jwt.loadbalancer.server.port=8080
+networks:
+  internal:
+  traefik:
+    external: true
+    name: ${TRAEFIK_NETWORK}      # netbird_netbird
+  nbroute:
+    external: true
+    name: services                # created by the netbird-client stack (SERVICES_SUBNET)

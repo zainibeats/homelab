@@ -1,0 +1,77 @@
+# Copy over the generated homeserver.yaml AFTER running the one-time `generate`
+# step (that step creates the signing key and log config this file references).
+# Replace every CHANGE_ME_* marker.
+
+# PERMANENT: user IDs will look like @name:CHANGE_ME_MATRIX_HOST. Cannot be changed later.
+server_name: "CHANGE_ME_MATRIX_HOST"
+public_baseurl: "https://CHANGE_ME_MATRIX_HOST/"
+pid_file: /data/homeserver.pid
+
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    bind_addresses: ['0.0.0.0']
+    resources:
+      # The federation resource must stay enabled: lk-jwt-service validates
+      # OpenID tokens against it. Actual federation with other servers is blocked below.
+      - names: [client, federation]
+        compress: false
+
+database:
+  name: psycopg2
+  args:
+    user: synapse
+    password: CHANGE_ME_POSTGRES_PASSWORD
+    database: synapse
+    host: postgres
+    cp_min: 5
+    cp_max: 10
+
+log_config: "/data/CHANGE_ME_MATRIX_HOST.log.config"
+media_store_path: /data/media_store
+signing_key_path: "/data/CHANGE_ME_MATRIX_HOST.signing.key"
+report_stats: false
+suppress_key_server_warning: true
+
+macaroon_secret_key: "CHANGE_ME_MACAROON"
+form_secret: "CHANGE_ME_FORM"
+registration_shared_secret: "CHANGE_ME_REGISTRATION"
+
+# Private server: accounts are created by you with register_new_matrix_user.
+enable_registration: false
+# Empty whitelist = no federation with other servers.
+federation_domain_whitelist: []
+
+# Synapse serves /.well-known/matrix/server and /client itself.
+serve_server_wellknown: true
+extra_well_known_client_content:
+  org.matrix.msc4143.rtc_foci:
+    - type: livekit
+      livekit_service_url: "https://CHANGE_ME_RTC_HOST/livekit/jwt"
+
+# --- Element Call / MatrixRTC requirements (from the Element Call self-hosting guide) ---
+experimental_features:
+  msc3266_enabled: true
+  msc4222_enabled: true
+
+max_event_delay_duration: 24h
+
+rc_message:
+  per_second: 0.5
+  burst_count: 30
+
+rc_delayed_event_mgmt:
+  per_second: 1
+  burst_count: 20
+
+# OPTIONAL, only if Element X reports MISSING_MATRIX_RTC_TRANSPORT.
+# Newer Synapse versions expose the transports endpoint via this block;
+# check the current Synapse docs for the exact keys before enabling.
+# experimental_features:
+#   msc4143_enabled: true
+# matrix_rtc:
+#   transports:
+#     - type: livekit
+#       livekit_service_url: "https://CHANGE_ME_RTC_HOST/livekit/jwt"

@@ -1,0 +1,19 @@
+# API key/secret come from the LIVEKIT_KEYS env var set in docker-compose.yml.
+
+port: 7880
+
+rtc:
+  tcp_port: 7881
+  # Single UDP port (mux) instead of a wide range, so only one port needs opening
+  udp_port: 7882
+  # NetBird peers reach LiveKit directly on the routed "services" network, so
+  # advertise that address instead of discovering a public IP. Must equal LIVEKIT_IP in .env.
+  use_external_ip: false
+  node_ip: 10.110.2.30
+
+room:
+  # lk-jwt-service creates rooms for authorised users
+  auto_create: false
+
+logging:
+  level: info
