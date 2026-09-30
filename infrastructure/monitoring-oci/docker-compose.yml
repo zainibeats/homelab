@@ -1,0 +1,133 @@
+name: monitoring-oci
+
+# Metrics and logs for the OCI host, viewed in Grafana over NetBird.
+# Runs straight from the repo. Values come from .env (copy .env.example).
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=30d
+      - --storage.tsdb.retention.size=5GB
+      - --web.enable-lifecycle
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    networks: [monitoring]
+
+  # Host network so network and filesystem stats are the host's own.
+  # Bound to the monitoring bridge gateway only; ufw must allow 9100 from
+  # the monitoring subnet (see README).
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    network_mode: host
+    pid: host
+    command:
+      - --path.rootfs=/host
+      - --web.listen-address=10.110.9.1:9100
+    volumes:
+      - /:/host:ro,rslave
+      - /run/udev:/run/udev:ro
+
+  cadvisor:
+    image: ghcr.io/google/cadvisor:latest   # gcr.io/cadvisor/cadvisor is no longer updated
+    container_name: cadvisor
+    restart: unless-stopped
+    privileged: true
+    devices: [/dev/kmsg]
+    command:
+      - --docker_only=true
+      - --housekeeping_interval=15s
+      - --store_container_labels=false
+      - --whitelisted_container_labels=com.docker.compose.project,com.docker.compose.service
+      - --disable_metrics=advtcp,cpu_topology,cpuset,hugetlb,memory_numa,percpu,process,referenced_memory,resctrl,sched,tcp,udp
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    networks: [monitoring]
+
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    restart: unless-stopped
+    command: -config.file=/etc/loki/config.yaml
+    volumes:
+      - ./loki/config.yaml:/etc/loki/config.yaml:ro
+      - loki-data:/loki
+    networks: [monitoring]
+
+  # Ships container logs (Docker API) and host logs (journald) to Loki.
+  alloy:
+    image: grafana/alloy:latest
+    container_name: alloy
+    restart: unless-stopped
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/config.alloy
+    volumes:
+      - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
+      - alloy-data:/var/lib/alloy/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/log/journal:/var/log/journal:ro
+      - /etc/machine-id:/etc/machine-id:ro
+    networks: [monitoring]
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+      GF_SERVER_ROOT_URL: https://${GRAFANA_HOST}
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana-admin-password
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /etc/grafana/dashboards/OCI/overview.json
+    secrets: [grafana-admin-password]
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/etc/grafana/dashboards:ro
+    networks: [monitoring, traefik]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIK_NETWORK}
+      - traefik.http.middlewares.grafana-netbird-only.ipallowlist.sourcerange=${ALLOWED_RANGES}
+      - traefik.http.routers.grafana.rule=Host(`${GRAFANA_HOST}`)
+      - traefik.http.routers.grafana.entrypoints=${TRAEFIK_ENTRYPOINT}
+      - traefik.http.routers.grafana.tls.certresolver=${TRAEFIK_CERTRESOLVER}
+      - traefik.http.routers.grafana.middlewares=grafana-netbird-only
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
+
+secrets:
+  grafana-admin-password:
+    file: ./grafana-admin-password   # created by hand, owned by uid 472 (see README)
+
+volumes:
+  prometheus-data:
+  loki-data:
+  alloy-data:
+  grafana-data:
+
+networks:
+  monitoring:
+    driver_opts:
+      com.docker.network.bridge.name: br-monitoring
+    ipam:
+      config:
+        - subnet: 10.110.9.0/24
+          gateway: 10.110.9.1
+  traefik:
+    external: true
+    name: ${TRAEFIK_NETWORK}      # netbird_netbird
