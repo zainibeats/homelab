@@ -36,6 +36,7 @@ ubuntu-server-lan.yml
 ubuntu-server-remote.yml
 ubuntu-server.yml
 **/monitoring/docker-compose.yml
+**/monitoring-oci/grafana-admin-password
 
 # Data and Storage
 */*/netbird/
