@@ -1,6 +1,6 @@
 services:
   netbird-client:
-    image: netbirdio/netbird:latest
+    image: netbirdio/netbird:0.79.0
     container_name: netbird-client
     restart: unless-stopped
     cap_add:
@@ -14,16 +14,19 @@ services:
       - NB_HOSTNAME=${HOSTNAME}
     volumes:
       - ./netbird:/var/lib/netbird
+    labels:
+      - com.centurylinklabs.watchtower.enable=false   # pinned with the NetBird server; upgrade together
     networks:
       services:
-        ipv4_address: ${NETBIRD_CLIENT_IP:-172.110.2.10}
+        ipv4_address: ${NETBIRD_CLIENT_IP:?set NETBIRD_CLIENT_IP in .env}
 
 networks:
   services:
     name: services
+    # true on a host where the netbird-server stack already created "services"
+    external: ${SERVICES_EXTERNAL:-false}
     driver: bridge
     ipam:
       config:
-        - subnet: ${SERVICES_SUBNET:-172.110.2.0/24}
-          gateway: ${SERVICES_GATEWAY:-172.110.2.1}
-
+        - subnet: ${SERVICES_SUBNET:?set SERVICES_SUBNET in .env (unique per host)}
+          gateway: ${SERVICES_GATEWAY:?set SERVICES_GATEWAY in .env}
