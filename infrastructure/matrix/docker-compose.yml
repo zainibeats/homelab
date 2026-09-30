@@ -99,7 +99,8 @@ services:
       LIVEKIT_SECRET: ${LIVEKIT_SECRET}
       LIVEKIT_FULL_ACCESS_HOMESERVERS: ${MATRIX_HOST}
     networks: [traefik]
-    # Reach Synapse and LiveKit through Traefik (its IP on TRAEFIK_NETWORK)
+    # Reach Synapse and LiveKit through Traefik: its fixed IP on TRAEFIK_NETWORK
+    # (see ../netbird-server/README.md "Traefik's internal IP")
     extra_hosts:
       - "${MATRIX_HOST}:172.30.0.10"
       - "${RTC_HOST}:172.30.0.10"
@@ -120,4 +121,4 @@ networks:
     name: ${TRAEFIK_NETWORK}      # netbird_netbird
   nbroute:
     external: true
-    name: services                # created by the netbird-client stack (SERVICES_SUBNET)
+    name: services                # created by the netbird-server stack (SERVICES_SUBNET)
