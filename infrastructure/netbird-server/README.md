@@ -62,20 +62,3 @@ Follow the [official upgrade steps](https://docs.netbird.io/selfhosted/maintenan
 2. Carry over any changes to the compose, `config.yaml` or env templates.
 3. Bump `netbird-server`, `reverse-proxy` and netbird-client's `netbird` together, plus the matching dashboard release.
 4. Replace the kept script with the new one.
-
-## Migrating from `~/services/netbird`
-
-The live server still runs from where the installer put it in May. It differs from this copy in three ways:
-
-- Its `config.yaml` has no `trustedPeers` (same value as `trustedHTTPProxies`) or `sessionCookieEncryptionKey`.
-- Its compose is missing the `/management.ProxyService/` gRPC route.
-- Its `services` network belongs to the netbird-client project, so it has to be recreated under this one. That means stopping everything attached to it.
-
-To migrate:
-
-1. Stop Matrix, the game stacks, netbird-client and the old stack.
-2. `docker network rm services`
-3. `sudo cp -a` `config.yaml`, `dashboard.env`, `proxy.env`, `cloudflare-dns-token` and `crowdsec/` into this directory, then add the two missing keys.
-4. Bring everything back up in setup order.
-
-The volumes are reused as they are.
