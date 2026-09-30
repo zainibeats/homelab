@@ -16,6 +16,7 @@ This directory contains infrastructure services that handle networking, remote a
 
 ### Monitoring
 - **[Monitoring](./monitoring/README.md)** - Complete monitoring stack including Prometheus, Grafana, Loki, and cAdvisor for metrics and log aggregation
+- **[Monitoring (OCI)](./monitoring-oci/README.md)** - Prometheus, Grafana, Loki and Alloy for the OCI host, with Grafana reachable only over NetBird
 - **[Uptime Kuma](./uptime-kuma/README.md)** - Service availability monitoring with alerting for uptime and response time
 
 ### Dashboard
