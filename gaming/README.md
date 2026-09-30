@@ -2,7 +2,7 @@
 
 This directory contains self-hosted game server stacks for running games in the homelab or on reusable cloud hosts.
 
-NetBird is the preferred way to access game servers remotely. Individual game stacks should include a NetBird client when they need private remote access instead of exposing game ports directly to the internet.
+NetBird is the preferred way to access game servers remotely. Game stacks publish no ports: each joins the NetBird-routed `services` network with a static IP instead of exposing game ports to the internet.
 
 ## Services Overview
 
@@ -17,16 +17,15 @@ NetBird is the preferred way to access game servers remotely. Individual game st
 
 Use NetBird as the default remote access path for gaming services.
 
-This requires a NetBird management server to be set up first. My deployment runs on an Oracle Cloud Always Free 4-core ARM VPS (`VM.Standard.A1.Flex`) using NetBird's [Self-Hosting NetBird with Authentik](https://netbird.io/knowledge-hub/selfhost-netbird-with-authentik) guide.
+This needs [NetBird Server](../infrastructure/netbird-server/README.md) (mine runs on an OCI Always Free `VM.Standard.A1.Flex`) and [NetBird Client](../infrastructure/netbird-client/README.md) as the routing peer for `services`. Each game sets its address in `.env`:
 
-For game stacks that include a NetBird client, set these values in the service `.env` file:
+| Game | Variable | Address | Ports to allow in the NetBird policy |
+|------|----------|---------|--------------------------------------|
+| Minecraft | `MINECRAFT_IP` | `10.110.2.40` | TCP 25565 |
+| Palworld | `PALWORLD_IP` | `10.110.2.41` | UDP 8211, 27015 |
+| Valheim | `VALHEIM_IP` | `10.110.2.42` | UDP 2456-2458 |
 
-| Variable | Purpose | Example |
-|----------|---------|---------|
-| `NB_SETUP_KEY` | NetBird setup key for enrolling the client | `"A1B2C3..."` |
-| `NB_MANAGEMENT_URL` | NetBird management server URL | `"https://netbird.example.com"` |
-
-After the stack is running, connect clients through NetBird and use the server address exposed on the NetBird network.
+Players connect through NetBird to `<address>:<port>`.
 
 WireGuard remains a fallback option when NetBird is not available. The full setup steps are in the [WireGuard README](../infrastructure/wireguard/README.md).
 

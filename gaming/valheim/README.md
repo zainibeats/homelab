@@ -1,10 +1,10 @@
 # Valheim Server
 
-Docker Compose stack for a Valheim server with a NetBird client for private remote access.
+Docker Compose stack for a Valheim server, reachable privately over NetBird on the `services` network.
 
 ## Deployment
 
-Copy the example environment file and update the Valheim and NetBird settings:
+Copy the example environment file and update the Valheim settings and `VALHEIM_IP`:
 
 ```bash
 cp .env.example .env
@@ -18,11 +18,13 @@ docker compose up -d
 
 ## Remote Access
 
-NetBird is the preferred access path for this server. Set `NB_SETUP_KEY` and `NB_MANAGEMENT_URL` in `.env`, then connect clients through the NetBird network.
+The stack publishes no ports. It joins the `services` network at `VALHEIM_IP` (e.g. `10.110.2.42`), which [NetBird Client](../../infrastructure/netbird-client/README.md) routes to peers; start that first. Players connect through NetBird to that address.
 
 For shared remote access guidance, see the [Gaming Services README](../README.md#remote-access).
 
 ## Ports
+
+Allow these to the `services` resource in the NetBird policy:
 
 - `2456-2458/udp` - Valheim game ports
 - `9001/tcp` - Valheim query port
@@ -31,4 +33,3 @@ For shared remote access guidance, see the [Gaming Services README](../README.md
 
 - `./config` - Valheim server configuration
 - `./data` - Persistent Valheim server data
-- `./netbird` - NetBird client state

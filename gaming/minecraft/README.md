@@ -17,7 +17,7 @@ The instructions assume the host is a Debian/Ubuntu VM that already has Docker i
 
 ### Docker Compose
 
-A single [docker-compose.yml](./docker-compose.yml) file defines the Minecraft container and NetBird client. This is the default deployment path for remote access.
+A single [docker-compose.yml](./docker-compose.yml) file defines the Minecraft container. It publishes no ports; it joins the NetBird-routed `services` network at `MINECRAFT_IP`.
 
 > **Note**
 > `$USERNAME` should be replaced with your Minecraft username or the UUID of operators/whitelisted players.
@@ -26,7 +26,7 @@ A single [docker-compose.yml](./docker-compose.yml) file defines the Minecraft c
 
 NetBird is the preferred remote access method for this server. See the shared [Gaming Services README](../README.md#remote-access) for the NetBird setup details.
 
-Set `NB_SETUP_KEY` and `NB_MANAGEMENT_URL` in `.env`, then start the stack with:
+Start [NetBird Client](../../infrastructure/netbird-client/README.md) first (it routes `services`), set `MINECRAFT_IP` in `.env`, then start the stack with:
 
 ```bash
 docker compose up -d
@@ -45,8 +45,7 @@ WireGuard can still be used as a fallback when NetBird is not available. The ful
 | Variable | Purpose | Example |
 |----------|---------|--------|
 | `EULA` | Accept Minecraft EULA | `"TRUE"` |
-| `NB_SETUP_KEY` | NetBird setup key for enrolling the client | `"A1B2C3..."` |
-| `NB_MANAGEMENT_URL` | NetBird management server URL | `"https://netbird.example.com"` |
+| `MINECRAFT_IP` | Static IP on the `services` network | `"10.110.2.40"` |
 | `TZ` | Container timezone | `"America/Los_Angeles"` |
 | `MAX_PLAYERS` | Max simultaneous players | `"5"` |
 | `MOTD` | Server message of the day | `"Welcome to My Server"` |
@@ -121,9 +120,8 @@ docker compose down
 
 ## Accessing the Server
 
-1. **Inside LAN** - Players can join using the host's IP address (`<HOST_IP>:25565`).
-2. **Over NetBird** - Connect through NetBird and use the Minecraft server address exposed on that network.
-3. **Over WireGuard** - If you choose the WireGuard alternative, connect a client to the WireGuard network and use the VPN IP of the host (`10.8.0.1:25565` or whatever subnet you configured).
+1. **Over NetBird** - Connect through NetBird and join `MINECRAFT_IP:25565` (e.g. `10.110.2.40:25565`).
+2. **Over WireGuard** - If you choose the WireGuard alternative, connect a client to the WireGuard network and use the VPN IP of the host (`10.8.0.1:25565` or whatever subnet you configured).
 
 ---
 
@@ -133,7 +131,7 @@ docker compose down
 |---------|--------------|-----|
 | Server never starts | Missing EULA acceptance | Set `EULA=TRUE`. |
 | Mods not loading | Incorrect CurseForge API key or URL | Verify `CF_API_KEY` and `CF_PAGE_URL`. |
-| NetBird client not visible | Missing or invalid NetBird enrollment values | Verify `NB_SETUP_KEY` and `NB_MANAGEMENT_URL`, then restart the stack. |
+| Can't reach the server over NetBird | `services` not routed, or port not allowed | Check `docker exec netbird-client netbird status` and that the NetBird policy allows TCP 25565 to the `services` resource. |
 | WireGuard traffic blocked | Firewall rules missing | Re-run `wg-quick up wg0` and check `iptables -L FORWARD`. |
 | Player cannot connect over WireGuard | Port forwarding issue on router | Ensure UDP 51820, or your custom port, is forwarded to the host. |
 
