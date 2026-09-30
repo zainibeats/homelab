@@ -11,7 +11,8 @@ This directory contains infrastructure services that handle networking, remote a
 ### Remote Access
 - **[Guacamole](./guacamole/README.md)** - Clientless remote desktop gateway supporting VNC, RDP, and SSH protocols with web-based access
 - **[WireGuard](./wireguard/README.md)** - WireGuard VPN for secure remote access to homelab and services
-- **[NetBird Client](./netbird-client/README.md)** - NetBird client for secure mesh networking with the homelab
+- **[NetBird Server](./netbird-server/README.md)** - Self-hosted NetBird control plane (management, dashboard, proxy) behind Traefik, pinned to a known installer version
+- **[NetBird Client](./netbird-client/README.md)** - NetBird client for secure mesh networking with the homelab, and routing peer for the `services` network
 
 ### Monitoring
 - **[Monitoring](./monitoring/README.md)** - Complete monitoring stack including Prometheus, Grafana, Loki, and cAdvisor for metrics and log aggregation

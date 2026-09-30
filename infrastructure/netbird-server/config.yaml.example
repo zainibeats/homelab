@@ -1,0 +1,36 @@
+# Combined NetBird Server Configuration (Simplified)
+# Rendered by getting-started.sh v0.79.0. Copy to config.yaml (chmod 600) and replace
+# every CHANGE_ME_* and netbird.domain.tld; see README.md "Setup".
+
+server:
+  listenAddress: ":80"
+  exposedAddress: "https://netbird.domain.tld:443"
+  stunPorts:
+    - 3478
+  metricsPort: 9090
+  healthcheckAddress: ":9000"
+  logLevel: "info"
+  logFile: "console"
+
+  authSecret: "CHANGE_ME_AUTH_SECRET"
+  dataDir: "/var/lib/netbird"
+
+  auth:
+    issuer: "https://netbird.domain.tld/oauth2"
+    signKeyRefreshEnabled: true
+    sessionCookieEncryptionKey: "CHANGE_ME_SESSION_COOKIE_KEY"
+    dashboardRedirectURIs:
+      - "https://netbird.domain.tld/nb-auth"
+      - "https://netbird.domain.tld/nb-silent-auth"
+    cliRedirectURIs:
+      - "http://localhost:53000/"
+
+  reverseProxy:
+    trustedHTTPProxies:
+      - "172.30.0.10/32"
+    trustedPeers:
+      - "172.30.0.10/32"
+
+  store:
+    engine: "sqlite"
+    encryptionKey: "CHANGE_ME_ENCRYPTION_KEY"

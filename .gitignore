@@ -3,6 +3,10 @@
 runtime.env
 secrets.yaml
 *.pem
+**/netbird-server/config.yaml
+**/netbird-server/*.env
+**/netbird-server/cloudflare-dns-token
+**/netbird-server/crowdsec/
 
 # Logs and Cache
 .cache/
