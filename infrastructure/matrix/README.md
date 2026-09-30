@@ -25,7 +25,7 @@ Deploy in this order: [netbird-server](../netbird-server/README.md#setup) → [n
 
 ## Setup
 
-1. Copy `.env.example` to `.env` and fill it in. Set `rtc.node_ip` in `livekit/livekit.yaml` to `LIVEKIT_IP`, and put `MATRIX_HOST` in `element/config.json`.
+1. Copy `.env.example` to `.env` and `element/config.json.example` to `element/config.json`, and fill them in (`MATRIX_HOST` goes in `config.json`). Set `rtc.node_ip` in `livekit/livekit.yaml` to `LIVEKIT_IP`.
 2. Generate the Synapse signing key and log config once. Type the server name literally; an unset shell variable produces broken, nameless files.
    ```sh
    docker run --rm -v "$PWD/synapse:/data" -e SYNAPSE_SERVER_NAME=matrix.domain.tld -e SYNAPSE_REPORT_STATS=no matrixdotorg/synapse:latest generate
