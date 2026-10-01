@@ -10,6 +10,12 @@ rtc:
   # advertise that address instead of discovering a public IP. Must equal LIVEKIT_IP in .env.
   use_external_ip: false
   node_ip: 10.110.2.30
+  # Gather ICE candidates on that address only. LiveKit is also on Traefik's network,
+  # and Docker's interface order can change on recreate, which binds the candidate to
+  # the wrong socket and drops all media.
+  ips:
+    includes:
+      - 10.110.2.30/32
 
 room:
   # lk-jwt-service creates rooms for authorised users
