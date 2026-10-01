@@ -8,6 +8,7 @@ secrets.yaml
 **/netbird-server/cloudflare-dns-token
 **/netbird-server/crowdsec/
 **/matrix/element/config.json
+**/ddclient/config/
 
 # Logs and Cache
 .cache/
