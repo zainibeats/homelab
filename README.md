@@ -5,12 +5,21 @@ This repository contains configuration files and documentation for my homelab se
 > For my build processes, insights, stories, photos, and more, visit my [blog](https://czaini.net/blog).
 
 ## Infrastructure Overview
+
+### On-Prem
+
 | Device                     | Purpose                                       | OS |
 | -------------------------- | --------------------------------------------- | --- |
 | **TrueNAS Server**         | Centralized storage and backups               | TrueNAS Scale |
 | **Application Server**     | Primary application hosting                   | Ubuntu Server LTS |
 | **Raspberry Pi**           | Network services, monitoring and automation   | Raspberry Pi OS Lite |
 | **Rackmount Compute Node** | Virtual machines, remote desktop and testing  | Proxmox VE |
+
+### Cloud Instances
+| Provider                   | Purpose                                       | OS |
+| -------------------------- | --------------------------------------------- | --- |
+| Oracle                     | Game servers, Matrix, and NetBird server      | Ubuntu Server LTS |
+| Azure                      | Jump server                                   | Debian |
 
 
 ## Project Organization
