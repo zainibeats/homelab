@@ -27,13 +27,8 @@ This needs [NetBird Server](../infrastructure/netbird-server/README.md) (mine ru
 
 Players connect through NetBird to `<address>:<port>`.
 
-WireGuard remains a fallback option when NetBird is not available. The full setup steps are in the [WireGuard README](../infrastructure/wireguard/README.md).
+WireGuard may be used as an alternative to Netbird. The full setup steps are in the [WireGuard README](../infrastructure/wireguard/README.md).
 
 ### Infrastructure vs Game Runtime
 The shared OCI Terraform configuration in [infrastructure](../infrastructure/terraform/oci/free-tier-host/README.md) manages the reusable host pattern, while each game directory owns its Docker Compose stack, environment variables, and game-specific data.
 
-### Free Tier Limits
-OCI Free Tier limits should guide the architecture. Prefer one reusable server pattern with configurable names and ports before duplicating infrastructure per game.
-
-### Persistent Data
-Game worlds and server data should stay in each game's directory or documented volume path so backups, restores, and migrations remain clear.
