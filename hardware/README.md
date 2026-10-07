@@ -47,7 +47,7 @@ This section documents the physical hardware that powers my home lab. It covers 
 - *NIC*: Onboard multi-gig Ethernet and dual SFP+
 - *Case*: Sliger CX4170a (4U)
 
-### Utility Node
+### Application Server
 
 **Role**: Low‑power server for always-on services and management tasks
 - *CPU*: Intel Core i7‑7700 (6 c/12 t)
