@@ -1,11 +1,18 @@
 # Ansible
 
-This setup provides shared Ansible automation for managing homelab and cloud servers. It currently focuses on Debian-based hosts and includes a playbook for updating system packages across the homelab inventory.
+This setup provides shared Ansible automation for managing homelab and cloud servers. It is organized into subdirectories by service:
+
+- **`server-admin/`**: General server administration tasks (e.g., package updates).
+- **`gaming/`**: Gaming-related infrastructure automation.
 
 ## Inventory
 
-- **`inventory/hosts.yml`**: Local inventory used by Ansible by default.
-- **`inventory/example.hosts.yml`**: Example inventory template with placeholder host addresses and connection settings.
+### Server Admin
+- **`server-admin/inventory/hosts.yml`**: Local inventory used by Ansible by default for admin tasks.
+- **`server-admin/inventory/example.hosts.yml`**: Example inventory template with placeholder host addresses and connection settings.
+
+### Gaming
+- **`gaming/inventory/`**: Contains inventory files specific to gaming hosts.
 
 Hosts are grouped by purpose:
 
@@ -16,13 +23,13 @@ Hosts are grouped by purpose:
 ## Configuration
 
 1. **Ansible Config**
-   The local `ansible.cfg` points Ansible at `./inventory/hosts.yml`, so commands can be run from this directory without passing `-i` each time.
+   Each subdirectory (e.g., `server-admin/` and `gaming/`) contains its own `ansible.cfg`. This ensures that the correct inventory and variables are loaded when running tasks from those specific directories.
 
 2. **Inventory Setup**
-   Copy the example inventory and replace the placeholder hostnames, ports, users, and SSH key path:
+   Copy the example inventory and replace the placeholder hostnames, ports, users, and SSH key path for the server admin setup:
 
    ```bash
-   cp inventory/example.hosts.yml inventory/hosts.yml
+   cp server-admin/inventory/example.hosts.yml server-admin/inventory/hosts.yml
    ```
 
 3. **SSH Access**
@@ -33,25 +40,16 @@ Hosts are grouped by purpose:
 
 ## Playbooks
 
-- **`playbooks/update-packages.yml`**: Updates the package cache, performs a dist upgrade on Debian-based homelab hosts, and reboots hosts when `/var/run/reboot-required` exists.
+- **`server-admin/playbooks/update-packages.yml`**: Updates the package cache, performs a dist upgrade on Debian-based homelab hosts, and reboots hosts when `/var/run/reboot-required` exists.
 
 ## Usage
 
-Run commands from the `automation/ansible` directory:
+Run commands from the appropriate subdirectory:
 
 ```bash
-cd automation/ansible
-```
-
-Check that the inventory is reachable:
-
-```bash
+# For server administration
+cd automation/ansible/server-admin
 ansible all -m ping
-```
-
-Run the package update playbook:
-
-```bash
 ansible-playbook playbooks/update-packages.yml --ask-become-pass
 ```
 
