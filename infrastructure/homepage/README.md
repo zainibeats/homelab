@@ -28,4 +28,6 @@ See the [admin Docker configuration](./admin-instance/docker-compose.yml).
 - `7575` - Public dashboard.
 - `3330` - Admin dashboard.
 
-For full configuration options, see the [official documentation](https://gethomepage.dev/).
+## Troubleshooting
+
+If remote monitoring reports a 'status not available' error, ensure that the necessary TCP ports are allowed through the firewall (UFW).
