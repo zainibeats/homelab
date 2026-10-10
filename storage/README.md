@@ -1,6 +1,6 @@
 # Storage & Backup Services
 
-This directory contains services focused on data storage, backup, and security for personal and family data.
+This directory contains services focused on data storage for personal and family data.
 
 ## Services Overview
 
@@ -16,15 +16,3 @@ This directory contains services focused on data storage, backup, and security f
 ### File Sync
 
 - **[Syncthing](./syncthing/README.md)** - Continuous file synchronization program that synchronizes files between two or more computers in real time
-
-### Password Management
-
-- **[Vaultwarden](./vaultwarden/README.md)** - Lightweight self-hosted password manager compatible with Bitwarden clients
-
-### Personal Context
-
-- **[Obsidian Vault](./obsidian-vault)** - A symbolic link to my personal notes and tasks. This directory is ignored by git and is not visible to the public, but provides extra context for humans and AI agents regarding the homelab.
-
-## Storage Notes
-
-These services use NAS-backed storage with separate datasets for application data, photos, private files, and backups.
