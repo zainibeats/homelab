@@ -64,10 +64,10 @@ mkdir -p /data/downloads/nzbget/{completed,intermediate,nzb,queue,tmp}
 If you're using a separate NAS or file server, mount your NFS share to `/data`:
 
 ```bash
-# Replace <nfs-server-ip> and </path/on/nfs> with your NFS server details
+# Replace <nfs-server-ip> and <exported/path> with your NFS server details
 # Example: 192.168.1.100:/mnt/pool/JellyfinData /mnt/nfs/jellyfin nfs defaults 0 0
 sudo nano /etc/fstab
-<nfs-server-ip>:/path/on/nfs /mnt/nfs/jellyfin nfs defaults 0 0
+<nfs-server-ip>:<exported/path> /mnt/nfs/jellyfin nfs defaults 0 0
 
 # Optionally, you can add smb mounts to fstab file
 # Example: //192.168.1.100/JellyfinData /mnt/truenas_data/jellyfin_data cifs credentials=/etc/smb_credentials,uid=1000,gid=1000,iocharset=utf8,nofail 0 0
