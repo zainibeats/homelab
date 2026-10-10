@@ -9,21 +9,20 @@ This directory contains infrastructure services that handle networking, remote a
 - **[DDClient](./ddclient/README.md)** - Dynamic DNS updater for Cloudflare using ddclient docker image
 
 ### Remote Access
-- **[Guacamole](./guacamole/README.md)** - Clientless remote desktop gateway supporting VNC, RDP, and SSH protocols with web-based access
 - **[WireGuard](./wireguard/README.md)** - WireGuard VPN for secure remote access to homelab and services
 - **[NetBird Server](./netbird-server/README.md)** - Self-hosted NetBird control plane (management, dashboard, proxy) behind Traefik, pinned to a known installer version
 - **[NetBird Client](./netbird-client/README.md)** - NetBird client for secure mesh networking with the homelab, and routing peer for the `services` network
 
 ### Monitoring
-- **[Monitoring](./monitoring/README.md)** - Complete monitoring stack including Prometheus, Grafana, Loki, and cAdvisor for metrics and log aggregation
-- **[Monitoring (OCI)](./monitoring-oci/README.md)** - Prometheus, Grafana, Loki and Alloy for the OCI host, with Grafana reachable only over NetBird
+- **[Monitoring](./monitoring/README.md)** - Home (on-prem) monitoring stack: Prometheus, Grafana, cAdvisor
+- **[Monitoring (OCI)](./monitoring-oci/README.md)** - OCI-specific stack with NetBird access for logs and metrics: Prometheus, Grafana, Loki, Alloy 
 - **[Uptime Kuma](./uptime-kuma/README.md)** - Service availability monitoring with alerting for uptime and response time
 
 ### Dashboard
 - **[Homepage](./homepage/README.md)** - Highly customizable dashboard aggregating service status and APIs, with separate admin and public instances
 
 ### Documentation
-- **[Wiki.js](./wiki-js/README.md)** - Self-hosted documentation and knowledge base platform backed by PostgreSQL and exposed through Traefik
+- **[Wiki.js](./wiki-js/README.md)** - Self-hosted documentation and knowledge base platform backed by PostgreSQL
 
 ### Communication
 - **[Matrix](./matrix/README.md)** - Private Matrix homeserver (Synapse) with Element Web and LiveKit calls, reachable only over NetBird
@@ -35,7 +34,7 @@ This directory contains infrastructure services that handle networking, remote a
 ### Version Control
 - **[Gitea](./gitea/README.md)** - Self-hosted Git service for repository management
 
-### Infrastructure as Code
+### Infrastructure as Code (Terraform)
 - **[Azure Jump Server](./terraform/azure/jump-server/README.md)** - Terraform-managed Azure Linux jump server for SSH access to other cloud resources
 - **[OCI Free Tier Host](./terraform/oci/free-tier-host/README.md)** - Reusable Terraform configuration for a single OCI Free Tier host
 - **[Ollama AWS Hybrid](./terraform/aws/ollama-aws-hybrid/README.md)** - Terraform-managed AWS EC2 host for the hybrid Ollama deployment
