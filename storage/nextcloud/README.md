@@ -4,30 +4,29 @@ Nextcloud is a suite of client-server software for creating and using file hosti
 
 ## Prerequisites
 
-1. NFS share mounted at `/mnt/nfs/family`
+1. NFS share mounted at `/mnt/nfs/apps/nextcloud`
 2. Proper permissions set on the NFS share (owned by UID 1005:GID 1005)
 
 ## Configuration
 
 ### 1. NFS Storage Setup
 
-Ensure your NFS share is properly mounted at `/mnt/nfs/family` with the following steps:
+Ensure your NFS share is properly mounted at `/mnt/nfs/apps/nextcloud` with the following steps:
 
 ```bash
 # Create the mount point and nextcloud directory
-sudo mkdir -p /mnt/nfs/family
-sudo mkdir -p /mnt/nfs/family/nextcloud
+sudo mkdir -p /mnt/nfs/apps/nextcloud
 
-# Add to /etc/fstab (replace <nfs-server-ip> and </path/on/nfs> with your details)
-# Example: 192.168.1.100:/mnt/pool/nextcloud /mnt/nfs/family/nextcloud nfs defaults 0 0
+# Add to /etc/fstab (replace <nfs-server-ip> and <exported/path> with your details)
+# Example: 192.168.1.100:/mnt/pool/nextcloud /mnt/nfs/apps/nextcloud nfs defaults 0 0
 sudo nano /etc/fstab
-<nfs-server-ip>:<path/on/nfs> /mnt/nfs/family/nextcloud nfs defaults 0 0
+<nfs-server-ip>:<exported/path> /mnt/nfs/apps/nextcloud nfs defaults 0 0
 
 # Mount the NFS share
 sudo mount -a
 
 # Set correct ownership (adjust UID/GID if needed)
-sudo chown -R 1005:1005 /mnt/nfs/family/nextcloud
+sudo chown -R 1005:1005 /mnt/nfs/apps/nextcloud
 ```
 
 ### 2. Database Configuration
