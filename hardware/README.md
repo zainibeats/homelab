@@ -36,7 +36,7 @@ This section documents the physical hardware that powers my home lab. It covers 
 - *NIC*: Onboard Ethernet and dual SFP+
 - *Case*: Fractal Node 804
 
-### Rack‑mount Compute Node
+### GPU Compute Node
 
 **Role**: ProxmoxVE, gaming VMs, AI, transcoding
 - *CPU*: Ryzen 9 5900X

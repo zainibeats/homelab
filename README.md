@@ -10,10 +10,10 @@ This repository contains configuration files and documentation for my homelab se
 
 | Device                     | Purpose                                       | OS |
 | -------------------------- | --------------------------------------------- | --- |
-| **TrueNAS Server**         | Centralized storage and backups               | TrueNAS Scale |
+| **NAS**                    | Centralized storage and backups               | TrueNAS Scale |
 | **Application Server**     | Primary application hosting                   | Ubuntu Server LTS |
 | **Raspberry Pi**           | Network services, monitoring and automation   | Raspberry Pi OS Lite |
-| **Rackmount Compute Node** | Virtual machines, remote desktop and testing  | Proxmox VE |
+| **GPU Compute Node**       | Virtual machines, remote desktop and testing  | Proxmox VE |
 
 ### Cloud Instances
 | Provider                   | Purpose                                       | OS |
