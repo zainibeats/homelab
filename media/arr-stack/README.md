@@ -7,7 +7,7 @@ This setup is based on the configuration provided by [TechHutTV/homelab](https:/
 The "Arr Stack" is a collection of services for managing and automating media downloads and organization. This setup includes:
 
 - **VPN Protection**: All download traffic is routed through a VPN using Gluetun
-- **Download Clients**: qBittorrent (torrents) and NZBGet (Usenet)
+- **Download Client**: qBittorrent (torrents)
 - **Media Management**: Sonarr, Radarr, Lidarr, and Bazarr
 - **Indexer Management**: Prowlarr
 - **Additional Tools**: Seerr
@@ -17,8 +17,7 @@ The "Arr Stack" is a collection of services for managing and automating media do
 | Service | Description | Web UI Port |
 |---------|-------------|-------------|
 | Gluetun | VPN client container | N/A |
-| qBittorrent | Torrent download client | 8123 |
-| NZBGet | Usenet download client | 6789 |
+| qBittorrent | Torrent download client | 8122 (published by Gluetun, maps to 8123 in the container) |
 | Prowlarr | Indexer management | 9696 |
 | Sonarr | TV show management | 8989 |
 | Radarr | Movie management | 7878 |
@@ -29,39 +28,27 @@ The "Arr Stack" is a collection of services for managing and automating media do
 
 ## Network Architecture
 
-This stack uses a custom Docker network (`servarrnetwork`) with static IP addresses for each service. The download clients and Prowlarr route their traffic through the Gluetun VPN container for privacy and security.
+This stack uses a custom Docker network (`servarrnetwork`) with static IP addresses for each service. The download client (qBittorrent) and Prowlarr route their traffic through the Gluetun VPN container for privacy and security.
 
 ## Prerequisites
 
 1. Docker and Docker Compose installed
 2. A VPN subscription (ProtonVPN, Mullvad, etc.)
-3. A dedicated `/data` directory for all media and downloads (see setup below)
+3. A dedicated data directory for all media and downloads, mounted at `/data` in the containers (see setup below)
 4. User permissions set correctly (PUID/PGID)
 
 ## Setup Instructions
 
 ### 1. Prepare Data Directory Structure
 
-All services are configured to use a single `/data` directory structure. This approach simplifies permissions and path management across all containers. You have two options:
+All services are configured to use a single `/data` directory structure inside the containers. This approach simplifies permissions and path management across all containers. You have two options:
 
-#### Option 1: Local Directory (Recommended for Single Machine Setup)
+- **Option 1 (NFS)** is what this stack's `docker-compose.yml` uses: the NFS share is mounted on the host at `/mnt/nfs/jellyfin` and the compose file mounts it into the containers as `/data`.
+- **Option 2 (local)** works too, but you must change the `/mnt/nfs/jellyfin` host paths in `docker-compose.yml` to `/data`.
 
-```bash
-# Create the main data directory
-sudo mkdir -p /data
+#### Option 1: NFS Mount (Used by `docker-compose.yml`)
 
-# Set ownership to your user (replace 1000:1000 with your PUID:PGID if different)
-sudo chown -R 1000:1000 /data
-
-# Create the directory structure
-mkdir -p /data/{books,movies,music,shows,youtube}
-mkdir -p /data/downloads/qbittorrent/{completed,incomplete,torrents}
-mkdir -p /data/downloads/nzbget/{completed,intermediate,nzb,queue,tmp}
-```
-
-#### Option 2: NFS Mount (For Network Storage)
-
-If you're using a separate NAS or file server, mount your NFS share to `/data`:
+If you're using a separate NAS or file server, mount your NFS share on the host at `/mnt/nfs/jellyfin`:
 
 ```bash
 # Replace <nfs-server-ip> and <exported/path> with your NFS server details
@@ -81,12 +68,27 @@ sudo mkdir -p /mnt/nfs/jellyfin
 sudo mount -a
 
 # Create the directory structure (if not already existing on the NFS share)
-mkdir -p /mnt/nfs/jellyfin/{books,movies,music,shows,youtube}
+mkdir -p /mnt/nfs/jellyfin/{books,movies,music,tv,youtube}
 mkdir -p /mnt/nfs/jellyfin/downloads/qbittorrent/{completed,incomplete,torrents}
-mkdir -p /mnt/nfs/jellyfin/downloads/nzbget/{completed,intermediate,nzb,queue,tmp}
 
 # Set correct ownership (adjust PUID/PGID as needed)
 sudo chown -R 1000:1000 /mnt/nfs/jellyfin
+```
+
+#### Option 2: Local Directory (For Single Machine Setup)
+
+If you're not using network storage, use a local `/data` directory and update the `/mnt/nfs/jellyfin` host paths in `docker-compose.yml` to `/data`:
+
+```bash
+# Create the main data directory
+sudo mkdir -p /data
+
+# Set ownership to your user (replace 1000:1000 with your PUID:PGID if different)
+sudo chown -R 1000:1000 /data
+
+# Create the directory structure
+mkdir -p /data/{books,movies,music,tv,youtube}
+mkdir -p /data/downloads/qbittorrent/{completed,incomplete,torrents}
 ```
 
 ### 2. Configure VPN Settings
@@ -131,17 +133,6 @@ docker compose up -d
 - Set network interface to `tun0` in Advanced settings to prevent VPN timeout issues
 - In Settings > Downloads, set Default Save Path to `/data/downloads/qbittorrent/completed`
 
-### NZBGet
-
-- Configure your Usenet provider details in Settings
-- Under "PATHS" set:
-  - `MainDir=/data/downloads/nzbget`
-  - `DestDir=${MainDir}/completed`
-  - `InterDir=${MainDir}/intermediate`
-  - `QueueDir=${MainDir}/queue`
-  - `TempDir=${MainDir}/tmp`
-- Under "INCOMING NZBS", set "AppendCategoryDir" to "No" to prevent path mapping issues with Sonarr/Radarr
-
 ### Prowlarr
 
 - Add your indexers/trackers
@@ -152,8 +143,11 @@ docker compose up -d
 
 ### Sonarr/Radarr/Lidarr
 
-- Add qBittorrent and NZBGet as download clients
-- Configure root folders pointing to `/data/shows`, `/data/movies`, etc.
+- Add qBittorrent as a download client
+- Configure root folders pointing to:
+  - `/tv` for Sonarr (mounted from `/mnt/nfs/jellyfin/tv`)
+  - `/movies` for Radarr (mounted from `/mnt/nfs/jellyfin/movies`)
+  - `/data` for Lidarr (mounted from `/mnt/nfs/jellyfin/music/itunes-archive`). Unlike the other services, Lidarr's `/data` is only the music archive, so it can't see `/data/downloads`
 - Connect to Prowlarr for indexers
 
 ### Bazarr
@@ -187,13 +181,9 @@ If Gluetun is using excessive RAM, add this environment variable:
 - BLOCK_MALICIOUS=off
 ```
 
-### NZBGet "Directory Does Not Appear to Exist" Error
-
-In NZBGet settings, under "INCOMING NZBS", set "AppendCategoryDir" to "No".
-
 ### Backing Up Configurations
 
-All service configurations are stored in the respective subdirectories (./sonarr, ./radarr, etc.). Back these up regularly.
+Service configurations live in two places: Gluetun, Sonarr, Radarr, Lidarr, Bazarr, and Seerr store theirs under `/mnt/nfs/apps/arr/`, while qBittorrent and Prowlarr use `./qbittorrent` and `./prowlarr` next to the compose file. Back these up regularly.
 
 ## Security Considerations
 

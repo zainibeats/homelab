@@ -12,7 +12,6 @@ This directory contains services for managing, streaming, and requesting media c
   - **Bazarr** - Subtitle management
   - **Prowlarr** - Indexer management for all *arr services
   - **qBittorrent** - Torrent download client (VPN-protected)
-  - **NZBGet** - Usenet download client (VPN-protected)
   - **Gluetun** - VPN client for securing download traffic
   - **Seerr** - Media request management and discovery
 
