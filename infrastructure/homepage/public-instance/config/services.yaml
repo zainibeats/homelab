@@ -25,11 +25,6 @@
         description: Photo & Video Backup
         icon: immich.png
         siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:2283"
-    - Vaultwarden:
-        href: "https://vaultwarden.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Password Manager
-        icon: vaultwarden.png
-        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8088"
 - Tools:
     - SearXNG:
         href: "https://search.{{HOMEPAGE_VAR_DOMAIN}}"
