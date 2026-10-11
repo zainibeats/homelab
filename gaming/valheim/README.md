@@ -26,8 +26,7 @@ For shared remote access guidance, see the [Gaming Services README](../README.md
 
 Allow these to the `services` resource in the NetBird policy:
 
-- `2456-2458/udp` - Valheim game ports
-- `9001/tcp` - Valheim query port
+- `2456-2458/udp` - Valheim game and query ports
 
 ## Data
 
