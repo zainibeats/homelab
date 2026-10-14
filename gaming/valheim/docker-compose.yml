@@ -1,3 +1,5 @@
+name: valheim
+
 services:
   valheim:
     image: tsxcloud/valheim-arm:latest

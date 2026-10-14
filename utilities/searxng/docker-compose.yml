@@ -1,3 +1,5 @@
+name: searxng
+
 services:
   core:
     container_name: searxng-core

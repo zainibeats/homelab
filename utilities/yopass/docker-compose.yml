@@ -1,3 +1,5 @@
+name: yopass
+
 services:
   memcached:
     image: memcached

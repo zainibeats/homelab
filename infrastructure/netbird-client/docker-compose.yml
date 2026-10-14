@@ -1,3 +1,5 @@
+name: netbird-client
+
 services:
   netbird-client:
     image: netbirdio/netbird:0.79.0

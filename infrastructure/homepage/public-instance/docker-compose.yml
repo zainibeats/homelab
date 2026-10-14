@@ -1,3 +1,5 @@
+name: public-instance
+
 services:
   homepage:
     image: ghcr.io/gethomepage/homepage:latest
