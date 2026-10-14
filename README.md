@@ -35,7 +35,7 @@ Services are organized into logical categories for easier management and navigat
 - **[Monitoring](./monitoring/README.md)** - Metrics, logs, and uptime monitoring for home and OCI hosts
 - **[Networking](./networking/README.md)** - Reverse proxy, dynamic DNS, and remote access (WireGuard, NetBird)
 - **[Storage](./storage/README.md)** - Data storage, backup, and security services
-- **[Utilities](./utilities/README.md)** - General-purpose tools including file conversion, IT utilities, secret sharing, and virtual browser
+- **[Utilities](./utilities/README.md)** - General-purpose tools including file conversion, IT utilities, secret sharing, search, virtual browser, wiki, and Matrix chat
 
 ## AI Agents
 This repository includes an AI agent framework located in the `.agents` directory. 

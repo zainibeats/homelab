@@ -4,7 +4,7 @@ My self-hosted NetBird control plane: the combined server, the dashboard, the Ne
 
 ## Changes from the installer output
 
-- This stack creates the `services` network (`SERVICES_SUBNET`), and Traefik joins it at `TRAEFIK_SERVICES_IP` (`10.110.2.20`). [netbird-client](../netbird-client/README.md) routes the network to peers. [Matrix](../../infrastructure/matrix/README.md) and the game servers sit on it.
+- This stack creates the `services` network (`SERVICES_SUBNET`), and Traefik joins it at `TRAEFIK_SERVICES_IP` (`10.110.2.20`). [netbird-client](../netbird-client/README.md) routes the network to peers. [Matrix](../../utilities/matrix/README.md) and the game servers sit on it.
 - A second resolver, `letsencrypt-dns`, handles DNS-01 through Cloudflare. It covers NetBird-only hostnames, which resolve to private IPs. The token goes in `cloudflare-dns-token` (`Zone:DNS:Edit`, `chmod 600`).
 - The NetBird images are pinned and excluded from Watchtower.
 - Domain and ACME email come from `.env`. `name: netbird` keeps the installer's volume and network names (`netbird_netbird_data`, `netbird_netbird`).

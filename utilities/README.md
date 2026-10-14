@@ -23,3 +23,11 @@ This directory contains general-purpose utility services.
 ### Virtual Browser
 
 - **[Neko](./neko/README.md)** - Self-hosted virtual browser that streams via WebRTC, with VPN integration for private browsing, watch parties, and collaborative browsing
+
+### Documentation
+
+- **[Wiki.js](./wiki-js/README.md)** - Self-hosted documentation and knowledge base platform backed by PostgreSQL
+
+### Communication
+
+- **[Matrix](./matrix/README.md)** - Private Matrix homeserver (Synapse) with Element Web and LiveKit calls, reachable only over NetBird
