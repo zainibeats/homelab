@@ -27,10 +27,11 @@ This repository contains configuration files and documentation for my homelab se
 Services are organized into logical categories for easier management and navigation:
 - **[Automation](./automation/README.md)** - Home automation and AI platforms
 - **[Gaming](./gaming/README.md)** - Game server stacks and runtime documentation
-- **[Infrastructure](./infrastructure/README.md)** - Monitoring, dashboards, version control, and container management
+- **[Infrastructure](./infrastructure/README.md)** - Dashboards, version control, and container management
 - **[Terraform](./terraform/README.md)** - Terraform configurations for cloud and Proxmox hosts
 - **[Ansible](./ansible/README.md)** - Playbooks for server administration, game hosts, and the Ollama AWS hybrid host
 - **[Media](./media/README.md)** - Media automation, management, and streaming services
+- **[Monitoring](./monitoring/README.md)** - Metrics, logs, and uptime monitoring for home and OCI hosts
 - **[Networking](./networking/README.md)** - Reverse proxy, dynamic DNS, and remote access (WireGuard, NetBird)
 - **[Storage](./storage/README.md)** - Data storage, backup, and security services
 - **[Utilities](./utilities/README.md)** - General-purpose tools including file conversion, IT utilities, secret sharing, and virtual browser
