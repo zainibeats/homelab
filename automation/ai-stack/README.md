@@ -19,7 +19,7 @@ This setup allows you to run large language models (LLMs) locally using Ollama a
    - The **ollama** and **open-webui** directories are now separate, enabling you to swap providers (e.g., LM Studio, custom Ollama setups, or API-key services) without altering the overall architecture.
 
    - Open WebUI joins two external Docker networks, so both must exist before you start it:
-     - `traefik-proxy` carries the `open-webui.${DOMAIN}` routes and is created by the [Traefik](../../infrastructure/traefik/README.md) stack.
+     - `traefik-proxy` carries the `open-webui.${DOMAIN}` routes and is created by the [Traefik](../../networking/traefik/README.md) stack.
      - `tmdb-net` exists specifically so that this stack can communicate with my custom [TMDB MCP server](https://github.com/zainibeats/tmdb-mcp). If you're not using the MCP tool, remove it from `open-webui/docker-compose.yml` or create it with `docker network create tmdb-net`.
    - **Ollama (`ollama/.env.example`)**
      - `MODELS_DIR`: Directory containing model files that should be mounted into the container.

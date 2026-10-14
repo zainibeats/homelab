@@ -18,7 +18,7 @@ Prometheus, Grafana, Loki, Alloy, node-exporter and cAdvisor for the OCI host. G
 
 ## Prerequisites
 
-- **Traefik:** [netbird-server](../netbird-server/README.md) with the `letsencrypt-dns` resolver, and Traefik on `services` at `10.110.2.20`.
+- **Traefik:** [netbird-server](../../networking/netbird-server/README.md) with the `letsencrypt-dns` resolver, and Traefik on `services` at `10.110.2.20`.
 - **DNS:** a Cloudflare A record for `GRAFANA_HOST` pointing to `10.110.2.20`, DNS only.
 - **ufw:** Docker bypasses ufw for published ports but not for container-to-host traffic, so Prometheus needs a rule to reach node-exporter:
   ```sh

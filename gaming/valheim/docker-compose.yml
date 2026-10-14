@@ -27,4 +27,4 @@ services:
 networks:
   services:
     external: true
-    name: services   # created by infrastructure/netbird-server or infrastructure/netbird-client
+    name: services   # created by networking/netbird-server or networking/netbird-client
