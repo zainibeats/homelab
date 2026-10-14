@@ -39,6 +39,7 @@ Services are organized into logical categories for easier management and navigat
 This repository includes an AI agent framework located in the `.agents` directory. 
 - **[AGENTS.md](./AGENTS.md)** - Core rules, behaviors, and instructions for the AI agents.
 - **[.agents](./.agents)** - Contains specialized skills and configurations used by the agents to perform tasks like documentation audits and conventional commit generation.
+- **[ai-agents](./ai-agents/README.md)** - Agent context and skills for tools outside this repo (e.g. the Obsidian vault).
 
 ## Storage Overview
 

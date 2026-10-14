@@ -10,8 +10,7 @@ This directory contains automation-focused services and tooling for home automat
 
 ### AI Infrastructure
 
-This directory houses the infrastructure for LLM inference (models and interfaces), agentic context, and hybrid cloud setups.
+This directory houses the infrastructure for LLM inference (models and interfaces) and hybrid cloud setups.
 
 - **[AI Stack](./ai-stack/README.md)** - Local LLM inference with a web-based chat interface
 - **[Ollama AWS Hybrid (Experimental)](./ollama-aws-hybrid/README.md)** - Hybrid Ollama setup combining local and AWS-hosted inference
-- **[Context & Skills](./ai-stack/context/)** - Claude Code context bundles and skills
