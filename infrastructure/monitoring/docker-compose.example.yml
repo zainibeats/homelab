@@ -1,3 +1,5 @@
+name: monitoring
+
 networks:
   monitoring:
     driver: bridge

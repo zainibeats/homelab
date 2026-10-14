@@ -1,3 +1,5 @@
+name: convertx
+
 services:
   convertx:
     image: ghcr.io/c4illin/convertx

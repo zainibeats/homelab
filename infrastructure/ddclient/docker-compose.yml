@@ -1,3 +1,5 @@
+name: ddclient
+
 services:
   ddclient:
     image: "linuxserver/ddclient:latest"

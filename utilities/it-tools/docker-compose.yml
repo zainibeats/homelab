@@ -1,3 +1,5 @@
+name: it-tools
+
 services:
   it-tools:
     image: corentinth/it-tools:latest

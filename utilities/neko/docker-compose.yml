@@ -1,3 +1,5 @@
+name: neko
+
 networks:
   neko-network:
     name: neko-network

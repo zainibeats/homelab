@@ -1,3 +1,5 @@
+name: admin-instance
+
 services:
   homepage-admin:
     image: ghcr.io/gethomepage/homepage:latest

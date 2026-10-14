@@ -1,3 +1,5 @@
+name: invidious
+
 services:
   gluetun:
     image: qmcgaw/gluetun
