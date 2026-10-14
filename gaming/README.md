@@ -17,7 +17,7 @@ NetBird is the preferred way to access game servers remotely. Game stacks publis
 
 Use NetBird as the default remote access path for gaming services.
 
-This needs [NetBird Server](../infrastructure/netbird-server/README.md) (mine runs on an OCI Always Free `VM.Standard.A1.Flex`) and [NetBird Client](../infrastructure/netbird-client/README.md) as the routing peer for `services`. Each game sets its address in `.env`:
+This needs [NetBird Server](../networking/netbird-server/README.md) (mine runs on an OCI Always Free `VM.Standard.A1.Flex`) and [NetBird Client](../networking/netbird-client/README.md) as the routing peer for `services`. Each game sets its address in `.env`:
 
 | Game | Variable | Address | Ports to allow in the NetBird policy |
 |------|----------|---------|--------------------------------------|
@@ -27,7 +27,7 @@ This needs [NetBird Server](../infrastructure/netbird-server/README.md) (mine ru
 
 Players connect through NetBird to `<address>:<port>`.
 
-WireGuard may be used as an alternative to Netbird. The full setup steps are in the [WireGuard README](../infrastructure/wireguard/README.md).
+WireGuard may be used as an alternative to Netbird. The full setup steps are in the [WireGuard README](../networking/wireguard/README.md).
 
 ### Infrastructure vs Game Runtime
 The shared OCI Terraform configuration in [terraform](../terraform/oci/free-tier-host/README.md) manages the reusable host pattern, while each game directory owns its Docker Compose stack, environment variables, and game-specific data.

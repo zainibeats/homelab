@@ -26,7 +26,7 @@ A single [docker-compose.yml](./docker-compose.yml) file defines the Minecraft c
 
 NetBird is the preferred remote access method for this server. See the shared [Gaming Services README](../README.md#remote-access) for the NetBird setup details.
 
-Start [NetBird Client](../../infrastructure/netbird-client/README.md) first (it routes `services`), set `MINECRAFT_IP` in `.env`, then start the stack with:
+Start [NetBird Client](../../networking/netbird-client/README.md) first (it routes `services`), set `MINECRAFT_IP` in `.env`, then start the stack with:
 
 ```bash
 docker compose up -d
@@ -34,7 +34,7 @@ docker compose up -d
 
 ### WireGuard Alternative
 
-WireGuard can still be used as a fallback when NetBird is not available. The full setup steps are in the [WireGuard README](../../infrastructure/wireguard/README.md), and an example Minecraft-specific configuration is available in the [Minecraft WireGuard template](../../infrastructure/wireguard/templates/minecraft-server-example.conf).
+WireGuard can still be used as a fallback when NetBird is not available. The full setup steps are in the [WireGuard README](../../networking/wireguard/README.md), and an example Minecraft-specific configuration is available in the [Minecraft WireGuard template](../../networking/wireguard/templates/minecraft-server-example.conf).
 
 ---
 

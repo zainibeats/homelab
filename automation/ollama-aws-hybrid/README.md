@@ -31,7 +31,7 @@ Client -> EC2:443 -> Traefik -> Gluetun:8080/Open WebUI -> WireGuard -> Ollama
 The default infrastructure uses an Elastic IP so the Cloudflare DNS record
 remains valid across EC2 stop/start cycles and service downtime is minimized.
 
-As an alternative, [`ddclient`](../../infrastructure/ddclient/README.md) can
+As an alternative, [`ddclient`](../../networking/ddclient/README.md) can
 update the Cloudflare DNS record when the instance's dynamically assigned
 public IP changes. This avoids reserving an Elastic IP, but introduces a period
 of downtime while the instance starts, `ddclient` detects the new address, and

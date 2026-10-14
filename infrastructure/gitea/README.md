@@ -12,7 +12,7 @@ This project uses a `docker-compose.yml` that runs:
 - **Ports**:
   - `3331:3000` - HTTP/HTTPS web UI.
   - `2223:22` - SSH for Git operations.
-- **Routing**: Traefik routes `git.${DOMAIN}` and `git.${SUBDOMAIN}.${DOMAIN}` to the web UI. The external `traefik-proxy` network must exist; the [Traefik](../traefik/README.md) stack creates it.
+- **Routing**: Traefik routes `git.${DOMAIN}` and `git.${SUBDOMAIN}.${DOMAIN}` to the web UI. The external `traefik-proxy` network must exist; the [Traefik](../../networking/traefik/README.md) stack creates it.
 - **Volumes**:
   - `/mnt/nfs/apps/gitea:/data`
   - `/etc/timezone:/etc/timezone:ro`

@@ -18,7 +18,7 @@ docker compose up -d
 
 ## Remote Access
 
-The stack publishes no ports. It joins the `services` network at `PALWORLD_IP` (e.g. `10.110.2.41`), which [NetBird Client](../../infrastructure/netbird-client/README.md) routes to peers; start that first. Players connect through NetBird to that address.
+The stack publishes no ports. It joins the `services` network at `PALWORLD_IP` (e.g. `10.110.2.41`), which [NetBird Client](../../networking/netbird-client/README.md) routes to peers; start that first. Players connect through NetBird to that address.
 
 For shared remote access guidance, see the [Gaming Services README](../README.md#remote-access).
 

@@ -11,13 +11,13 @@ Private Matrix homeserver (Synapse) with Element Web and Element Call / MatrixRT
 | `livekit` | SFU for calls | `https://RTC_HOST/livekit/sfu` (signalling), `LIVEKIT_IP` 7881/tcp and 7882/udp (media) |
 | `lk-jwt-service` | Issues LiveKit tokens to Matrix users | `https://RTC_HOST/livekit/jwt` |
 
-- The `services` Docker network is created by [netbird-server](../netbird-server/README.md) and routed to your peers by [netbird-client](../netbird-client/README.md).
+- The `services` Docker network is created by [netbird-server](../../networking/netbird-server/README.md) and routed to your peers by [netbird-client](../../networking/netbird-client/README.md).
 - NetBird's Traefik joins `services` with a static IP. The three hostnames point there, and every router uses an IP allowlist (`ALLOWED_RANGES`).
 - LiveKit has a static IP on `services` and publishes no ports. Nothing is exposed on the public interface.
 
 ## Prerequisites
 
-Deploy in this order: [netbird-server](../netbird-server/README.md#setup) → [netbird-client](../netbird-client/README.md) → this stack. That gives you:
+Deploy in this order: [netbird-server](../../networking/netbird-server/README.md#setup) → [netbird-client](../../networking/netbird-client/README.md) → this stack. That gives you:
 
 - **Routed network:** `services` (`10.110.2.0/24`) with netbird-client as routing peer, masquerade on, and a policy allowing your group TCP 443, TCP 7881 and UDP 7882.
 - **Traefik:** on `services` at `10.110.2.20`, with the `letsencrypt-dns` resolver named in `TRAEFIK_CERTRESOLVER`.
