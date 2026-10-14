@@ -6,6 +6,8 @@ services:
     container_name: ollama
     network_mode: host
     tty: true
+    environment:
+      - OLLAMA_HOST=${OLLAMA_HOST:-127.0.0.1:11434}   # 0.0.0.0 so Open WebUI can reach it via host.docker.internal
     restart: unless-stopped
     volumes:
       - ollama:/root/.ollama
