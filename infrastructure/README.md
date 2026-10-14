@@ -5,7 +5,8 @@ This directory contains infrastructure services that handle networking, remote a
 ## Services Overview
 
 ### Dashboard
-- **[Homepage](./homepage/README.md)** - Highly customizable dashboard aggregating service status and APIs, with separate admin and public instances
+- **[Homepage (Public)](./homepage-public/README.md)** - Public dashboard aggregating service status and APIs
+- **[Homepage (Admin)](./homepage-admin/README.md)** - Administrator dashboard for internal services
 
 ### Documentation
 - **[Wiki.js](./wiki-js/README.md)** - Self-hosted documentation and knowledge base platform backed by PostgreSQL
