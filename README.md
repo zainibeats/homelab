@@ -11,15 +11,16 @@ This repository contains configuration files and documentation for my homelab se
 | Device                     | Purpose                                       | OS |
 | -------------------------- | --------------------------------------------- | --- |
 | **NAS**                    | Centralized storage and backups               | TrueNAS Scale |
-| **Application Server**     | Primary application hosting                   | Ubuntu Server LTS |
+| **Application Server**     | Primary application hosting                   | Ubuntu Server |
 | **Raspberry Pi**           | Network services, monitoring and automation   | Raspberry Pi OS Lite |
 | **GPU Compute Node**       | Virtual machines, remote desktop and testing  | Proxmox VE |
 
 ### Cloud Instances
 | Provider                   | Purpose                                       | OS |
 | -------------------------- | --------------------------------------------- | --- |
-| Oracle                     | Game servers, Matrix, and NetBird server      | Ubuntu Server LTS |
+| Oracle                     | Game servers, Matrix, and NetBird server      | Ubuntu Server |
 | Azure                      | Jump server                                   | Debian |
+| AWS                        | Testing                                       | Ubuntu Server |
 
 
 ## Project Organization
