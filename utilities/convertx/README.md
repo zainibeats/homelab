@@ -1,17 +1,39 @@
 # ConvertX
 
-ConvertX is a simple yet powerful file conversion service that allows you to convert between various file formats. It provides a web interface for easy file conversion.
+ConvertX is a self-hosted file conversion service with a web interface for converting between many file formats.
+
+**Runs on:** Application Server
+
+## Prerequisites
+
+- The [Traefik](../../networking/traefik/README.md) stack running on the same host (it creates the external `traefik-proxy` network).
+
+## Setup
+
+```bash
+cp .env.example .env
+# set JWT_SECRET (e.g. openssl rand -hex 32), then:
+docker compose up -d
+```
+
+Open the web UI and create the first account.
 
 ## Configuration
 
-Before starting the service, ensure you have:
+- `JWT_SECRET` - Secret used to sign login tokens. Use a long random value.
+- `DOMAIN` - Base domain for the Traefik routes (`convertx.${DOMAIN}`).
+- `SUBDOMAIN` - LAN subdomain for the second route (`convertx.${SUBDOMAIN}.${DOMAIN}`).
 
-1. Set a secure `JWT_SECRET` environment variable in `docker-compose.yml` for authentication.
+## Routing & Ports
 
-## Volumes
+- `convertx.${DOMAIN}` and `convertx.${SUBDOMAIN}.${DOMAIN}` - Web UI through Traefik (`websecure`, `cloudflare` resolver).
+- `3000` - Web interface and API.
+- Joins the external `traefik-proxy` network.
 
-- `./data:/app/data` - Stores converted files and application data
+## Data & Backups
 
-## Ports
+- `./data` → `/app/data` - Accounts, uploaded and converted files. Back up only if you want to keep accounts and history.
 
-- `3000` - Web interface and API
+## Troubleshooting
+
+- Logged out after every restart: `JWT_SECRET` is empty or changed; set a fixed value in `.env`.
