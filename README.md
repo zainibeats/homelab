@@ -22,20 +22,44 @@ This repository contains configuration files and documentation for my homelab se
 | Azure                      | Jump server                                   | Debian |
 | AWS                        | Testing                                       | Ubuntu Server |
 
+### Host Map
+
+| Host | Stacks |
+| --- | --- |
+| Application Server | [arr-stack](./media/arr-stack/README.md), [convertx](./utilities/convertx/README.md), [gitea](./infrastructure/gitea/README.md), [home-assistant](./automation/home-assistant/README.md), [immich](./storage/immich/README.md), [invidious](./media/invidious/README.md), [it-tools](./utilities/it-tools/README.md), [jellyfin](./media/jellyfin/README.md), [neko](./utilities/neko/README.md), [nextcloud](./storage/nextcloud/README.md), [portainer](./infrastructure/portainer/README.md), [searxng](./utilities/searxng/README.md), [traefik](./networking/traefik/README.md), [wiki-js](./utilities/wiki-js/README.md), [yopass](./utilities/yopass/README.md) |
+| Raspberry Pi | [homepage-admin](./infrastructure/homepage-admin/README.md), [homepage-public](./infrastructure/homepage-public/README.md), [monitoring-home](./monitoring/monitoring-home/README.md), [traefik](./networking/traefik/README.md), [uptime-kuma](./monitoring/uptime-kuma/README.md) |
+| NAS | [syncthing](./storage/syncthing/README.md) |
+| GPU Compute Node | [ai-stack](./automation/ai-stack/README.md) |
+| Desktop | [ai-stack](./automation/ai-stack/README.md), [syncthing](./storage/syncthing/README.md) |
+| Oracle (OCI) | [matrix](./utilities/matrix/README.md), [minecraft](./gaming/minecraft/README.md), [monitoring-oci](./monitoring/monitoring-oci/README.md), [netbird-client](./networking/netbird-client/README.md), [netbird-server](./networking/netbird-server/README.md), [palworld](./gaming/palworld/README.md), [valheim](./gaming/valheim/README.md) |
+| AWS EC2 | [ollama-aws-hybrid](./automation/ollama-aws-hybrid/README.md) |
+| Every Docker host | [watchtower](./infrastructure/watchtower/README.md) |
+| Cloud instances without a static IP | [ddclient](./networking/ddclient/README.md) |
+| Any other host on the NetBird network (project dependent) | [netbird-client](./networking/netbird-client/README.md) |
+
+OCI and AWS run the Traefik bundled in [netbird-server](./networking/netbird-server/README.md) and [ollama-aws-hybrid](./automation/ollama-aws-hybrid/README.md) instead of the standalone [traefik](./networking/traefik/README.md) stack.
 
 ## Project Organization
 
-Services are organized into logical categories for easier management and navigation:
+Compose stacks are grouped by job, one folder per stack. Provisioning code (run from a workstation or control node) lives in its own top-level folders.
+
+**Compose stacks**
 - **[Automation](./automation/README.md)** - Home automation and AI platforms
 - **[Gaming](./gaming/README.md)** - Game server stacks and runtime documentation
 - **[Infrastructure](./infrastructure/README.md)** - Dashboards, version control, and container management
-- **[Terraform](./terraform/README.md)** - Terraform configurations for cloud and Proxmox hosts
-- **[Ansible](./ansible/README.md)** - Playbooks for server administration, game hosts, and the Ollama AWS hybrid host
 - **[Media](./media/README.md)** - Media automation, management, and streaming services
 - **[Monitoring](./monitoring/README.md)** - Metrics, logs, and uptime monitoring for home and OCI hosts
 - **[Networking](./networking/README.md)** - Reverse proxy, dynamic DNS, and remote access (WireGuard, NetBird)
 - **[Storage](./storage/README.md)** - Data storage, backup, and security services
 - **[Utilities](./utilities/README.md)** - General-purpose tools including file conversion, IT utilities, secret sharing, search, virtual browser, wiki, and Matrix chat
+
+**Provisioning**
+- **[Terraform](./terraform/README.md)** - Terraform configurations for cloud and Proxmox hosts
+- **[Ansible](./ansible/README.md)** - Playbooks for server administration, game hosts, and the Ollama AWS hybrid host
+
+**Conventions**
+- Every compose file pins `name:`, so renaming a folder never renames its volumes.
+- Example files are `<file>.example.<ext>` (env files: `.env.example`, `<name>.env.example`; Terraform: `terraform.tfvars.example`). Copy them without `.example` and fill them in; the live copies are gitignored.
 
 ## AI Agents
 This repository includes an AI agent framework located in the `.agents` directory. 
