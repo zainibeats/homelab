@@ -1,6 +1,6 @@
 # Monitoring (OCI host)
 
-Prometheus, Grafana, Loki, Alloy, node-exporter and cAdvisor for the OCI host. Grafana sits behind NetBird's Traefik and is reachable only by NetBird peers. The home stack is in [monitoring](../monitoring/README.md).
+Prometheus, Grafana, Loki, Alloy, node-exporter and cAdvisor for the OCI host. Grafana sits behind NetBird's Traefik and is reachable only by NetBird peers. The home stack is in [monitoring](../monitoring-home/README.md).
 
 ## Architecture
 

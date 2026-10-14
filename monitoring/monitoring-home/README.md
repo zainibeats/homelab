@@ -21,7 +21,7 @@ This directory contains a Docker Compose setup for a basic monitoring stack usin
    ```
 
 2. **Prometheus Configuration**: The Prometheus service mounts a configuration file from `~/promgrafnode/prometheus/prometheus.yml` on the host.
-   - A basic `prometheus.yml` is provided in *this* directory (`monitoring/prometheus.yml`). Copy its contents, or the file itself, to `~/promgrafnode/prometheus/prometheus.yml` on your host machine. Adjust the configuration if needed.
+   - A basic `prometheus.yml` is provided in *this* directory (`monitoring-home/prometheus/prometheus.yml`). Copy its contents, or the file itself, to `~/promgrafnode/prometheus/prometheus.yml` on your host machine. Adjust the configuration if needed.
 
 3. **Grafana Configuration & Data**: Grafana mounts volumes for its data (`~/promgrafnode/grafana`) and provisioning (`~/promgrafnode/grafana/provisioning/datasources`). The necessary directories should have been created in step 1.
    - You can place datasource configuration files in `~/promgrafnode/grafana/provisioning/datasources`, such as a file that automatically adds the Prometheus datasource.
