@@ -13,7 +13,7 @@ It isn't deployed by any Docker Compose file — it's kept here for version cont
 
 ## Deployment layout
 
-This directory is the source copy kept for version control — it isn't read in place. To actually take effect, its contents are placed into the Obsidian vault (the project root, e.g. `/mnt/backup/syncthing/notes/obsidian-tasknotes`) matching each agent tool's own layout convention:
+This directory is the source copy kept for version control — it isn't read in place. To actually take effect, its contents are placed into the Obsidian vault (the project root, e.g. `/mnt/backup/syncthing/notes/obsidian-vault`) matching each agent tool's own layout convention:
 
 | Source (here) | Deployed to (vault root) |
 |---|---|

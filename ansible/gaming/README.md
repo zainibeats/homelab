@@ -2,7 +2,7 @@
 
 Ansible automation for deploying one game stack at a time onto the reusable OCI Debian-based host from `terraform/oci/free-tier-host`.
 
-The playbooks copy the existing Compose stacks from `gaming/minecraft` or `gaming/palworld`, install Docker host prerequisites, decrypt a Vault-managed `.env`, and start the selected stack.
+The playbooks copy the existing Compose stacks from `gaming/minecraft` or `gaming/palworld`, install Docker host prerequisites, decrypt a Vault-managed `.env`, and start the selected stack. Valheim isn't supported by the playbooks (`gaming_allowed_stacks` lists only `minecraft` and `palworld`); deploy it manually with `docker compose`.
 
 ## Layout
 
@@ -38,10 +38,10 @@ ansible-galaxy collection install -r requirements.yml
 Create an encrypted runtime env file for each game you plan to deploy:
 
 ```bash
-cp ../../../gaming/minecraft/.env.example /tmp/minecraft.env
+cp ../../gaming/minecraft/.env.example /tmp/minecraft.env
 ansible-vault encrypt /tmp/minecraft.env --output files/minecraft.env.vault
 
-cp ../../../gaming/palworld/.env.example /tmp/palworld.env
+cp ../../gaming/palworld/.env.example /tmp/palworld.env
 ansible-vault encrypt /tmp/palworld.env --output files/palworld.env.vault
 ```
 
@@ -93,4 +93,4 @@ By default the remote host uses:
 - `/opt/gaming/minecraft`
 - `/opt/gaming/palworld`
 
-Each selected directory contains the copied `docker-compose.yml`, decrypted `.env`, persistent `data/`, optional `config/`, and NetBird state.
+Each selected directory contains the copied `docker-compose.yml`, decrypted `.env`, persistent `data/`, and optional `config/`.

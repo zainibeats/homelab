@@ -117,7 +117,6 @@
       loop:
         - "{{ selected_app_dir }}"
         - "{{ selected_app_dir }}/data"
-        - "{{ selected_app_dir }}/netbird"
 
     - name: Copy Docker Compose file
       ansible.builtin.copy:
