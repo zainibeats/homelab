@@ -17,7 +17,7 @@ cp .env.example .env
 cp config/traefik.example.yml config/traefik.yml
 # Copy only the dynamic files this host needs, e.g.:
 cp config/dynamic/pi5.example.yml config/dynamic/pi5.yml
-chmod 600 letsencrypt/acme.json
+mkdir -p letsencrypt && touch letsencrypt/acme.json && chmod 600 letsencrypt/acme.json
 docker compose up -d
 ```
 
@@ -47,7 +47,7 @@ Static configuration lives in `config/traefik.yml`: entrypoints `web` (`:80`, re
 
 ## Data & Backups
 
-- `./letsencrypt/acme.json` - Issued certificates (mode `600`). Back it up to avoid re-issuing certificates.
+- `./letsencrypt/acme.json` - Issued certificates (mode `600`, gitignored). Back it up to avoid re-issuing certificates.
 - `./config/traefik.yml`, `./config/dynamic/` - Live configuration (gitignored); back these up.
 - `/var/run/docker.sock` (read-only) - Docker provider.
 

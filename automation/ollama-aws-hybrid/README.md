@@ -169,7 +169,7 @@ placeholder, ensure Traefik's certificate store is private, and start the
 stack:
 
 ```shell
-chmod 600 ./letsencrypt/acme.json
+mkdir -p letsencrypt && touch letsencrypt/acme.json && chmod 600 letsencrypt/acme.json
 docker compose up -d
 ```
 
@@ -214,7 +214,7 @@ Client -> EC2:443 -> Traefik -> Gluetun:8080/Open WebUI -> WireGuard -> Ollama
 ## Data & Backups
 
 - `open-webui` volume - Open WebUI data (users, chats, settings). Back this up if the instance is long-lived.
-- `./letsencrypt/acme.json` - Traefik certificates (mode `600`).
+- `./letsencrypt/acme.json` - Traefik certificates (mode `600`, gitignored).
 - `./gluetun` - Gluetun data.
 - Terraform state is local to `terraform/aws/ollama-aws-hybrid` (gitignored). Move it to an encrypted remote backend with locking for shared or production use.
 
