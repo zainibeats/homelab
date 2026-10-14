@@ -16,7 +16,7 @@ The on-prem monitoring stack: Prometheus for metrics, Loki and Promtail for logs
 
 ## Setup
 
-The compose file is tracked as `docker-compose.example.yml`; the live `docker-compose.yml` is gitignored so it can be adjusted per host.
+The compose file is tracked as `docker-compose.example.yml`; the live `docker-compose.yml` is gitignored so it can be adjusted per host. Keep `name: monitoring` as its first line: the volume and network names depend on it, and a copy made before the name was pinned won't have it.
 
 ```bash
 cp docker-compose.example.yml docker-compose.yml

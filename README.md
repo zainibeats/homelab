@@ -58,7 +58,7 @@ Compose stacks are grouped by job, one folder per stack. Provisioning code (run 
 - **[Ansible](./ansible/README.md)** - Playbooks for server administration, game hosts, and the Ollama AWS hybrid host
 
 **Conventions**
-- Every compose file pins `name:`, so renaming a folder never renames its volumes.
+- Every compose file pins `name:`, so renaming a folder never renames its volumes. Gitignored live compose copies must keep the same `name:` line (e.g. `monitoring/monitoring-home/docker-compose.yml`).
 - Example files are `<file>.example.<ext>` (env files: `.env.example`, `<name>.env.example`; Terraform: `terraform.tfvars.example`). Copy them without `.example` and fill them in; the live copies are gitignored.
 
 ## AI Agents

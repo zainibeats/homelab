@@ -1186,14 +1186,21 @@ Report: the commit list, any deferred checks (Ansible syntax-check, `terraform v
 **Every host with a clone**, for each stack it runs that moved:
 
 ```bash
+cd <repo> && git status                    # must show no modified tracked files, or the pull will abort
+# Traefik hosts only: acme.json is no longer tracked, and the pull deletes the tracked copy
+cp -p <old path>/letsencrypt/acme.json ~/acme.json.bak
+git checkout -- <old path>/letsencrypt/acme.json
 cd <repo>/<old path> && docker compose down
 cd <repo> && git pull
-rsync -a <old path>/ <new path>/          # .env, data dirs, acme.json, live configs
+rsync -a <old path>/ <new path>/          # .env, data dirs, live configs
+cp -p ~/acme.json.bak <new path>/letsencrypt/acme.json && chmod 600 <new path>/letsencrypt/acme.json   # Traefik hosts only
 cd <new path> && docker compose up -d
 docker compose ls                          # project name must be unchanged
 # after confirming the stack works:
 rm -rf <old path>
 ```
+
+`monitoring/monitoring-home` runs from a gitignored live `docker-compose.yml` copied before `name:` was pinned. Before `docker compose up -d`, add `name: monitoring` as its first line (or re-copy `docker-compose.example.yml`); otherwise the project becomes `monitoring-home`. `automation/ollama-aws-hybrid` also loses its tracked `acme.json`: on a manual deployment, back it up and restore it the same way.
 
 Moved stacks: `infrastructure/{traefik,ddclient,wireguard,netbird-server,netbird-client}` → `networking/…`; `infrastructure/monitoring` → `monitoring/monitoring-home`; `infrastructure/{monitoring-oci,uptime-kuma}` → `monitoring/…`; `infrastructure/homepage/{admin,public}-instance` → `infrastructure/homepage-{admin,public}`; `infrastructure/{matrix,wiki-js}` → `utilities/…`. Data under root-owned folders (e.g. `netbird-client/netbird/`) needs `sudo rsync` and `sudo rm`.
 
