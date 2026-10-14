@@ -1,29 +1,40 @@
 # Uptime Kuma
 
-Uptime Kuma is a lightweight, self-hosted uptime monitoring solution that runs in a single Docker container. It checks HTTP, TCP, DNS, and ping endpoints and can also monitor Docker containers via the Docker socket.
+Uptime Kuma is a lightweight, self-hosted uptime monitor. It checks HTTP, TCP, DNS, and ping endpoints, and monitors Docker containers through the Docker socket.
 
-## Quick Start
+**Runs on:** Raspberry Pi
+
+## Prerequisites
+
+- The [Traefik](../../networking/traefik/README.md) stack running on the same host (it creates the external `traefik-proxy` network).
+
+## Setup
 
 ```bash
+cp .env.example .env
 docker compose up -d
 ```
 
-The service is exposed on port **3001**. Data is persisted in the `./data` directory, and the Docker socket is mounted read-only for container monitoring.
-
-## Directory Structure
-
-```
-docker-compose.yml   # Compose definition
-./data/              # Persistent storage for monitors, config, and logs
-```
+Open the web UI and create the admin account on first visit.
 
 ## Configuration
 
-- **Data volume**: `./data:/app/data`
-- **Docker socket**: `/var/run/docker.sock:/var/run/docker.sock:ro`
-- **Port mapping**: `3001:3001`
+- `DOMAIN` - Base domain for the Traefik route (`uptime.${DOMAIN}`).
 
-## Access
+Monitors, notifications, and status pages are configured in the web UI.
 
-- Web UI: `http://<host>:3001`
-- API: `/api` (see UI documentation)
+## Routing & Ports
+
+- `uptime.${DOMAIN}` - Web UI through Traefik (`websecure`, `cloudflare` resolver).
+- `3001` - Web UI (`http://<host>:3001`).
+- Joins the external `traefik-proxy` network.
+- Push monitors and status badges use the `/api/push/...` and `/api/badge/...` endpoints; Prometheus metrics are at `/metrics`.
+
+## Data & Backups
+
+- `./data` → `/app/data` - Monitors, settings, and history (SQLite). Back this up.
+- `/var/run/docker.sock` (read-only) - Docker container monitoring.
+
+## Troubleshooting
+
+- Docker monitors fail: confirm the socket mount and that the container can read `/var/run/docker.sock`.
