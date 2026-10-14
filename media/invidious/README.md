@@ -1,8 +1,6 @@
 # Invidious
 
-Invidious is an open-source alternative frontend for YouTube.
-
-## Components
+Invidious is an open-source alternative frontend for YouTube. Unlike the official stack, this one routes **all** container traffic through a Gluetun VPN container.
 
 | Service | Description |
 |---------|-------------|
@@ -11,64 +9,60 @@ Invidious is an open-source alternative frontend for YouTube.
 | Invidious Companion | Handles video streaming via `youtubei.js` |
 | PostgreSQL 14 | Database backend for Invidious |
 
-## How This Differs from the Official Stack
-
-The official Invidious Docker Compose stack does not include a VPN. This setup routes **all container traffic** through a Gluetun VPN container:
-
-- `invidious`, `companion`, and `invidious-db` all use `network_mode: "service:gluetun"`; they share Gluetun's network stack and have no direct network access of their own
-- The only exposed port is on the Gluetun container: `3080` (mapped to Invidious's internal port `3000`)
-- A dedicated Docker network (`invidious-net`, subnet `172.172.0.0/24`) is used with a static IP for Gluetun (`172.172.0.2`)
-- The companion service is included and wired to Invidious via `http://127.0.0.1:8282/companion` (loopback within the shared network namespace)
+**Runs on:** Application Server
 
 ## Prerequisites
 
-1. Docker and Docker Compose installed
-2. A VPN configuration compatible with Gluetun
-3. `pwgen` installed for generating secret keys
-4. The [Invidious repository](https://github.com/iv-org/invidious) cloned into a directory of your choosing. The database container mounts `./config/sql` and `./docker/init-invidious-db.sh` directly from it:
+- A VPN configuration compatible with Gluetun.
+- `pwgen` for generating secret keys.
+- The [Invidious repository](https://github.com/iv-org/invidious) cloned, with this stack's `docker-compose.yml` replacing the upstream one. The database container mounts `./config/sql` and `./docker/init-invidious-db.sh` from it:
 
-```bash
-git clone https://github.com/iv-org/invidious.git
-```
-
-> **Note:** Replace the `docker-compose.yml` with [this one](./docker-compose.yml).
+  ```bash
+  git clone https://github.com/iv-org/invidious.git
+  cp docker-compose.yml .env.example invidious/
+  ```
 
 ## Setup
 
-### 1. Configure Environment Variables
-
-Copy the example file and fill in your values:
-
 ```bash
 cp .env.example .env
+# fill in .env (pwgen 16 1 for each key), then:
+docker compose up -d
 ```
+
+Open `http://<host>:3080`.
+
+## Configuration
 
 | Variable | Description |
 |----------|-------------|
-| `TZ` | Your timezone (e.g. `America/Los_Angeles`) |
-| `VPN_SERVICE_PROVIDER` | Your VPN provider (e.g. `protonvpn`, `mullvad`) |
+| `TZ` | Timezone (e.g. `America/Los_Angeles`) |
+| `VPN_SERVICE_PROVIDER` | VPN provider (e.g. `protonvpn`, `mullvad`) |
 | `VPN_TYPE` | VPN protocol (`wireguard`) |
 | `WIREGUARD_PUBLIC_KEY` | WireGuard public key from your VPN config |
 | `WIREGUARD_PRIVATE_KEY` | WireGuard private key from your VPN config |
 | `SERVER_COUNTRIES` | Comma-separated list of countries (e.g. `"United States"`) |
 | `POSTGRES_USER` | PostgreSQL username |
 | `POSTGRES_PASSWORD` | PostgreSQL password |
-| `HMAC_KEY` | Secret key for Invidious (generate with `pwgen 16 1`) |
-| `COMPANION_KEY` | Shared secret between Invidious and Companion (generate with `pwgen 16 1`) |
+| `HMAC_KEY` | Secret key for Invidious (`pwgen 16 1`) |
+| `COMPANION_KEY` | Shared secret between Invidious and Companion (`pwgen 16 1`) |
 
-### 2. Start the Stack
+## Routing & Ports
 
-```bash
-docker compose up -d
-```
+- `invidious`, `companion`, and `invidious-db` use `network_mode: "service:gluetun"`: they share Gluetun's network stack and have no network access of their own.
+- `3080` → `3000` - The only published port, on Gluetun (Invidious web UI).
+- Gluetun has a static IP (`172.172.0.2`) on `invidious-net` (`172.172.0.0/24`).
+- Companion is reached at `http://127.0.0.1:8282/companion` (loopback inside the shared namespace).
 
-### 3. Access the Web Interface
+## Data & Backups
 
-```
-http://<your-server-ip>:3080
-```
+- `postgresdata` volume - Invidious database (accounts, subscriptions). Back up with `pg_dump`.
+- `companioncache` volume - Companion's `youtubei.js` cache; disposable.
+- `./gluetun` - Gluetun data.
 
-## Verify VPN is Working
+## Troubleshooting
+
+Check that traffic leaves through the VPN:
 
 ```bash
 docker exec -it gluetun-invidious sh
@@ -78,8 +72,4 @@ cat index.html
 
 The returned IP should belong to your VPN provider, not your home ISP.
 
-## Official Documentation
-
-- [Invidious documentation](https://docs.invidious.io/)
-- [Invidious Companion](https://github.com/iv-org/invidious-companion)
-- [Gluetun documentation](https://github.com/qdm12/gluetun/wiki)
+Docs: [Invidious](https://docs.invidious.io/), [Invidious Companion](https://github.com/iv-org/invidious-companion), [Gluetun](https://github.com/qdm12/gluetun/wiki).
