@@ -2,7 +2,7 @@
 
 My self-hosted NetBird control plane: the combined server, the dashboard, the NetBird Proxy with CrowdSec, and Traefik. It started as the output of NetBird's [one-line installer](https://docs.netbird.io/selfhosted/selfhosted-quickstart), version 0.79.0 (answers: built-in Traefik, proxy on, CrowdSec on). That script is kept here as [`getting-started-v0.79.0.sh`](./getting-started-v0.79.0.sh) for diffing and is never run.
 
-## Changes from the installer output
+Changes from the installer output:
 
 - This stack creates the `services` network (`SERVICES_SUBNET`), and Traefik joins it at `TRAEFIK_SERVICES_IP` (`10.110.2.20`). [netbird-client](../netbird-client/README.md) routes the network to peers. [Matrix](../../utilities/matrix/README.md) and the game servers sit on it.
 - A second resolver, `letsencrypt-dns`, handles DNS-01 through Cloudflare. It covers NetBird-only hostnames, which resolve to private IPs. The token goes in `cloudflare-dns-token` (`Zone:DNS:Edit`, `chmod 600`).
@@ -10,7 +10,9 @@ My self-hosted NetBird control plane: the combined server, the dashboard, the Ne
 - Domain and ACME email come from `.env`. `name: netbird` keeps the installer's volume and network names (`netbird_netbird_data`, `netbird_netbird`).
 - The installer hard-codes Traefik's internal IP as `172.30.0.10`. It's also in `config.yaml`, `proxy.env` and Matrix's lk-jwt-service `extra_hosts`.
 
-## Host
+**Runs on:** Oracle (OCI)
+
+## Prerequisites
 
 - **ufw:** deny all incoming, allow `22/tcp` from anywhere. Docker's published ports bypass ufw, so the NetBird ports don't need ufw rules.
 - **OCI security list** (see [free-tier-host](../../terraform/oci/free-tier-host/README.md#firewall)):
@@ -24,7 +26,7 @@ My self-hosted NetBird control plane: the combined server, the dashboard, the Ne
 
 The order is: this stack → [netbird-client](../netbird-client/README.md) (`SERVICES_EXTERNAL=true`) → Matrix and game stacks.
 
-1. Copy `.env.example`, `config.example.yaml` (`chmod 600`), `dashboard.env.example` and `proxy.env.example` without the `.example` suffix. Replace `netbird.domain.tld` in all of them.
+1. Copy `.env.example`, `config.example.yaml` (`chmod 600`), `dashboard.env.example` and `proxy.env.example` to `.env`, `config.yaml`, `dashboard.env` and `proxy.env`. Replace `netbird.domain.tld` in all of them.
 2. Fill in the `config.yaml` secrets:
    - `authSecret`: `openssl rand -base64 32 | sed 's/=//g'`
    - `sessionCookieEncryptionKey`: `openssl rand -base64 32`
@@ -50,7 +52,7 @@ In the dashboard:
   | UDP | 8211, 27015 | Palworld |
   | UDP | 2456-2458 | Valheim |
 
-## Upgrading
+### Upgrading
 
 Follow the [official upgrade steps](https://docs.netbird.io/selfhosted/maintenance/upgrade): back up, read the release notes, and keep the proxy and management versions in sync. Because the tags here are pinned, also do the following:
 
@@ -62,3 +64,53 @@ Follow the [official upgrade steps](https://docs.netbird.io/selfhosted/maintenan
 2. Carry over any changes to the compose, `config.yaml` or env templates.
 3. Bump `netbird-server`, `reverse-proxy` and netbird-client's `netbird` together, plus the matching dashboard release.
 4. Replace the kept script with the new one.
+
+## Configuration
+
+`.env` (compose interpolation):
+
+- `NETBIRD_DOMAIN` - Public hostname of the NetBird server (A record → instance public IP, DNS only).
+- `ACME_EMAIL` - Let's Encrypt account email for both Traefik resolvers.
+- `SERVICES_SUBNET`, `SERVICES_GATEWAY` - The routed `services` network owned by this stack. Must be private and must not overlap any NetBird client's local or Docker networks.
+- `TRAEFIK_SERVICES_IP` - Traefik's address on `services` (default `10.110.2.20`); NetBird-only hostnames point here.
+
+`dashboard.env` (installer defaults; change only the domain):
+
+- `NETBIRD_MGMT_API_ENDPOINT`, `NETBIRD_MGMT_GRPC_API_ENDPOINT` - `https://NETBIRD_DOMAIN`.
+- `AUTH_AUTHORITY` - `https://NETBIRD_DOMAIN/oauth2` (embedded IdP).
+- `AUTH_AUDIENCE`, `AUTH_CLIENT_ID`, `AUTH_CLIENT_SECRET`, `USE_AUTH0`, `AUTH_SUPPORTED_SCOPES`, `AUTH_REDIRECT_URI`, `AUTH_SILENT_REDIRECT_URI` - Embedded IdP client settings; leave as generated.
+- `NGINX_SSL_PORT`, `LETSENCRYPT_DOMAIN` - Leave as generated (`443`, `none`); Traefik handles TLS.
+
+`proxy.env` (NetBird Proxy):
+
+- `NB_PROXY_DOMAIN` - Public URL where the proxy is reachable.
+- `NB_PROXY_TOKEN` - Proxy token (Setup step 5).
+- `NB_PROXY_CROWDSEC_API_KEY` - CrowdSec bouncer key (Setup step 5).
+- `NB_PROXY_CROWDSEC_API_URL` - `http://crowdsec:8080`.
+- `NB_PROXY_MANAGEMENT_ADDRESS`, `NB_PROXY_ALLOW_INSECURE` - Connect to management over the internal Docker network (avoids hairpin NAT).
+- `NB_PROXY_TRUSTED_PROXIES`, `NB_PROXY_PROXY_PROTOCOL` - Trust Traefik (`172.30.0.10`) and preserve client IPs with PROXY protocol.
+- `NB_PROXY_ADDRESS`, `NB_PROXY_CERTIFICATE_DIRECTORY`, `NB_PROXY_ACME_CERTIFICATES`, `NB_PROXY_ACME_CHALLENGE_TYPE`, `NB_PROXY_FORWARDED_PROTO`, `NB_PROXY_DEBUG_LOGS` - Installer defaults.
+
+`config.yaml` holds the server settings and the secrets from Setup step 2.
+
+## Routing & Ports
+
+- `80/tcp`, `443/tcp` - Traefik (dashboard, management API, gRPC, relay).
+- `3478/udp` - STUN (netbird-server).
+- `51820/udp` - NetBird Proxy.
+- `https://NETBIRD_DOMAIN` - Dashboard; `/api`, `/oauth2`, `/relay`, `/ws-proxy/` and the gRPC paths go to netbird-server.
+- Networks: `netbird` (internal, Traefik at `172.30.0.10`) and `services` (created here, routed by netbird-client).
+
+## Data & Backups
+
+- `netbird_data` volume - The NetBird store. Back it up together with `config.yaml` (its `encryptionKey` decrypts the store).
+- `netbird_traefik_letsencrypt` volume - Traefik certificates.
+- `netbird_proxy_certs` volume - Proxy certificates.
+- `./crowdsec`, `crowdsec_db` volume - CrowdSec configuration and data.
+- Live files to back up (all gitignored): `.env`, `config.yaml`, `dashboard.env`, `proxy.env`, `cloudflare-dns-token`.
+
+## Troubleshooting
+
+- Peers can't reach `services`: confirm the network resource and access policy in the dashboard, and that netbird-client is the routing peer.
+- Proxy fails to register: regenerate `NB_PROXY_TOKEN` (Setup step 5) and restart `proxy`.
+- After an upgrade, keep the server, proxy, and client versions in sync (see [Upgrading](#upgrading)).
