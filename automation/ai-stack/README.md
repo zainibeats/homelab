@@ -1,55 +1,77 @@
 # Ollama + Open WebUI
 
-This setup allows you to run large language models (LLMs) locally using Ollama and interact with them through a user-friendly web interface provided by Open WebUI.
+Run large language models locally with Ollama and use them through Open WebUI. The two services are separate stacks (`ollama/` and `open-webui/`), so either side can be swapped (e.g. LM Studio, a custom Ollama setup, or an API-key service) without changing the other.
 
-## Services
+**Runs on:** Desktop and GPU Compute Node
 
-- **Ollama**: Serves and manages LLMs locally.
-- **Open WebUI**: A web interface for interacting with Ollama-served models.
+## Prerequisites
 
-## Configuration
+- An NVIDIA GPU with the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) (recommended). Without one, remove the `deploy` section from `ollama/docker-compose.yml`.
+- Two external Docker networks for Open WebUI:
+  - `traefik-proxy` - Carries the `open-webui.${DOMAIN}` routes; created by the [Traefik](../../networking/traefik/README.md) stack.
+  - `tmdb-net` - Lets Open WebUI talk to my [TMDB MCP server](https://github.com/zainibeats/tmdb-mcp) and to [SearXNG](../../utilities/searxng/README.md). Create it with `docker network create tmdb-net`, or remove it from `open-webui/docker-compose.yml` if you don't use either.
 
-1. **GPU Acceleration (Optional but Recommended)**
-   The `ollama` service is configured to use NVIDIA GPUs (`deploy.resources.reservations.devices`). Ensure you have the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) installed on your host if you want to use GPU acceleration. If you don’t have an NVIDIA GPU or don’t want to use it, remove or comment out the `deploy` section in `ollama/docker-compose.yml`.
+## Setup
 
-2. **Port Mapping**
-   Open WebUI is exposed as port `8808` on the host by default (container port `8080`). You can change the host port if needed.
+1. Ollama:
+   ```bash
+   cd ollama
+   cp .env.example .env   # set MODELS_DIR
+   docker compose up -d
+   ```
+   Ollama uses host networking. Open WebUI reaches it through `host.docker.internal`, which arrives on the Docker bridge, so Ollama must listen on all interfaces: set `OLLAMA_HOST=0.0.0.0:11434` for the `ollama` service (e.g. under `environment:`). This also exposes Ollama on the LAN, so restrict port `11434` with the host firewall.
+2. Open WebUI:
+   ```bash
+   cd open-webui
+   cp .env.example .env   # set WEBUI_SECRET_KEY and the rest
+   docker compose up -d
+   ```
 
-3. **Environment Variables**
-   - The **ollama** and **open-webui** directories are now separate, enabling you to swap providers (e.g., LM Studio, custom Ollama setups, or API-key services) without altering the overall architecture.
+### Custom models
 
-   - Open WebUI joins two external Docker networks, so both must exist before you start it:
-     - `traefik-proxy` carries the `open-webui.${DOMAIN}` routes and is created by the [Traefik](../../networking/traefik/README.md) stack.
-     - `tmdb-net` exists specifically so that this stack can communicate with my custom [TMDB MCP server](https://github.com/zainibeats/tmdb-mcp). If you're not using the MCP tool, remove it from `open-webui/docker-compose.yml` or create it with `docker network create tmdb-net`.
-   - **Ollama (`ollama/.env.example`)**
-     - `MODELS_DIR`: Directory containing model files that should be mounted into the container.
-   - **Open WebUI (`open-webui/.env.example`)**
-     - `DOMAIN`, `SUBDOMAIN`: Traefik hostnames (`open-webui.${DOMAIN}` and `open-webui.${SUBDOMAIN}.${DOMAIN}`).
-     - `OLLAMA_BASE_URL`: Base URL for Ollama (default: `http://ollama:11434`).
-     - `WEBUI_SECRET_KEY`: Secret key used by Open WebUI to secure cookies.
-     - `CORS_ALLOW_ORIGIN`: Origins allowed by CORS.
-     - `ENABLE_WEB_SEARCH`: Set to `True` to enable the built-in web search feature.
-     - `WEB_SEARCH_ENGINE`: Search engine to use (e.g., `searxng`, `bing`, `duckduckgo`).
-     - `SEARXNG_QUERY_URL`: URL of a Searxng instance for query expansion. Both stacks share `tmdb-net`, so use the container name and its container port (`http://searxng-core:8080/search?q=<query>`), not the published host port.
-     - `WEB_SEARCH_RESULT_COUNT`: Number of search results returned by the UI.
-
-4. **Models Directory (Optional)**
-   To use custom models, mount a local directory containing your models into the Ollama container using the `MODELS_DIR` variable.
-
-5. **WebUI Secret Key (Optional)**
-   For production environments, set the `WEBUI_SECRET_KEY` to a secure, random string.
-
-## Agent Context
-
-Claude Code context bundles and skills moved to [`ai-agents/`](../../ai-agents/README.md).
-
-## Custom Models
-
-To use custom models from your local directory, create them using a Modelfile:
+Mount a directory of model files with `MODELS_DIR`, then create a model from a Modelfile (see `ollama/models/Modelfile.example`):
 
 ```bash
 docker exec -it ollama sh
 ollama create custom-model-name -f /models/path/to/Modelfile
 ```
 
-> **Note**: Since the docker volume mounts the models directory to `/models` inside the container, the path in the command should be the absolute path _inside_ the container (e.g., `/models/gpt-oss/Modelfile`).
+The models directory is mounted at `/models`, so use the path _inside_ the container (e.g. `/models/gpt-oss/Modelfile`).
+
+## Configuration
+
+Ollama (`ollama/.env`):
+
+- `MODELS_DIR` - Host directory with model files, mounted at `/models`.
+
+Open WebUI (`open-webui/.env`):
+
+- `DOMAIN` - Base domain for the Traefik routes (`open-webui.${DOMAIN}`).
+- `SUBDOMAIN` - LAN subdomain for the second route (`open-webui.${SUBDOMAIN}.${DOMAIN}`).
+- `OLLAMA_BASE_URL` - Ollama URL: `http://host.docker.internal:11434`. The compose file maps `host.docker.internal` to the host (`extra_hosts: host-gateway`). If Ollama ever runs on a shared Docker network instead of host networking, use `http://ollama:11434`.
+- `WEBUI_SECRET_KEY` - Secret used to secure sessions. Set a long random value.
+- `CORS_ALLOW_ORIGIN` - Origins allowed by CORS (the LAN URL and the Traefik hostname).
+- `ENABLE_WEB_SEARCH` - `True` to enable web search.
+- `WEB_SEARCH_ENGINE` - Search engine (`searxng`, `bing`, `duckduckgo`, ...).
+- `SEARXNG_QUERY_URL` - SearXNG query URL. Both stacks share `tmdb-net`, so use the container name and container port: `http://searxng-core:8080/search?q=<query>`, not the published host port.
+- `WEB_SEARCH_RESULT_COUNT` - Number of search results to use.
+
+## Routing & Ports
+
+- `open-webui.${DOMAIN}` and `open-webui.${SUBDOMAIN}.${DOMAIN}` - Open WebUI through Traefik.
+- `8808` → `8080` - Open WebUI on the host.
+- `11434` - Ollama API on the host (host networking).
+- Networks: Open WebUI joins the external `traefik-proxy` and `tmdb-net`; Ollama uses `network_mode: host`.
+
+## Data & Backups
+
+- `ollama` volume → `/root/.ollama` - Downloaded models; re-downloadable.
+- `${MODELS_DIR}` → `/models` - Custom model files and Modelfiles.
+- `open-webui` volume → `/app/backend/data` - Users, chats, and settings. Back this up.
+
+## Troubleshooting
+
+- Open WebUI shows no models: Ollama isn't reachable at `host.docker.internal:11434`. Confirm Ollama listens on `0.0.0.0` (`OLLAMA_HOST`) and test with `docker exec open-webui curl -s http://host.docker.internal:11434/api/tags`.
+- `docker compose up` fails with "network tmdb-net declared as external, but could not be found": create it or remove it from the compose file.
+
+Claude Code context bundles and skills that used to live here are in [`ai-agents/`](../../ai-agents/README.md).

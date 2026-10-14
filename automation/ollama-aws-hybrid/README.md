@@ -13,7 +13,9 @@ Public traffic enters the EC2 instance over HTTPS through **Traefik**. Traefik
 obtains certificates using Cloudflare's DNS-01 challenge, so the instance does
 not need to expose an HTTP listener on port 80.
 
-## Architecture Overview
+**Runs on:** AWS EC2 (Open WebUI) with Ollama on a local machine
+
+### Architecture
 
 <img src="https://assets.czaini.net/images/aws-ollama-diagram.jpg" width="50%" height="auto"/>
 
@@ -26,7 +28,7 @@ not need to expose an HTTP listener on port 80.
 Client -> EC2:443 -> Traefik -> Gluetun:8080/Open WebUI -> WireGuard -> Ollama
 ```
 
-### Public IP and DNS
+#### Public IP and DNS
 
 The default infrastructure uses an Elastic IP so the Cloudflare DNS record
 remains valid across EC2 stop/start cycles and service downtime is minimized.
@@ -40,7 +42,23 @@ DNS caches expire.
 **Local**:
 - Ollama is exposed on the LAN (e.g., `http://192.168.1.100:11434`) and is reachable from the EC2 instance through the WireGuard tunnel.
 
-## Terraform
+## Prerequisites
+
+- An AWS CLI profile and the SSH key referenced by `public_key_path` (Terraform).
+- A Cloudflare zone for `DOMAIN` and an API token that can edit its DNS records.
+- A WireGuard server on the local network, with a peer for the EC2 instance.
+- Local Ollama listening on an address reachable from the WireGuard client, with only the WireGuard client IP allowed to reach TCP `11434`. The local compose stack can still include Open WebUI for local troubleshooting and permission changes:
+
+  ```yaml
+  # Running on local node
+  services:
+    ollama:
+      network_mode: host
+  ```
+
+## Setup
+
+### Terraform
 
 The configuration in
 [`terraform/aws/ollama-aws-hybrid`](../../terraform/aws/ollama-aws-hybrid/)
@@ -99,67 +117,7 @@ This project currently uses local Terraform state. That is suitable for an
 experimental single-user deployment; shared or production use should move the
 state to an encrypted remote backend with locking.
 
-## Configuration
-
-**EC2 Instance**:
-- `OLLAMA_BASE_URL` must point to the **local** Ollama instance.
-- The EC2 security group should allow TCP port `443` only from your trusted
-  public CIDR. Port `3000` is not published by the Compose stack.
-
-_See full configuration [here](./docker-compose.yml)_
-
-**Local**:
-
-- Ollama must listen on an address reachable from the WireGuard client.
-- Allow only the WireGuard client IP to reach Ollama on TCP port `11434`.
-- The local compose stack can still include Open WebUI for local
-  troubleshooting and permission changes.
-
-```yaml
-# Running on local node
-services:
-  ollama:
-    network_mode: host
-```
-
-### Environment Variables
-
-**IMPORTANT**: Any IP that is being used for the health check during the gluetun startup must be included in `WIREGUARD_ALLOWED_IPS`. For simplicity (and to whitelist Cloudflare DNS), I've opted for 1.1.1.1/32 in the example [env file](./.env.example). Without a passing the healthcheck, the VPN connection will be unstable.
-
-Set `DOMAIN` to the base DNS zone for the deployment. Traefik routes
-`open-webui.${DOMAIN}` to Open WebUI, so that hostname must resolve to the EC2
-instance. The Cloudflare token must be able to edit DNS records for that zone
-so Traefik can complete the DNS-01 certificate challenge. Only TCP port 443
-needs to be exposed by the instance; restrict it to your trusted public CIDR in
-the Terraform security group.
-
-Traefik requires these values in `.env`:
-
-- `DOMAIN`: base DNS zone used to build the Open WebUI hostname, such as
-  `example.com` for `open-webui.example.com`.
-- `CF_DNS_API_TOKEN`: Cloudflare API token with DNS edit access to the relevant
-  zone.
-- `ACME_EMAIL`: email address used for ACME certificate registration.
-- `WEBUI_SECRET_KEY`: long, random secret used by Open WebUI.
-
-Create a DNS record for `open-webui.${DOMAIN}` that points to the EC2
-instance's public address. DNS propagation and the first Traefik certificate
-request can take a few minutes.
-
-For a manual deployment, copy `.env.example` to `.env`, replace every
-placeholder, ensure Traefik's certificate store is private, and start the
-stack:
-
-```shell
-chmod 600 ./letsencrypt/acme.json
-docker compose up -d
-```
-
-Traefik discovers the route from labels on the Gluetun service. This is
-intentional: Open WebUI uses `network_mode: "service:gluetun"`, so it shares
-Gluetun's network namespace and is reachable through Gluetun on port `8080`.
-
-## Ansible
+### Ansible
 
 The playbooks in [`ansible/ollama-aws-hybrid/`](../../ansible/ollama-aws-hybrid/) verify the EC2 prerequisites and
 deploy the Compose and Traefik configuration. Create a local inventory from the
@@ -203,3 +161,65 @@ To stop the stack while preserving volumes:
 ```shell
 ansible-playbook teardown.yml
 ```
+
+### Manual deployment
+
+For a manual deployment, copy `.env.example` to `.env`, replace every
+placeholder, ensure Traefik's certificate store is private, and start the
+stack:
+
+```shell
+chmod 600 ./letsencrypt/acme.json
+docker compose up -d
+```
+
+Traefik discovers the route from labels on the Gluetun service. This is
+intentional: Open WebUI uses `network_mode: "service:gluetun"`, so it shares
+Gluetun's network namespace and is reachable through Gluetun on port `8080`.
+
+## Configuration
+
+`.env` (see [`.env.example`](./.env.example)):
+
+- `VPN_SERVICE_PROVIDER`, `VPN_TYPE` - `custom` and `wireguard` for a self-hosted WireGuard server.
+- `WIREGUARD_ENDPOINT_IP` - Public IP of the home WireGuard server. Domain names may not work; use the IP if unsure.
+- `WIREGUARD_ENDPOINT_PORT` - WireGuard server port (`51820`).
+- `WIREGUARD_PUBLIC_KEY` - The server's public key.
+- `WIREGUARD_PRIVATE_KEY` - This client's private key.
+- `WIREGUARD_PRESHARED_KEY` - Preshared key (optional).
+- `WIREGUARD_ADDRESSES` - This client's tunnel address in CIDR, e.g. `10.0.1.5/32`.
+- `WIREGUARD_ALLOWED_IPS` - Networks routed through the tunnel: the home network (e.g. `192.168.1.0/24`) and the health target's IP (`1.1.1.1/32`).
+- `WIREGUARD_MTU` - Tunnel MTU (`1380`).
+- `HEALTH_TARGET_ADDRESS` - Address Gluetun checks to confirm the tunnel works (`1.1.1.1:443`). Its IP must be in `WIREGUARD_ALLOWED_IPS`.
+- `DNS_ADDRESS` - DNS server used by the VPN client (`1.1.1.1`, or a local DNS server).
+- `CF_DNS_API_TOKEN` - Cloudflare API token with DNS edit access to the zone (Traefik DNS-01).
+- `ACME_EMAIL` - Email for ACME certificate registration.
+- `DOMAIN` - Base DNS zone; Open WebUI is served at `open-webui.${DOMAIN}`.
+- `OLLAMA_BASE_URL` - URL of the **local** Ollama instance, reached through the tunnel (e.g. `http://192.168.1.100:11434`).
+- `WEBUI_SECRET_KEY` - Long, random secret used by Open WebUI to secure sessions.
+- `TZ` - Timezone, e.g. `America/Los_Angeles`.
+
+Traefik's static configuration is in [`config/traefik.yml`](./config/traefik.yml). See the full stack in [`docker-compose.yml`](./docker-compose.yml).
+
+## Routing & Ports
+
+```text
+Client -> EC2:443 -> Traefik -> Gluetun:8080/Open WebUI -> WireGuard -> Ollama
+```
+
+- `443` - The only published port (Traefik, HTTPS). Restrict it to trusted public CIDRs in the Terraform security group. There is no HTTP listener on port 80; certificates use the DNS-01 challenge.
+- `open-webui.${DOMAIN}` - Open WebUI. Traefik discovers the route from labels on the Gluetun service: Open WebUI uses `network_mode: "service:gluetun"`, so it shares Gluetun's network namespace and is reachable through Gluetun on port `8080`. Port `3000` is not published.
+- Create a DNS `A` record for `open-webui.${DOMAIN}` pointing to the instance's public IP (the Terraform `public_ip` output).
+
+## Data & Backups
+
+- `open-webui` volume - Open WebUI data (users, chats, settings). Back this up if the instance is long-lived.
+- `./letsencrypt/acme.json` - Traefik certificates (mode `600`).
+- `./gluetun` - Gluetun data.
+- Terraform state is local to `terraform/aws/ollama-aws-hybrid` (gitignored). Move it to an encrypted remote backend with locking for shared or production use.
+
+## Troubleshooting
+
+- Gluetun keeps restarting or the tunnel is unstable: the health check target's IP must be in `WIREGUARD_ALLOWED_IPS`. The example uses `1.1.1.1/32` for both (which also allows Cloudflare DNS).
+- Open WebUI can't reach Ollama: confirm `OLLAMA_BASE_URL` uses the local LAN address, that the address is inside `WIREGUARD_ALLOWED_IPS`, and that the local firewall allows the WireGuard client IP on `11434`.
+- The first certificate can take a few minutes after the DNS record is created.

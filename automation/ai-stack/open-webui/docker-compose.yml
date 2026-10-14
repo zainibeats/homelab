@@ -10,6 +10,8 @@ services:
       - tmdb-net
     ports:
       - "8808:8080"
+    extra_hosts:
+      - host.docker.internal:host-gateway   # Ollama runs with host networking
     environment:
       - OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
