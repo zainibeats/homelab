@@ -24,7 +24,7 @@ My self-hosted NetBird control plane: the combined server, the dashboard, the Ne
 
 The order is: this stack → [netbird-client](../netbird-client/README.md) (`SERVICES_EXTERNAL=true`) → Matrix and game stacks.
 
-1. Copy `.env.example`, `config.yaml.example` (`chmod 600`), `dashboard.env.example` and `proxy.env.example` without the `.example` suffix. Replace `netbird.domain.tld` in all of them.
+1. Copy `.env.example`, `config.example.yaml` (`chmod 600`), `dashboard.env.example` and `proxy.env.example` without the `.example` suffix. Replace `netbird.domain.tld` in all of them.
 2. Fill in the `config.yaml` secrets:
    - `authSecret`: `openssl rand -base64 32 | sed 's/=//g'`
    - `sessionCookieEncryptionKey`: `openssl rand -base64 32`

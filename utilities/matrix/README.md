@@ -25,12 +25,12 @@ Deploy in this order: [netbird-server](../../networking/netbird-server/README.md
 
 ## Setup
 
-1. Copy `.env.example` to `.env` and `element/config.json.example` to `element/config.json`, and fill them in (`MATRIX_HOST` goes in `config.json`). Set `rtc.node_ip` and `rtc.ips.includes` in `livekit/livekit.yaml` to `LIVEKIT_IP`.
+1. Copy `.env.example` to `.env` and `element/config.example.json` to `element/config.json`, and fill them in (`MATRIX_HOST` goes in `config.json`). Set `rtc.node_ip` and `rtc.ips.includes` in `livekit/livekit.yaml` to `LIVEKIT_IP`.
 2. Generate the Synapse signing key and log config once. Type the server name literally; an unset shell variable produces broken, nameless files.
    ```sh
    docker run --rm -v "$PWD/synapse:/data" -e SYNAPSE_SERVER_NAME=matrix.domain.tld -e SYNAPSE_REPORT_STATS=no matrixdotorg/synapse:latest generate
    ```
-3. Replace `synapse/homeserver.yaml` with `homeserver.yaml.template` and fill in every `CHANGE_ME_*`. The database password is `POSTGRES_PASSWORD`; generate the other secrets with `openssl rand -hex 32`.
+3. Replace `synapse/homeserver.yaml` with `homeserver.example.yaml` and fill in every `CHANGE_ME_*`. The database password is `POSTGRES_PASSWORD`; generate the other secrets with `openssl rand -hex 32`.
 4. `sudo chown -R 991:991 synapse`
 5. `docker compose up -d`
 6. Create accounts (registration is disabled). Add `-a` for an admin:

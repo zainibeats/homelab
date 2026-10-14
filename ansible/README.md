@@ -10,7 +10,7 @@ This setup provides shared Ansible automation for managing homelab and cloud ser
 
 ### Server Admin
 - **`server-admin/inventory/hosts.yml`**: Local inventory used by Ansible by default for admin tasks.
-- **`server-admin/inventory/example.hosts.yml`**: Example inventory template with placeholder host addresses and connection settings.
+- **`server-admin/inventory/hosts.example.yml`**: Example inventory template with placeholder host addresses and connection settings.
 
 ### Gaming
 - **`gaming/inventory/`**: Contains inventory files specific to gaming hosts.
@@ -30,7 +30,7 @@ Hosts are grouped by purpose:
    Copy the example inventory and replace the placeholder hostnames, ports, users, and SSH key path for the server admin setup:
 
    ```bash
-   cp server-admin/inventory/example.hosts.yml server-admin/inventory/hosts.yml
+   cp server-admin/inventory/hosts.example.yml server-admin/inventory/hosts.yml
    ```
 
 3. **SSH Access**
