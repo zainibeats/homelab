@@ -16,7 +16,7 @@ This setup is particularly effective for:
 Before starting the service, ensure you have:
 
 1. Created a `.env` file with your VPN and Neko credentials (see examples below).
-2. Set `NEKO_NAT1TO1` to your server's external IP address for WebRTC connectivity.
+2. Set `NEKO_WEBRTC_NAT1TO1` to your server's external IP address for WebRTC connectivity.
 
 ### Environment Variables
 
@@ -24,9 +24,12 @@ Create a `.env` file with the following variables:
 
 ```conf
 # Neko Credentials
-NEKO_PASSWORD=your_user_password
-NEKO_PASSWORD_ADMIN=your_admin_password
-NEKO_NAT1TO1=your_external_ip
+NEKO_MEMBER_MULTIUSER_USER_PASSWORD=your_user_password
+NEKO_MEMBER_MULTIUSER_ADMIN_PASSWORD=your_admin_password
+
+# WebRTC
+NEKO_WEBRTC_NAT1TO1=your_external_ip
+NEKO_WEBRTC_IP_RETRIEVAL_URL=https://checkip.amazonaws.com # URL used to look up the external IP address (Neko's default)
 ```
 
 ### Custom WireGuard
@@ -46,7 +49,7 @@ WIREGUARD_ADDRESSES=WIREGUARD_ADDRESSES
 # Timezone, e.g. America/Los_Angeles
 TZ=TIMEZONE
 ```
-Find your VPN provider's configuration in the [Gluetun wiki](https://github.com/qdm12/gluetun-wiki/tree/main/setup/providers) and adjust the environment variables accordingly. The [example .env](./.env.example) can be referenced for configuring your commercial VPN (eg. Mullvad, ProtonVPN, etc.) as well.
+Find your VPN provider's configuration in the [Gluetun wiki](https://github.com/qdm12/gluetun-wiki/tree/main/setup/providers) and adjust the environment variables accordingly. The [example .env](./.env.example) can be referenced for configuring your commercial VPN (eg. Mullvad, ProtonVPN, etc.) as well. For those, set `VPN_SERVICE_PROVIDER`, `VPN_TYPE`, `WIREGUARD_PUBLIC_KEY`, `WIREGUARD_PRIVATE_KEY`, and `SERVER_COUNTRIES` (a comma-separated list of countries to connect through) instead of the custom WireGuard variables.
 
 ## Volumes
 
