@@ -1,40 +1,62 @@
 # Wiki.js
 
-Wiki.js is a self-hosted documentation and knowledge base platform. This stack runs Wiki.js with PostgreSQL and exposes the web interface through Traefik.
+Wiki.js is a self-hosted documentation and knowledge base platform. This stack runs Wiki.js 2 with PostgreSQL 15 and exposes the web interface through Traefik.
+
+**Runs on:** Application Server
+
+## Prerequisites
+
+- The [Traefik](../../networking/traefik/README.md) stack running on the same host (it creates the external `traefik-proxy` network).
+
+## Setup
+
+```bash
+cp .env.example .env
+# set real passwords in .env, then:
+docker compose up -d
+```
+
+Open the web UI and complete the setup wizard (admin account and site URL).
 
 ## Configuration
 
-Before starting the service, ensure you have:
+PostgreSQL:
 
-1. Copied `.env.example` to `.env`.
-2. Set secure PostgreSQL credentials in `.env`.
-3. Set `DOMAIN` and `SUBDOMAIN` for the Traefik routes.
-4. Created the external `traefik-proxy` Docker network.
+- `POSTGRES_DB` - Database name.
+- `POSTGRES_USER` - Database user.
+- `POSTGRES_PASSWORD` - Database password.
 
-The Wiki.js database variables should match the PostgreSQL variables:
+Wiki.js (must match the PostgreSQL values):
 
-- `DB_USER` should match `POSTGRES_USER`
-- `DB_PASS` should match `POSTGRES_PASSWORD`
-- `DB_NAME` should match `POSTGRES_DB`
+- `DB_NAME` - Must equal `POSTGRES_DB`.
+- `DB_USER` - Must equal `POSTGRES_USER`.
+- `DB_PASS` - Must equal `POSTGRES_PASSWORD`.
+- `TZ` - Timezone, e.g. `America/Los_Angeles`.
 
-## Volumes
+Traefik:
 
-- `db-data:/var/lib/postgresql/data` - Stores PostgreSQL database files
+- `DOMAIN` - Base domain for the Traefik routes (`wiki.${DOMAIN}`).
+- `SUBDOMAIN` - LAN subdomain for the second route (`wiki.${SUBDOMAIN}.${DOMAIN}`).
 
-## Ports
+## Routing & Ports
 
-- `8839` - Wiki.js web interface
-- `3000` - Internal Wiki.js container port used by Traefik
+- `wiki.${DOMAIN}` and `wiki.${SUBDOMAIN}.${DOMAIN}` - Web UI through Traefik (`websecure`, `cloudflare` resolver) on container port `3000`.
+- `8839` → `3000` - Web UI on the host.
+- Joins the external `traefik-proxy` network.
 
-## Git Storage Note
+## Data & Backups
 
-SSH-based Git storage did not work when using a custom SSH port, even after allowing the Docker network to reach that port with a URL like:
+- `db-data` volume → `/var/lib/postgresql/data` - All wiki content lives in PostgreSQL. Back up with `pg_dump` or configure Wiki.js Git storage.
+
+## Troubleshooting
+
+Git storage: SSH did not work with a custom SSH port, even after allowing the Docker network to reach it with a URL like:
 
 ```text
 ssh://user@server:port/path/to/git/dir
 ```
 
-HTTP also did not work with a standard account password. Using a personal access token worked when the Git URL used the machine's local IP address, for example:
+HTTP did not work with an account password either. A personal access token worked when the Git URL used the machine's local IP address, for example:
 
 ```text
 http://192.168.1.100:3331/path/to/git/repo

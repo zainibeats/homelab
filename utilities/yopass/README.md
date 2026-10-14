@@ -1,24 +1,38 @@
 # Yopass
 
-Yopass is a lightweight, self-hosted service for securely sharing secrets, passwords, and files. It encrypts data client-side, stores it temporarily in Memcached, and returns a one-time URL that expires automatically.
+Yopass is a lightweight, self-hosted service for sharing secrets, passwords, and files. It encrypts data client-side, stores it temporarily in Memcached, and returns a one-time URL that expires automatically. Source: <https://github.com/jhaals/yopass>.
 
-The web UI is available on port **8889** (mapped from the container's port 80).
+**Runs on:** Application Server
+
+## Prerequisites
+
+- The [Traefik](../../networking/traefik/README.md) stack running on the same host (it creates the external `traefik-proxy` network).
+
+## Setup
+
+```bash
+cp .env.example .env
+docker compose up -d
+```
 
 ## Configuration
 
-- **Memcached** - Used for temporary storage of encrypted payloads. Exposed on port `11211` within the Compose network.
-- **Yopass** - Runs on port `80` internally; the compose file maps it to `8889` on the host.
+- `DOMAIN` - Base domain for the Traefik routes (`yopass.${DOMAIN}`).
+- `SUBDOMAIN` - LAN subdomain for the second route (`yopass.${SUBDOMAIN}.${DOMAIN}`).
 
-The service is started with the following command line arguments:
+Yopass is started with `--memcached=memcached:11211 --port 80`; no other settings are needed for the default setup.
 
-```text
---memcached=memcached:11211 --port 80
-```
+## Routing & Ports
 
-No additional environment variables are required for the default setup.
+- `yopass.${DOMAIN}` and `yopass.${SUBDOMAIN}.${DOMAIN}` - Web UI through Traefik (`websecure`, `cloudflare` resolver).
+- `8889` → `80` - Web UI (`http://<host>:8889`).
+- Memcached listens on `11211` on the internal `yopass-net` network only (not published).
+- Networks: `yopass-net` (internal) and the external `traefik-proxy`.
 
-## Persistence
+## Data & Backups
 
-This configuration is meant for quick, temporary sharing. If you need persistent storage or advanced security options, refer to the original project documentation on GitHub and adjust the Compose file accordingly.
+None. Secrets live only in Memcached memory and are lost on restart, which is intended for temporary sharing. For persistent storage or other options, see the upstream project.
 
-Source: <https://github.com/jhaals/yopass> - self-hosted secret sharing.
+## Troubleshooting
+
+- Links stop working after a restart: expected, Memcached holds secrets in memory only.

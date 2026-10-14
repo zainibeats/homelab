@@ -1,73 +1,78 @@
 # Neko
 
-Neko is a self-hosted virtual browser that runs in Docker and streams to your web browser via WebRTC. This stack routes all browser traffic through a VPN using Gluetun, making it ideal for various scenarios.
+Neko is a self-hosted virtual browser (Brave) that runs in Docker and streams to your web browser over WebRTC. This stack routes all browser traffic through a VPN with Gluetun and uses NVIDIA hardware encoding (NVENC).
 
-## Key Benefits & Use Cases
+Good for:
 
-This setup is particularly effective for:
+- **Watch parties:** synchronized viewing sessions with shared playback control.
+- **Secure remote access:** reach apps and devices on the home network while away, without subnet conflicts (e.g. both networks using `192.168.1.x`).
+- **No browser extensions:** a dedicated, containerized browser for VPN-routed traffic.
+- **More:** embedding content, collaborative browsing, a throwaway browser.
 
-- **Watch Parties:** Host synchronized viewing sessions where multiple users can watch streaming content together in real-time with shared playback control.
-- **Secure Remote Access:** Safely access applications and devices on your home network when you're away, such as a self-hosted media server or administration panels. Additionally eliminates subnet conflicts (e.g., both your home network and the remote network use the `192.168.1.x` range).
-- **Avoid Browser Extensions:** Use a dedicated, containerized browser for VPN-routed traffic without relying on browser extensions.
-- **More:** Embedding content, collaborative browsing, throwaway browser, etc.
+**Runs on:** Application Server
 
-## Configuration
+## Prerequisites
 
-Before starting the service, ensure you have:
+- NVIDIA drivers and the NVIDIA Container Toolkit on the host.
+- VPN credentials: a commercial provider supported by Gluetun, or your own WireGuard server.
+- UDP ports `52000-52100` reachable by clients (forward them if used remotely).
 
-1. Created a `.env` file with your VPN and Neko credentials (see examples below).
-2. Set `NEKO_WEBRTC_NAT1TO1` to your server's external IP address for WebRTC connectivity.
+## Setup
 
-### Environment Variables
-
-Create a `.env` file with the following variables:
-
-```conf
-# Neko Credentials
-NEKO_MEMBER_MULTIUSER_USER_PASSWORD=your_user_password
-NEKO_MEMBER_MULTIUSER_ADMIN_PASSWORD=your_admin_password
-
-# WebRTC
-NEKO_WEBRTC_NAT1TO1=your_external_ip
-NEKO_WEBRTC_IP_RETRIEVAL_URL=https://checkip.amazonaws.com # URL used to look up the external IP address (Neko's default)
+```bash
+cp .env.example .env
+# fill in .env, then:
+docker compose up -d
 ```
 
-### Custom WireGuard
+Set `NEKO_WEBRTC_NAT1TO1` to the server's external IP so WebRTC can connect.
 
-For a custom WireGuard configuration (e.g., remote home access), add these to your `.env` file:
+For a custom WireGuard server (e.g. remote home access) instead of a commercial provider, set these in `.env`:
 
 ```conf
 VPN_SERVICE_PROVIDER=custom
 VPN_TYPE=wireguard
-WIREGUARD_ENDPOINT_IP=WIREGUARD_ENDPOINT_IP # e.g. External IP of VPN server. Domain names do not seem to work
-WIREGUARD_ENDPOINT_PORT=WIREGUARD_ENDPOINT_PORT # Default wireguard port is 51820 - recommended to change
+WIREGUARD_ENDPOINT_IP=WIREGUARD_ENDPOINT_IP # External IP of the VPN server; domain names don't seem to work
+WIREGUARD_ENDPOINT_PORT=WIREGUARD_ENDPOINT_PORT # Default is 51820; changing it is recommended
 WIREGUARD_PUBLIC_KEY=WIREGUARD_PUBLIC_KEY
 WIREGUARD_PRIVATE_KEY=WIREGUARD_PRIVATE_KEY
 WIREGUARD_PRESHARED_KEY=WIREGUARD_PRESHARED_KEY
 WIREGUARD_ADDRESSES=WIREGUARD_ADDRESSES
-
-# Timezone, e.g. America/Los_Angeles
-TZ=TIMEZONE
 ```
-Find your VPN provider's configuration in the [Gluetun wiki](https://github.com/qdm12/gluetun-wiki/tree/main/setup/providers) and adjust the environment variables accordingly. The [example .env](./.env.example) can be referenced for configuring your commercial VPN (eg. Mullvad, ProtonVPN, etc.) as well. For those, set `VPN_SERVICE_PROVIDER`, `VPN_TYPE`, `WIREGUARD_PUBLIC_KEY`, `WIREGUARD_PRIVATE_KEY`, and `SERVER_COUNTRIES` (a comma-separated list of countries to connect through) instead of the custom WireGuard variables.
 
-## Volumes
+Find each provider's settings in the [Gluetun wiki](https://github.com/qdm12/gluetun-wiki/tree/main/setup/providers).
 
-- `./gluetun:/gluetun` - Gluetun VPN client data
-- `./brave-profile:/home/neko/.config/BraveSoftware/Brave-Browser` - Persistent Brave browser profile
+## Configuration
 
-## Ports
+- `TZ` - Timezone, e.g. `America/Los_Angeles`.
+- `VPN_SERVICE_PROVIDER` - Gluetun provider (`mullvad`, `protonvpn`, `nordvpn`, ... or `custom`).
+- `VPN_TYPE` - `wireguard` or `openvpn`.
+- `WIREGUARD_PUBLIC_KEY` - WireGuard public key.
+- `WIREGUARD_PRIVATE_KEY` - WireGuard private key.
+- `SERVER_COUNTRIES` - Comma-separated countries to connect through (commercial providers).
+- `NEKO_MEMBER_MULTIUSER_USER_PASSWORD` - Password for regular users.
+- `NEKO_MEMBER_MULTIUSER_ADMIN_PASSWORD` - Password for the admin user.
+- `NEKO_WEBRTC_NAT1TO1` - The server's external IP address, advertised to WebRTC clients.
+- `NEKO_WEBRTC_IP_RETRIEVAL_URL` - URL used to look up the external IP (Neko's default, `https://checkip.amazonaws.com`).
 
-- `8880` - Neko web interface
-- `52000-52100/udp` - WebRTC media streaming
+Fixed in the compose file: Brave with an NVENC H.264 pipeline at `1920x1080@30`, multiuser auth, WebRTC ports `52000-52100`, ICE-lite.
 
-## Hardware Acceleration
+## Routing & Ports
 
-This stack uses NVIDIA GPU hardware encoding (NVENC) for efficient video streaming. Ensure you have:
+Neko shares Gluetun's network namespace, so Gluetun publishes its ports:
 
-1. NVIDIA drivers installed on the host
-2. NVIDIA Container Toolkit configured for Docker
+- `8880` → `8080` - Neko web interface.
+- `52000-52100/udp` - WebRTC media.
+- Gluetun sits on `neko-network` (`172.77.0.0/24`) at `172.77.0.2`.
+- The Application Server's Traefik reaches Neko through the file-based routes in `networking/traefik/config/dynamic/ubuntu-server*.yml`.
 
-## Documentation
+## Data & Backups
 
-For more detailed documentation, visit the [official Neko wiki](https://neko.m1k1o.net/docs/v3/quick-start).
+- `./gluetun` → `/gluetun` - Gluetun data (server lists).
+- `./brave-profile` → Brave profile (bookmarks, logins, extensions). Back this up if you keep logins in it.
+
+## Troubleshooting
+
+- Neko never starts: it waits for Gluetun's health check (`ping www.mullvad.net`). Check `docker logs gluetun-neko` for VPN errors.
+- Video connects but stays black or fails: confirm `NEKO_WEBRTC_NAT1TO1` and that the UDP range is reachable.
+- See the [Neko documentation](https://neko.m1k1o.net/docs/v3/quick-start).
