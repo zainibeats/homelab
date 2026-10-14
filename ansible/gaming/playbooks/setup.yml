@@ -7,7 +7,7 @@
     selected_game_stack: "{{ game_stack | default('minecraft') }}"
     selected_stack: "{{ gaming_stack_paths[selected_game_stack] }}"
     selected_app_dir: "{{ selected_stack.app_dir }}"
-    selected_source_dir: "{{ playbook_dir }}/../../../../gaming/{{ selected_game_stack }}"
+    selected_source_dir: "{{ playbook_dir }}/../../../gaming/{{ selected_game_stack }}"
     selected_env_vault_file: "{{ playbook_dir }}/../files/{{ selected_game_stack }}.env.vault"
     docker_apt_arch_map:
       aarch64: arm64

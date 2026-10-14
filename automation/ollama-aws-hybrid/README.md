@@ -161,20 +161,20 @@ Gluetun's network namespace and is reachable through Gluetun on port `8080`.
 
 ## Ansible
 
-The playbooks in [`ansible/`](./ansible/) verify the EC2 prerequisites and
+The playbooks in [`ansible/ollama-aws-hybrid/`](../../ansible/ollama-aws-hybrid/) verify the EC2 prerequisites and
 deploy the Compose and Traefik configuration. Create a local inventory from the
 example and replace the EC2 address and SSH key path:
 
 ```shell
-cd ansible
-cp open-webui-ec2-instance.example.yaml open-webui-ec2-instance.yaml
+cd ../../ansible/ollama-aws-hybrid
+cp open-webui-ec2-instance.example.yml open-webui-ec2-instance.yml
 ```
 
 Create the runtime environment file from the project example, fill in every
 placeholder, and encrypt the complete file before running the deployment:
 
 ```shell
-cp ../.env.example files/runtime.env
+cp ../../automation/ollama-aws-hybrid/.env.example files/runtime.env
 ansible-vault encrypt files/runtime.env
 ```
 
@@ -185,21 +185,21 @@ plaintext and must retain its restrictive permissions.
 Verify the host, then prepare the application directory:
 
 ```shell
-ansible-playbook verify-host.yaml
-ansible-playbook --ask-vault-pass setup.yaml
+ansible-playbook verify-host.yml
+ansible-playbook --ask-vault-pass setup.yml
 ```
 
-Run `setup.yaml` a second time to confirm idempotency. The second run should
+Run `setup.yml` a second time to confirm idempotency. The second run should
 report no changes when the deployed configuration is already current.
 
 Deploy the stack:
 
 ```shell
-ansible-playbook deploy.yaml
+ansible-playbook deploy.yml
 ```
 
 To stop the stack while preserving volumes:
 
 ```shell
-ansible-playbook teardown.yaml
+ansible-playbook teardown.yml
 ```

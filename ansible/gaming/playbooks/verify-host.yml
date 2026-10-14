@@ -48,4 +48,4 @@
       ansible.builtin.assert:
         that:
           - selected_compose_file.stat.exists
-        fail_msg: "Run setup.yaml for game_stack={{ selected_game_stack }} first"
+        fail_msg: "Run setup.yml for game_stack={{ selected_game_stack }} first"

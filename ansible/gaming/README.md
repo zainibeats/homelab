@@ -8,17 +8,17 @@ The playbooks copy the existing Compose stacks from `gaming/minecraft` or `gamin
 
 - `inventory/oci-game-hosts.example.yml` - Inventory template for the OCI host.
 - `files/*.env.vault` - Vault-managed runtime env files, created from the game stack `.env.example` files.
-- `playbooks/setup.yaml` - Prepare the host and copy the selected game stack.
-- `playbooks/deploy.yaml` - Start the selected stack and stop the other stack by default.
-- `playbooks/teardown.yaml` - Stop the selected stack.
-- `playbooks/verify-host.yaml` - Check Docker and selected stack setup.
+- `playbooks/setup.yml` - Prepare the host and copy the selected game stack.
+- `playbooks/deploy.yml` - Start the selected stack and stop the other stack by default.
+- `playbooks/teardown.yml` - Stop the selected stack.
+- `playbooks/verify-host.yml` - Check Docker and selected stack setup.
 
 ## Setup
 
 Run commands from this directory:
 
 ```bash
-cd automation/ansible/gaming
+cd ansible/gaming
 ```
 
 Create the inventory:
@@ -52,38 +52,38 @@ The real `*.env.vault` files are ignored locally by default. Remove the ignore r
 Prepare the OCI host for Minecraft:
 
 ```bash
-ansible-playbook playbooks/setup.yaml -e game_stack=minecraft --ask-vault-pass
+ansible-playbook playbooks/setup.yml -e game_stack=minecraft --ask-vault-pass
 ```
 
 Deploy Minecraft:
 
 ```bash
-ansible-playbook playbooks/deploy.yaml -e game_stack=minecraft
+ansible-playbook playbooks/deploy.yml -e game_stack=minecraft
 ```
 
 Switch the same OCI host to Palworld:
 
 ```bash
-ansible-playbook playbooks/setup.yaml -e game_stack=palworld --ask-vault-pass
-ansible-playbook playbooks/deploy.yaml -e game_stack=palworld
+ansible-playbook playbooks/setup.yml -e game_stack=palworld --ask-vault-pass
+ansible-playbook playbooks/deploy.yml -e game_stack=palworld
 ```
 
-`deploy.yaml` stops the other known game stack first when `gaming_stop_other_stack` is true. Override it only when you intentionally want to leave another stack running:
+`deploy.yml` stops the other known game stack first when `gaming_stop_other_stack` is true. Override it only when you intentionally want to leave another stack running:
 
 ```bash
-ansible-playbook playbooks/deploy.yaml -e game_stack=palworld -e gaming_stop_other_stack=false
+ansible-playbook playbooks/deploy.yml -e game_stack=palworld -e gaming_stop_other_stack=false
 ```
 
 Verify the host:
 
 ```bash
-ansible-playbook playbooks/verify-host.yaml -e game_stack=minecraft
+ansible-playbook playbooks/verify-host.yml -e game_stack=minecraft
 ```
 
 Stop a stack:
 
 ```bash
-ansible-playbook playbooks/teardown.yaml -e game_stack=minecraft
+ansible-playbook playbooks/teardown.yml -e game_stack=minecraft
 ```
 
 ## Runtime Paths

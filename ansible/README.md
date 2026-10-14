@@ -3,7 +3,8 @@
 This setup provides shared Ansible automation for managing homelab and cloud servers. It is organized into subdirectories by service:
 
 - **`server-admin/`**: General server administration tasks (e.g., package updates).
-- **`gaming/`**: Gaming-related infrastructure automation.
+- **`gaming/`**: Deploys one game stack from `gaming/` onto the OCI game host.
+- **`ollama-aws-hybrid/`**: Prepares and deploys the [Ollama AWS Hybrid](../automation/ollama-aws-hybrid/README.md) stack on its EC2 host.
 
 ## Inventory
 
@@ -23,7 +24,7 @@ Hosts are grouped by purpose:
 ## Configuration
 
 1. **Ansible Config**
-   Each subdirectory (e.g., `server-admin/` and `gaming/`) contains its own `ansible.cfg`. This ensures that the correct inventory and variables are loaded when running tasks from those specific directories.
+   Each subdirectory contains its own `ansible.cfg`. This ensures that the correct inventory and variables are loaded when running tasks from those specific directories.
 
 2. **Inventory Setup**
    Copy the example inventory and replace the placeholder hostnames, ports, users, and SSH key path for the server admin setup:
@@ -48,7 +49,7 @@ Run commands from the appropriate subdirectory:
 
 ```bash
 # For server administration
-cd automation/ansible/server-admin
+cd ansible/server-admin
 ansible all -m ping
 ansible-playbook playbooks/update-packages.yml --ask-become-pass
 ```

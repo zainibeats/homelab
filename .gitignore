@@ -26,9 +26,9 @@ terraform.tfvars
 *.tfstate.*
 
 # Automation and Configuration
-automation/ollama-aws-hybrid/ansible/open-webui-ec2-instance.yaml
-automation/ollama-aws-hybrid/ansible/check.output
-automation/ansible/server-admin/inventory/hosts.yml
+/ansible/ollama-aws-hybrid/open-webui-ec2-instance.yml
+/ansible/ollama-aws-hybrid/check.output
+/ansible/server-admin/inventory/hosts.yml
 app.ini
 traefik.yml
 pi5.yml
