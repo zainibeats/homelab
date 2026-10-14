@@ -2,7 +2,7 @@
 
 This directory is a [Claude Code](https://claude.com/claude-code) context bundle for working with a separate Obsidian vault — a personal "Second Brain" (PARA-organized) that uses the [TaskNotes](https://tasknotes.dev/) plugin for task management. The vault itself lives outside this repo (synced via Syncthing); these files are the reference material an agent reads before touching it.
 
-It isn't deployed by any Docker Compose file in `ai-stack/` — it's kept here for version control alongside the rest of the AI tooling in this repo. See [Deployment layout](#deployment-layout) below for where each file actually needs to live to take effect.
+It isn't deployed by any Docker Compose file — it's kept here for version control alongside the rest of the AI tooling in this repo. See [Deployment layout](#deployment-layout) below for where each file actually needs to live to take effect.
 
 ## Contents
 
