@@ -1,111 +1,71 @@
 # Immich
 
-Immich is a high-performance self-hosted photo and video backup solution that provides Google Photos-like features.
+Immich is a high-performance, self-hosted photo and video backup solution with Google Photos-like features. Media lives on the NAS over SMB; the database stays on local storage.
+
+**Runs on:** Application Server
 
 ## Prerequisites
 
-1. SMB share mounted at `/mnt/truenas_data/immich`
-2. Proper permissions set on the SMB share (owned by the container user, typically UID 1000)
+- The [Traefik](../../networking/traefik/README.md) stack running on the same host (it creates the external `traefik-proxy` network).
+- The NAS SMB share mounted at `/mnt/truenas_data/immich`, owned by UID/GID `1000`:
 
-## Configuration
-
-### 1. SMB Storage Setup
-
-Ensure your SMB share is properly mounted at `/mnt/truenas_data/immich` with the following steps:
-
-```bash
-# Create the mount point directories
-sudo mkdir -p /mnt/truenas_data/immich/{library,postgres}
-
-# Add to /etc/fstab (replace <smb-server-ip> and </path/on/smb> with your details)
-# Example: //192.168.1.100/ImmichData /mnt/truenas_data/immich cifs credentials=/etc/smb_credentials,uid=1000,gid=1000,iocharset=utf8,nofail 0 0
-sudo nano /etc/fstab
-<smb-server-ip>:<path/on/smb> /mnt/smb/immich cifs credentials=/etc/smb_credentials,uid=1000,gid=1000,iocharset=utf8,nofail 0 0
-
-# Mount the SMB share
-sudo mount -a
-
-# Set correct ownership (adjust UID/GID if needed)
-sudo chown -R 1000:1000 /mnt/truenas_data/immich
-```
-
-### 2. Environment Configuration
-
-Edit the `.env` file with your preferred text editor:
-
-```bash
-nano .env
-```
-
-Update the following variables:
-
-```ini
-# Set your timezone (e.g., America/Los_Angeles, Europe/London)
-TZ=America/Los_Angeles
-
-# Set a strong database password
-DB_PASSWORD=your_secure_password_here
-
-# Verify the upload location points to your SMB mount
-UPLOAD_LOCATION=/mnt/truenas_data/immich/library
-
-# Verify the database location (local storage recommended for DB)
-DB_DATA_LOCATION=./postgres
-```
+  ```bash
+  sudo mkdir -p /mnt/truenas_data/immich
+  # /etc/fstab (replace the server, share, and credentials file):
+  # //192.168.1.100/ImmichData /mnt/truenas_data/immich cifs credentials=/etc/smb_credentials,uid=1000,gid=1000,iocharset=utf8,nofail 0 0
+  sudo mount -a
+  sudo mkdir -p /mnt/truenas_data/immich/library
+  sudo chown -R 1000:1000 /mnt/truenas_data/immich
+  ```
 
 ## Setup
 
-1. Start the Immich services:
+```bash
+cp .env.example .env
+# set TZ and DB_PASSWORD, then:
+docker compose up -d
+```
 
-   ```bash
-   docker compose up -d
-   ```
+Open the web UI, create the admin account, and start uploading.
 
-2. Access the web interface at `http://<your-server-ip>:2283`
+## Configuration
 
-3. Create an admin account and start uploading photos
+- `DOMAIN` - Base domain for the Traefik routes (`immich.${DOMAIN}`).
+- `SUBDOMAIN` - LAN subdomain for the second route (`immich.${SUBDOMAIN}.${DOMAIN}`).
+- `UPLOAD_LOCATION` - Where media is stored: the SMB mount, `/mnt/truenas_data/immich/library`.
+- `DB_DATA_LOCATION` - Postgres data directory, `./postgres`. Must be local storage; network shares aren't supported for the database.
+- `TZ` - Timezone, e.g. `America/Los_Angeles`.
+- `IMMICH_VERSION` - Image tag, `release` or a pinned version like `v1.71.0`.
+- `DB_PASSWORD` - Postgres password. Use only `A-Za-z0-9`.
+- `DB_USERNAME` - Postgres user (`postgres`); no need to change.
+- `DB_DATABASE_NAME` - Postgres database (`immich`); no need to change.
 
-## Data Storage
+See the [Immich environment variables](https://immich.app/docs/install/environment-variables) for more. Hardware acceleration is off; the compose file has commented `extends` blocks for it.
 
-Immich stores different types of data in the following locations:
+## Routing & Ports
 
-- **Media Files**: `/mnt/truenas_data/immich/library` (SMB share)
-- **Database**: `./postgres` (local storage)
-- **Machine Learning Models**: Docker volume `immich_model-cache`
+- `immich.${DOMAIN}` and `immich.${SUBDOMAIN}.${DOMAIN}` - Web UI through Traefik (`websecure`, `cloudflare` resolver).
+- `2283` - Web UI and API (`http://<host>:2283`).
+- Networks: `immich-net` (internal) and the external `traefik-proxy` (server only).
 
-## Maintenance
+## Data & Backups
 
-### Backups
+- `/mnt/truenas_data/immich/library` - Media files (SMB share). Covered by the NAS backup.
+- `./postgres` - Database (local). Back it up regularly:
 
-1. **Media Files**: Since media is stored on the SMB share, ensure you have a backup solution for your NAS.
+  ```bash
+  docker exec immich_postgres pg_dump -U postgres immich > immich_backup_$(date +%Y%m%d).sql
+  ```
 
-2. **Database**: Backup the PostgreSQL database regularly:
-
-   ```bash
-   docker exec immich_postgres pg_dump -U postgres immich > immich_backup_$(date +%Y%m%d).sql
-   ```
-
-## Security Considerations
-
-- Always use strong, unique passwords for the database and admin accounts
-- Consider setting up a reverse proxy with HTTPS (e.g., Nginx Proxy Manager)
-- Regularly update Immich to receive security patches
-- The database should always be stored on local storage, not on SMB
+- `model-cache` volume - Machine learning models; re-downloaded if lost.
 
 ## Troubleshooting
 
-### Permission Issues
-
-If you encounter permission issues with the SMB share:
+Permission errors on the SMB share:
 
 ```bash
-# Check the current owner of the SMB directory
 ls -la /mnt/truenas_data/immich
-
-# Set correct ownership (adjust UID/GID as needed)
 sudo chown -R 1000:1000 /mnt/truenas_data/immich
 ```
 
-## Documentation
-
-For more detailed documentation, visit the [official Immich documentation](https://immich.app/docs/).
+See the [Immich documentation](https://immich.app/docs/) for more.

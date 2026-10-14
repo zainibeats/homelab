@@ -1,64 +1,60 @@
 # Nextcloud
 
-Nextcloud is a suite of client-server software for creating and using file hosting services. It provides functionality similar to Dropbox, Office 365, or Google Drive when used with its integrated office suites Collabora Online or OnlyOffice.
+Nextcloud is a self-hosted file hosting suite, similar to Dropbox or Google Drive, with optional office integration (Collabora Online, OnlyOffice). This stack runs `nextcloud:latest` with MariaDB 10.6; user files live on the NAS over NFS.
+
+**Runs on:** Application Server
 
 ## Prerequisites
 
-1. NFS share mounted at `/mnt/nfs/apps/nextcloud`
-2. Proper permissions set on the NFS share (owned by UID 1005:GID 1005)
+- The [Traefik](../../networking/traefik/README.md) stack running on the same host (it creates the external `traefik-proxy` network).
+- The NFS share mounted at `/mnt/nfs/apps/nextcloud`, owned by `1005:1005`:
 
-## Configuration
-
-### 1. NFS Storage Setup
-
-Ensure your NFS share is properly mounted at `/mnt/nfs/apps/nextcloud` with the following steps:
-
-```bash
-# Create the mount point and nextcloud directory
-sudo mkdir -p /mnt/nfs/apps/nextcloud
-
-# Add to /etc/fstab (replace <nfs-server-ip> and <exported/path> with your details)
-# Example: 192.168.1.100:/mnt/pool/nextcloud /mnt/nfs/apps/nextcloud nfs defaults 0 0
-sudo nano /etc/fstab
-<nfs-server-ip>:<exported/path> /mnt/nfs/apps/nextcloud nfs defaults 0 0
-
-# Mount the NFS share
-sudo mount -a
-
-# Set correct ownership (adjust UID/GID if needed)
-sudo chown -R 1005:1005 /mnt/nfs/apps/nextcloud
-```
-
-### 2. Database Configuration
-
-Update the following environment variables in `docker-compose.yml`:
-
-1. In the `db` service:
-   - `MYSQL_ROOT_PASSWORD`: Choose a strong password for the MariaDB root user
-   - `MYSQL_PASSWORD`: Choose a strong password for the Nextcloud database user
-
-2. In the `app` service:
-   - Ensure `MYSQL_PASSWORD` matches the one set for the `db` service
-   - The `PUID` and `PGID` are set to 1005 by default to match the NFS share permissions
-
-### 3. Port Configuration
-
-By default, Nextcloud is accessible on port 8080 via the internal mapping. However, it is also configured with Traefik labels for domain-based access via port 80/443.
+  ```bash
+  sudo mkdir -p /mnt/nfs/apps/nextcloud
+  # /etc/fstab (replace the server and export path):
+  # 192.168.1.100:/mnt/pool/nextcloud /mnt/nfs/apps/nextcloud nfs defaults 0 0
+  sudo mount -a
+  sudo chown -R 1005:1005 /mnt/nfs/apps/nextcloud
+  ```
 
 ## Setup
 
-1. Navigate to the `nextcloud` directory:
+```bash
+cp .env.example .env
+# set the passwords and PUID/PGID, then:
+docker compose up -d
+```
 
-   ```bash
-   cd nextcloud
-   ```
+Open `http://<host>:8080` and finish the setup wizard with database host `db`, database `nextcloud`, user `nextcloud`, and the `MYSQL_PASSWORD` from `.env` (the database name and user are fixed in the compose file).
 
-2. Start the services using Docker Compose:
+Add each hostname you use to the trusted domains:
 
-   ```bash
-   docker compose up -d
-   ```
+```bash
+docker exec --user www-data nextcloud php occ config:system:set trusted_domains 3 --value=nextcloud.domain.tld
+```
 
-Nextcloud should now be accessible at `http://<your-server-ip>:8080` (or the custom port you configured). Follow the on-screen setup instructions, using `db` as the database host and the database credentials you set in the `docker-compose.yml`.
+## Configuration
 
-> To configure trusted domains: `docker exec --user www-data nextcloud php occ config:system:set trusted_domains 3 --value=nextcloud.domain.tld`
+- `MYSQL_ROOT_PASSWORD` - MariaDB root password.
+- `MYSQL_PASSWORD` - Password for the `nextcloud` database user (used by both containers).
+- `PUID` - User ID passed to the app container. Set it to the NFS share owner (`1005` in my setup; the example has `1000`).
+- `PGID` - Group ID passed to the app container (`1005` in my setup).
+- `DOMAIN` - Base domain for the Traefik routes (`nextcloud.${DOMAIN}`).
+- `SUBDOMAIN` - LAN subdomain for the second route (`nextcloud.${SUBDOMAIN}.${DOMAIN}`).
+
+## Routing & Ports
+
+- `nextcloud.${DOMAIN}` and `nextcloud.${SUBDOMAIN}.${DOMAIN}` - Web UI through Traefik (`websecure`, `cloudflare` resolver).
+- `8080` → `80` - Web UI on the host.
+- Networks: `nextcloud-net` (internal, with MariaDB) and the external `traefik-proxy`.
+
+## Data & Backups
+
+- `/mnt/nfs/apps/nextcloud` → `/var/www/html/data` - User files (NFS). Covered by the NAS backup.
+- `nextcloud` volume → `/var/www/html` - Nextcloud code, apps, and `config/config.php`. Back up `config.php`.
+- `db` volume - MariaDB data. Back up with `mysqldump`.
+
+## Troubleshooting
+
+- "Access through untrusted domain": add the hostname with the `occ` command in Setup.
+- Permission errors in the data directory: the official image runs PHP as `www-data`, so the NFS share must let that user write (check the share's owner and mapping on the NAS).
