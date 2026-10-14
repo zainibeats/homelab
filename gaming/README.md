@@ -30,5 +30,5 @@ Players connect through NetBird to `<address>:<port>`.
 WireGuard may be used as an alternative to Netbird. The full setup steps are in the [WireGuard README](../infrastructure/wireguard/README.md).
 
 ### Infrastructure vs Game Runtime
-The shared OCI Terraform configuration in [infrastructure](../infrastructure/terraform/oci/free-tier-host/README.md) manages the reusable host pattern, while each game directory owns its Docker Compose stack, environment variables, and game-specific data.
+The shared OCI Terraform configuration in [terraform](../terraform/oci/free-tier-host/README.md) manages the reusable host pattern, while each game directory owns its Docker Compose stack, environment variables, and game-specific data.
 

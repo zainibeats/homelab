@@ -1,6 +1,6 @@
 # Gaming Ansible
 
-Ansible automation for deploying one game stack at a time onto the reusable OCI Debian-based host from `infrastructure/terraform/oci/free-tier-host`.
+Ansible automation for deploying one game stack at a time onto the reusable OCI Debian-based host from `terraform/oci/free-tier-host`.
 
 The playbooks copy the existing Compose stacks from `gaming/minecraft` or `gaming/palworld`, install Docker host prerequisites, decrypt a Vault-managed `.env`, and start the selected stack.
 

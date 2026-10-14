@@ -6,7 +6,7 @@ deployment.
 Use this when the public Open WebUI entry point should run in AWS while the
 Ollama service remains on a local homelab machine. The application deployment
 and Ansible workflow live in
-[`automation/ollama-aws-hybrid`](../../../../automation/ollama-aws-hybrid/README.md).
+[`automation/ollama-aws-hybrid`](../../../automation/ollama-aws-hybrid/README.md).
 
 ## Layout
 
@@ -28,7 +28,7 @@ not a zone name such as `us-west-2b`.
 After `terraform apply`, use the `public_ip` output for the Cloudflare DNS
 record and the `ssh_command` output for host access. Continue with the
 deployment workflow in
-[`automation/ollama-aws-hybrid`](../../../../automation/ollama-aws-hybrid/README.md).
+[`automation/ollama-aws-hybrid`](../../../automation/ollama-aws-hybrid/README.md).
 
 This project currently uses local Terraform state. Keep `terraform.tfvars` and
 state files out of git.

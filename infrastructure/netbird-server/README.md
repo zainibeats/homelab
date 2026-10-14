@@ -13,7 +13,7 @@ My self-hosted NetBird control plane: the combined server, the dashboard, the Ne
 ## Host
 
 - **ufw:** deny all incoming, allow `22/tcp` from anywhere. Docker's published ports bypass ufw, so the NetBird ports don't need ufw rules.
-- **OCI security list** (see [free-tier-host](../terraform/oci/free-tier-host/README.md#firewall)):
+- **OCI security list** (see [free-tier-host](../../terraform/oci/free-tier-host/README.md#firewall)):
   - `22/tcp` from the control node or jump server only.
   - `80/tcp`, `443/tcp`, `3478/udp` and `51820/udp` from anywhere.
 - **DNS** (Cloudflare, DNS only):
