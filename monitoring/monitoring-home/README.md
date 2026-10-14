@@ -1,87 +1,64 @@
-# Monitoring Stack
+# Monitoring (Home)
 
-This setup is based on the configuration provided by [brandonleegit/OpenSourceMonitoring](https://github.com/brandonleegit/OpenSourceMonitoring).
+The on-prem monitoring stack: Prometheus for metrics, Loki and Promtail for logs, Grafana for dashboards, Node Exporter for host metrics, and cAdvisor (with Redis) for container metrics. It is based on [brandonleegit/OpenSourceMonitoring](https://github.com/brandonleegit/OpenSourceMonitoring). The OCI stack is in [monitoring-oci](../monitoring-oci/README.md).
 
-This directory contains a Docker Compose setup for a basic monitoring stack using:
+**Runs on:** Raspberry Pi
 
-- **Prometheus**: Time-series database and monitoring system.
-- **Grafana**: Visualization and analytics platform.
-- **Node Exporter**: Exporter for hardware and OS metrics exposed by *NIX kernels.
-- **cAdvisor**: Analyzes resource usage and performance characteristics of running containers.
+## Prerequisites
 
-## Configuration
+- The [Traefik](../../networking/traefik/README.md) stack running on the same host (it creates the external `traefik-proxy` network).
+- Host directories for Prometheus and Grafana data, owned by UID/GID `1000`:
 
-1. **Host Directory Setup**: Create the necessary directory structure and placeholder files on your host machine using the following commands in your home directory (`~`). You can copy the entire block and paste it into your terminal:
-
-   ```bash
-   mkdir -p ~/promgrafnode/prometheus
-   mkdir -p ~/promgrafnode/grafana/provisioning/datasources
-   touch ~/promgrafnode/docker-compose.yml
-   touch ~/promgrafnode/prometheus/prometheus.yml
-   ```
-
-2. **Prometheus Configuration**: The Prometheus service mounts a configuration file from `~/promgrafnode/prometheus/prometheus.yml` on the host.
-   - A basic `prometheus.yml` is provided in *this* directory (`monitoring-home/prometheus/prometheus.yml`). Copy its contents, or the file itself, to `~/promgrafnode/prometheus/prometheus.yml` on your host machine. Adjust the configuration if needed.
-
-3. **Grafana Configuration & Data**: Grafana mounts volumes for its data (`~/promgrafnode/grafana`) and provisioning (`~/promgrafnode/grafana/provisioning/datasources`). The necessary directories should have been created in step 1.
-   - You can place datasource configuration files in `~/promgrafnode/grafana/provisioning/datasources`, such as a file that automatically adds the Prometheus datasource.
-
-4. **Permissions (PUID/PGID)**: The `prometheus` and `grafana` services are configured to run with user/group ID `1000`. Ensure the host directories (`~/promgrafnode/*`) have appropriate permissions for this user/group, or update the `user` directive in the `docker-compose.yml` to match a user/group that owns the directories.
-
-5. **Volumes**: Ensure the host paths used for volumes exist and have the correct permissions:
-   - `~/promgrafnode/prometheus/prometheus.yml`
-   - `~/promgrafnode/prometheus`
-   - `~/promgrafnode/grafana/provisioning/datasources`
-   - `~/promgrafnode/grafana`
+  ```bash
+  mkdir -p ~/promgrafnode/prometheus
+  mkdir -p ~/promgrafnode/grafana/provisioning/datasources
+  ```
 
 ## Setup
 
-1. Ensure all configuration steps above are completed.
+The compose file is tracked as `docker-compose.example.yml`; the live `docker-compose.yml` is gitignored so it can be adjusted per host.
 
-2. Run the Node Exporter container on machines to be monitored.
+```bash
+cp docker-compose.example.yml docker-compose.yml
+cp .env.example .env
+cp prometheus/prometheus.yml ~/promgrafnode/prometheus/prometheus.yml
+docker compose up -d
+```
 
-   ```yaml
-   # docker-compose.yml example
-   networks:
-     monitoring:
-       driver: bridge
-   volumes:
-     prometheus_data: {}
-   services:
-     node-exporter:
-       image: prom/node-exporter:latest
-       container_name: node-exporter
-       restart: unless-stopped
-       volumes:
-         - /proc:/host/proc:ro
-         - /sys:/host/sys:ro
-         - /:/rootfs:ro
-       command:
-         - '--path.procfs=/host/proc'
-         - '--path.rootfs=/rootfs'
-         - '--path.sysfs=/host/sys'
-         - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-       ports:
-         - 9100:9100
-       networks:
-         - monitoring
-   ```
+On every other machine to be monitored, run only Node Exporter with the standalone [`node-exporter/docker-compose.yml`](./node-exporter/docker-compose.yml) (`docker compose up -d` in that folder), then add the machine as a target in `prometheus.yml`.
 
-3. Navigate to the `monitoring` directory:
+Grafana provisions only the Loki datasource (as the default) through its entrypoint. Add Prometheus (`http://prometheus:9090`) in Grafana under **Connections → Data sources**.
 
-   ```bash
-   cd monitoring
-   ```
+## Configuration
 
-4. Start the services using Docker Compose:
+- `DOMAIN` - Base domain for the Grafana Traefik route (`grafana.${DOMAIN}`).
 
-   ```bash
-   docker compose up -d
-   ```
+Other settings are fixed in the compose file:
 
-## Accessing Services
+- `prometheus` and `grafana` run as user `1000`. Change the `user` directive if the host directories belong to another user.
+- Grafana has anonymous access enabled with the **Admin** role (`GF_AUTH_ANONYMOUS_ENABLED=true`, `GF_AUTH_ANONYMOUS_ORG_ROLE=Admin`), so anyone who can reach it has full access. Keep it on trusted networks.
+- Prometheus targets are in `~/promgrafnode/prometheus/prometheus.yml` (sample in [`prometheus/prometheus.yml`](./prometheus/prometheus.yml)).
 
-- **Prometheus**: `http://<your-server-ip>:9090`
-- **Grafana**: `http://<your-server-ip>:3000` (Default login: admin/admin)
-- **Node Exporter Metrics**: `http://<your-server-ip>:9100/metrics`
-- **cAdvisor**: `http://<your-server-ip>:8080` (Requires `redis` service)
+## Routing & Ports
+
+- `grafana.${DOMAIN}` - Grafana through Traefik (`websecure`, `cloudflare` resolver).
+- `3000` - Grafana.
+- `9090` - Prometheus.
+- `9100` - Node Exporter metrics (`/metrics`).
+- `3100` - Loki.
+- `8080` - cAdvisor.
+- `6379` - Redis (used by cAdvisor).
+- Networks: `monitoring` (internal bridge) and `traefik-proxy` (external, Grafana only).
+
+## Data & Backups
+
+- `~/promgrafnode/prometheus` - Prometheus TSDB and config. Back up `prometheus.yml`; the TSDB is optional.
+- `~/promgrafnode/grafana` - Grafana database (dashboards, users). Back this up.
+- `~/promgrafnode/grafana/provisioning/datasources` - Datasource provisioning files.
+- Loki and Redis keep data inside their containers (no volumes); it is lost when they are recreated.
+- Read-only host mounts: `/proc`, `/sys`, `/` (Node Exporter, cAdvisor), `/var/log` (Promtail), `/var/lib/docker` (cAdvisor).
+
+## Troubleshooting
+
+- Prometheus or Grafana fails with permission errors: the `~/promgrafnode` directories must be writable by UID `1000`.
+- No Prometheus data in Grafana: the Prometheus datasource isn't provisioned automatically; add it (see Setup).
