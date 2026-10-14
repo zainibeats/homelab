@@ -1,39 +1,49 @@
 # NetBird Client
 
-NetBird Client provides a lightweight VPN client that connects your host to the NetBird mesh network, enabling secure remote access and service discovery across my homelab and/or game servers.
+NetBird Client connects the host to the NetBird mesh network, giving secure remote access to the homelab and game servers.
 
-It's also the routing peer for the `services` Docker network. Containers with a static IP on it are reachable by NetBird peers once the subnet is a [network resource](https://docs.netbird.io/manage/networks) routed by this client.
+It is also the routing peer for the `services` Docker network. Containers with a static IP on it are reachable by NetBird peers once the subnet is a [network resource](https://docs.netbird.io/manage/networks) routed by this client.
+
+**Runs on:** Oracle (OCI) always; any other host that joins the NetBird network (project dependent)
+
+## Prerequisites
+
+- A running [NetBird Server](../netbird-server/README.md) and a setup key from its dashboard.
+- A private `/24` for the `services` network that is unique per host and doesn't overlap any NetBird client's local or Docker networks.
+
+## Setup
+
+```shell
+cp .env.example .env
+# fill in .env, then:
+docker compose up -d
+```
+
+On the host running [netbird-server](../netbird-server/README.md), start that stack first and set `SERVICES_EXTERNAL=true` here.
 
 ## Configuration
 
 | Variable | Description |
 |----------|-------------|
-| `HOSTNAME` | Host name to register in NetBird. |
+| `HOSTNAME` | Host name to register in NetBird (passed as `NB_HOSTNAME`). |
 | `NB_SETUP_KEY` | NetBird setup key for onboarding the client. |
 | `NB_MANAGEMENT_URL` | URL of the NetBird management server (e.g. `https://netbird.domain.tld`). |
-| `SERVICES_SUBNET`, `SERVICES_GATEWAY`, `NETBIRD_CLIENT_IP` | The `services` network and this client's IP on it. All three are required. The subnet must be private and must not overlap any NetBird client's networks, so use a different one per host. |
-| `SERVICES_EXTERNAL` | Set to `true` on the host running [netbird-server](../netbird-server/README.md), which creates `services` itself. |
+| `SERVICES_SUBNET` | Subnet of the `services` network (required). |
+| `SERVICES_GATEWAY` | Gateway of the `services` network (required). |
+| `NETBIRD_CLIENT_IP` | This client's static IP on `services` (required). |
+| `SERVICES_EXTERNAL` | `true` on the host running netbird-server, which creates `services` itself (`SERVICES_SUBNET` must then match that stack's `.env`). Defaults to `false`. |
 
-All variables are supplied via `.env` (copy `.env.example`).
+## Routing & Ports
 
-## Deployment
+- No published ports.
+- Creates the `services` bridge network (or joins it when `SERVICES_EXTERNAL=true`). Matrix, the game servers, and other stacks attach to it at static IPs.
 
-```sh
-docker compose up -d
-```
+## Data & Backups
 
-The image is pinned to the NetBird server's version and excluded from Watchtower, so [upgrade them together](../netbird-server/README.md#upgrading).
+- `./netbird` → `/var/lib/netbird` - Client identity and state (root-owned). Back it up to keep the same peer identity after a rebuild.
 
-## Usage
+## Troubleshooting
 
-Once running, your host becomes part of the NetBird mesh. You can verify connectivity with:
-
-```sh
-docker exec netbird-client netbird status
-```
-
-or by checking the NetBird dashboard for the new node.
-
----
-
-*For advanced options (e.g., custom certificates or policy configuration), refer to the official [NetBird documentation](https://docs.netbird.io).*
+- Check connectivity: `docker exec netbird-client netbird status`, or look for the node in the NetBird dashboard.
+- The image is pinned to the NetBird server's version and excluded from Watchtower, so [upgrade them together](../netbird-server/README.md#upgrading).
+- For advanced options (custom certificates, policies), see the [NetBird documentation](https://docs.netbird.io).
