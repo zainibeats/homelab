@@ -1,129 +1,73 @@
 # Minecraft Server
 
-My self-hosted Minecraft server running in Docker with NetBird for remote access. Based on the `itzg/minecraft-server` image, with optional support for CurseForge modpacks, extra mods, and Vanilla Tweaks.
+My self-hosted Minecraft server, reachable privately over NetBird. Based on the `itzg/minecraft-server` image, with optional support for CurseForge modpacks, extra mods, and Vanilla Tweaks.
 
----
+**Runs on:** Oracle (OCI)
 
 ## Prerequisites
 
-- Docker Engine
-- Docker Compose
+- A Debian/Ubuntu host with Docker Engine and Docker Compose (the [gaming Ansible playbooks](../../ansible/gaming/README.md) can prepare it).
+- [NetBird Client](../../networking/netbird-client/README.md) running on the host (it routes the `services` network), and a NetBird policy allowing TCP `25565` to the `services` resource.
 
-The instructions assume the host is a Debian/Ubuntu VM that already has Docker installed.
-
----
-
-## Deployment
-
-### Docker Compose
-
-A single [docker-compose.yml](./docker-compose.yml) file defines the Minecraft container. It publishes no ports; it joins the NetBird-routed `services` network at `MINECRAFT_IP`.
-
-> **Note**
-> `$USERNAME` should be replaced with your Minecraft username or the UUID of operators/whitelisted players.
-
-### NetBird Remote Access
-
-NetBird is the preferred remote access method for this server. See the shared [Gaming Services README](../README.md#remote-access) for the NetBird setup details.
-
-Start [NetBird Client](../../networking/netbird-client/README.md) first (it routes `services`), set `MINECRAFT_IP` in `.env`, then start the stack with:
+## Setup
 
 ```bash
+cp .env.example .env
+# set MINECRAFT_IP and the server settings, then:
 docker compose up -d
 ```
 
-### WireGuard Alternative
+The first run downloads the image, and the modpack too if the CurseForge settings are enabled, which can take several minutes. Stop with `docker compose down`.
 
-WireGuard can still be used as a fallback when NetBird is not available. The full setup steps are in the [WireGuard README](../../networking/wireguard/README.md), and an example Minecraft-specific configuration is available in the [Minecraft WireGuard template](../../networking/wireguard/templates/minecraft-server.conf).
+### Modpacks and extra mods
 
----
+The modpack settings are commented out in [docker-compose.yml](./docker-compose.yml). To use them, set the values in `.env` and uncomment the matching lines:
+
+- **CurseForge modpack:** `TYPE`, `CF_API_KEY`, `CF_PAGE_URL`. The container pulls the modpack from `CF_PAGE_URL`.
+- **Extra mods:** add CurseForge slugs or IDs to `CURSEFORGE_FILES` (separated by commas, spaces, or newlines):
+  ```yaml
+  CURSEFORGE_FILES: |
+    geckolib
+    aquaculture
+  ```
+- **Vanilla Tweaks:** set `VANILLATWEAKS_SHARECODE`, or put JSON files in `config/`, uncomment the read-only mounts, and set `VANILLATWEAKS_FILE` (`/config/vanillatweaks-datapacks.json,/config/vanillatweaks-resourcepacks.json`). `REMOVE_OLD_VANILLATWEAKS` removes older entries at startup.
+- **Performance:** `MEMORY` (JVM heap, e.g. `14336M`), `USE_AIKAR_FLAGS=true` (Aikar's flags for CPU-bound workloads), `USE_MEOWICE_FLAGS=true` (Meowice's lightweight optimizations).
 
 ## Configuration
 
-### Environment Variables
-
 | Variable | Purpose | Example |
-|----------|---------|--------|
-| `EULA` | Accept Minecraft EULA | `"TRUE"` |
-| `MINECRAFT_IP` | Static IP on the `services` network | `"10.110.2.40"` |
-| `TZ` | Container timezone | `"America/Los_Angeles"` |
-| `MAX_PLAYERS` | Max simultaneous players | `"5"` |
-| `MOTD` | Server message of the day | `"Welcome to My Server"` |
-| `DIFFICULTY` | Minecraft difficulty | `"2"` |
-| `PVP` | Enable player-vs-player combat | `"false"` |
-| `LEVEL` | World name | `"My Server"` |
-| `SEED` | World seed, or blank for random | `""` |
-| `OPS` / `WHITELIST` | List of operators/whitelisted usernames separated by newlines | `$USERNAME\nANOTHER_USER` |
+|----------|---------|---------|
+| `EULA` | Accept the Minecraft EULA (also hard-coded to `TRUE` in compose) | `TRUE` |
+| `MINECRAFT_IP` | Static IP on the `services` network | `10.110.2.40` |
+| `TZ` | Container timezone | `America/Los_Angeles` |
+| `MAX_PLAYERS` | Max simultaneous players | `5` |
+| `MOTD` | Server message of the day | `Welcome to My Server` |
+| `DIFFICULTY` | Minecraft difficulty | `2` |
+| `PVP` | Enable player-vs-player combat | `false` |
+| `LEVEL` | World name | `My Server` |
+| `SEED` | World seed, or blank for random | |
+| `OPERATOR1` | Operator username; also whitelisted | `zainibeats` |
+| `USER1` | Extra whitelisted username | `username2` |
+| `TYPE` | Modpack type (optional) | `AUTO_CURSEFORGE` |
+| `CF_API_KEY` | CurseForge API key (optional) | |
+| `CF_PAGE_URL` | Modpack page URL (optional) | |
+| `VANILLATWEAKS_SHARECODE` | Vanilla Tweaks share code (optional) | |
+| `MEMORY` | JVM heap size (optional) | `14336M` |
+| `USE_AIKAR_FLAGS` | Aikar's JVM flags (optional) | `true` |
+| `USE_MEOWICE_FLAGS` | Meowice's JVM flags (optional) | `true` |
 
-### Optional Modpack Variables
+The whitelist is enabled (`ENABLE_WHITELIST=true`). To add more players, add variables to `.env` and list them under `WHITELIST` (and `OPS`) in the compose file.
 
-The default compose stack keeps the modpack-specific variables commented out. Uncomment the matching section in [docker-compose.yml](./docker-compose.yml) when you need CurseForge, extra mods, or Vanilla Tweaks.
+## Routing & Ports
 
-| Variable | Purpose | Example |
-|----------|---------|--------|
-| `TYPE` | Modpack type (CurseForge) | `"AUTO_CURSEFORGE"` |
-| `CF_API_KEY` | CurseForge API key | `"1234567890abcdef"` |
-| `CF_PAGE_URL` | URL of the modpack page | `"https://www.curseforge.com/minecraft/modpacks/essential-perfected-fabric"` |
-| `MEMORY` | JVM heap size | `"14336M"` |
-| `USE_AIKAR_FLAGS`, `USE_MEOWICE_FLAGS` | Enable recommended performance flags | `"true"` |
-| `CURSEFORGE_FILES` | Extra CurseForge mod slugs or IDs | `geckolib aquaculture` |
-| `VANILLATWEAKS_SHARECODE` | Vanilla Tweaks share code from the website | `"xxxxxxx"` |
-| `VANILLATWEAKS_FILE` | Local Vanilla Tweaks JSON files mounted into the container | `"/config/vanillatweaks-datapacks.json,/config/vanillatweaks-resourcepacks.json"` |
-| `REMOVE_OLD_VANILLATWEAKS` | Remove older Vanilla Tweaks entries during startup | `"TRUE"` |
+- No published ports. The container joins the external `services` network at `MINECRAFT_IP`.
+- Players connect through NetBird to `MINECRAFT_IP:25565` (e.g. `10.110.2.40:25565`). See the [Gaming README](../README.md#remote-access).
+- WireGuard fallback: the [WireGuard README](../../networking/wireguard/README.md) and the [Minecraft WireGuard template](../../networking/wireguard/templates/minecraft-server.conf). The template forwards TCP `25565` from the tunnel to `<MC_SERVER_IP>`, so clients connect to `MINECRAFT_IP:25565` through the tunnel.
 
-### Volume Layout
+## Data & Backups
 
-- `./data` - Persistent world data, server properties, player data.
-- `config/vanillatweaks-datapacks.json` & `...resourcepacks.json` - Optional vanilla datapack/resourcepack overrides.
-
-When Vanilla Tweaks is enabled, keep these mounts read-only to prevent accidental modification by the container.
-
-### Modpack & Extra Mods
-
-The container can pull a modpack from CurseForge based on `CF_PAGE_URL`.
-If you want additional mods, add their slugs or IDs to `CURSEFORGE_FILES` (comma/space separated). Example:
-
-```path/to/docker-compose.yml#L30-32
-CURSEFORGE_FILES: |
-  geckolib
-  aquaculture
-```
-
-### Vanilla Tweaks
-
-Place JSON files in the `config/` directory, uncomment the matching read-only volume mounts, and reference them via `VANILLATWEAKS_FILE`. The container will merge these into the server at startup.
-
-### Performance Flags
-
-The `itzg/minecraft-server` image supports a number of JVM flags.
-- `USE_AIKAR_FLAGS=true` enables Aikar’s recommended flags for CPU-bound workloads.
-- `USE_MEOWICE_FLAGS=true` adds Meowice’s lightweight optimizations (optional).
-
----
-
-## Running the Server
-
-```bash
-# From gaming/minecraft
-docker compose up -d
-```
-
-The first run will download the image. If you enable the optional CurseForge settings, it will also download the configured modpack, which may take several minutes depending on your internet speed.
-
-To stop:
-
-```bash
-docker compose down
-```
-
----
-
-## Accessing the Server
-
-1. **Over NetBird** - Connect through NetBird and join `MINECRAFT_IP:25565` (e.g. `10.110.2.40:25565`).
-2. **Over WireGuard** - If you choose the WireGuard alternative, connect a client to the WireGuard network and use the VPN IP of the host (`10.8.0.1:25565` or whatever subnet you configured).
-
----
+- `./data` - World data, server properties, and player data. Back this up.
+- `config/vanillatweaks-*.json` - Optional Vanilla Tweaks overrides, mounted read-only when enabled.
 
 ## Troubleshooting
 
@@ -134,5 +78,3 @@ docker compose down
 | Can't reach the server over NetBird | `services` not routed, or port not allowed | Check `docker exec netbird-client netbird status` and that the NetBird policy allows TCP 25565 to the `services` resource. |
 | WireGuard traffic blocked | Firewall rules missing | Re-run `wg-quick up wg0` and check `iptables -L FORWARD`. |
 | Player cannot connect over WireGuard | Port forwarding issue on router | Ensure UDP 51820, or your custom port, is forwarded to the host. |
-
-For shared remote access guidance, refer to the [Gaming Services README](../README.md#remote-access).
