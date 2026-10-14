@@ -16,7 +16,7 @@
         owner: ubuntu
         group: ubuntu
         mode: "0644"
-        src: ../docker-compose.yml
+        src: "{{ playbook_dir }}/../../automation/ollama-aws-hybrid/docker-compose.yml"
         dest: /home/ubuntu/ollama-aws-hybrid/docker-compose.yml
     - name: Create Traefik directory
       ansible.builtin.file:
@@ -30,7 +30,7 @@
         owner: ubuntu
         group: ubuntu
         mode: "0644"
-        src: ../config/traefik.yml
+        src: "{{ playbook_dir }}/../../automation/ollama-aws-hybrid/config/traefik.yml"
         dest: /home/ubuntu/ollama-aws-hybrid/config/traefik.yml
     - name: Create Let's Encrypt directory
       ansible.builtin.file:

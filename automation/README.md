@@ -1,16 +1,12 @@
 # Automation
 
-This directory contains automation-focused services and tooling for home automation, Ansible host management, and the AI stack.
+This directory contains automation-focused services and tooling for home automation and the AI stack.
 
 ## Services Overview
 
 ### Home Automation
 
 - **[Home Assistant](./home-assistant/README.md)** - Comprehensive home automation platform for controlling and automating smart home devices
-
-### Host Management
-
-- **[Ansible](./ansible/README.md)** - Shared Ansible inventory and playbooks for managing homelab and cloud servers
 
 ### AI Infrastructure
 
