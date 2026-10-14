@@ -1,18 +1,12 @@
 # Infrastructure Services
 
-This directory contains infrastructure services that handle networking, remote access, monitoring, dashboards, and proxy management for the homelab.
+This directory contains platform services: dashboards, version control, and container management.
 
 ## Services Overview
 
 ### Dashboard
 - **[Homepage (Public)](./homepage-public/README.md)** - Public dashboard aggregating service status and APIs
 - **[Homepage (Admin)](./homepage-admin/README.md)** - Administrator dashboard for internal services
-
-### Documentation
-- **[Wiki.js](./wiki-js/README.md)** - Self-hosted documentation and knowledge base platform backed by PostgreSQL
-
-### Communication
-- **[Matrix](./matrix/README.md)** - Private Matrix homeserver (Synapse) with Element Web and LiveKit calls, reachable only over NetBird
 
 ### Container Management
 - **[Watchtower](./watchtower/README.md)** - Automatic Docker container update service that monitors and updates running containers on a schedule
