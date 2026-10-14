@@ -43,12 +43,12 @@ DNS caches expire.
 ## Terraform
 
 The configuration in
-[`infrastructure/terraform/aws/ollama-aws-hybrid`](../../infrastructure/terraform/aws/ollama-aws-hybrid/)
+[`terraform/aws/ollama-aws-hybrid`](../../terraform/aws/ollama-aws-hybrid/)
 creates the AWS resources
 for the EC2 host: a VPC, public subnet, internet gateway, route table, security
 group, SSH key pair, EC2 instance, encrypted EBS root volume, and Elastic IP.
 The EC2 instance uses
-[`cloud-init.yaml`](../../infrastructure/terraform/aws/ollama-aws-hybrid/cloud-init.yaml)
+[`cloud-init.yaml`](../../terraform/aws/ollama-aws-hybrid/cloud-init.yaml)
 to
 install Docker and Docker Compose during first boot.
 
@@ -56,7 +56,7 @@ Before starting, configure an AWS CLI profile and create the SSH key referenced
 by `public_key_path`. Then create your local variables file:
 
 ```shell
-cd ../../infrastructure/terraform/aws/ollama-aws-hybrid
+cd ../../terraform/aws/ollama-aws-hybrid
 cp terraform.tfvars.example terraform.tfvars
 ```
 
