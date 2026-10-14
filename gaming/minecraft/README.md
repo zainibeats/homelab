@@ -34,7 +34,7 @@ docker compose up -d
 
 ### WireGuard Alternative
 
-WireGuard can still be used as a fallback when NetBird is not available. The full setup steps are in the [WireGuard README](../../networking/wireguard/README.md), and an example Minecraft-specific configuration is available in the [Minecraft WireGuard template](../../networking/wireguard/templates/minecraft-server-example.conf).
+WireGuard can still be used as a fallback when NetBird is not available. The full setup steps are in the [WireGuard README](../../networking/wireguard/README.md), and an example Minecraft-specific configuration is available in the [Minecraft WireGuard template](../../networking/wireguard/templates/minecraft-server.conf).
 
 ---
 

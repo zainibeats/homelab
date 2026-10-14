@@ -12,7 +12,7 @@ docker pull linuxserver/ddclient:latest
 
 ## Configuration
 
-Copy `ddclient.conf.example` to `config/ddclient.conf` and fill it in. `config/` is git-ignored, so git never overwrites the live file; the container chowns it to `PUID`.
+Copy `ddclient.example.conf` to `config/ddclient.conf` and fill it in. `config/` is git-ignored, so git never overwrites the live file; the container chowns it to `PUID`.
 Typical settings include:
 
 - `daemon=300` - check every 5 minutes
