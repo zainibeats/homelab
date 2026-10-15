@@ -2,8 +2,6 @@
 
 The on-prem monitoring stack: Prometheus for metrics, Loki and Promtail for logs, Grafana for dashboards, Node Exporter for host metrics, and cAdvisor (with Redis) for container metrics. It is based on [brandonleegit/OpenSourceMonitoring](https://github.com/brandonleegit/OpenSourceMonitoring). The OCI stack is in [monitoring-oci](../monitoring-oci/README.md).
 
-**Runs on:** Raspberry Pi
-
 ## Prerequisites
 
 - The [Traefik](../../networking/traefik/README.md) stack running on the same host (it creates the external `traefik-proxy` network).

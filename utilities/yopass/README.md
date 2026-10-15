@@ -2,8 +2,6 @@
 
 Yopass is a lightweight, self-hosted service for sharing secrets, passwords, and files. It encrypts data client-side, stores it temporarily in Memcached, and returns a one-time URL that expires automatically. Source: <https://github.com/jhaals/yopass>.
 
-**Runs on:** Application Server
-
 ## Prerequisites
 
 - The [Traefik](../../networking/traefik/README.md) stack running on the same host (it creates the external `traefik-proxy` network).

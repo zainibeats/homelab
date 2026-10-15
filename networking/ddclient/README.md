@@ -2,7 +2,7 @@
 
 DDClient is a lightweight dynamic DNS updater that keeps Cloudflare DNS records in sync with the host's public IP address. It runs the `linuxserver/ddclient` image.
 
-**Runs on:** Cloud instances without a static IP
+**Runs on:** cloud instances without a static IP
 
 ## Prerequisites
 

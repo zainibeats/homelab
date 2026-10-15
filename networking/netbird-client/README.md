@@ -4,7 +4,7 @@ NetBird Client connects the host to the NetBird mesh network, giving secure remo
 
 It is also the routing peer for the `services` Docker network. Containers with a static IP on it are reachable by NetBird peers once the subnet is a [network resource](https://docs.netbird.io/manage/networks) routed by this client.
 
-**Runs on:** Oracle (OCI) always; any other host that joins the NetBird network (project dependent)
+**Runs on:** any host on the NetBird network (always on the OCI host)
 
 ## Prerequisites
 

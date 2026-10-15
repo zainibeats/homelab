@@ -10,7 +10,7 @@ Changes from the installer output:
 - Domain and ACME email come from `.env`. `name: netbird` keeps the installer's volume and network names (`netbird_netbird_data`, `netbird_netbird`).
 - The installer hard-codes Traefik's internal IP as `172.30.0.10`. It's also in `config.yaml`, `proxy.env` and Matrix's lk-jwt-service `extra_hosts`.
 
-**Runs on:** Oracle (OCI)
+**Runs on:** the OCI host
 
 ## Prerequisites
 

@@ -4,8 +4,6 @@ Homepage is an open-source, highly customizable dashboard that aggregates over 1
 
 <img src="https://assets.czaini.net/images/homepage-clip.jpg" height="75%" width="75%" />
 
-**Runs on:** Raspberry Pi
-
 ## Prerequisites
 
 - The [Traefik](../../networking/traefik/README.md) stack (it creates the external `traefik-proxy` network).

@@ -2,7 +2,7 @@
 
 My self-hosted Minecraft server, reachable privately over NetBird. Based on the `itzg/minecraft-server` image, with optional support for CurseForge modpacks, extra mods, and Vanilla Tweaks.
 
-**Runs on:** Oracle (OCI)
+**Runs on:** the OCI host (must share the `services` network with netbird-server)
 
 ## Prerequisites
 

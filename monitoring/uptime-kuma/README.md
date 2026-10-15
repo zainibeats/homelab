@@ -2,8 +2,6 @@
 
 Uptime Kuma is a lightweight, self-hosted uptime monitor. It checks HTTP, TCP, DNS, and ping endpoints, and monitors Docker containers through the Docker socket.
 
-**Runs on:** Raspberry Pi
-
 ## Prerequisites
 
 - The [Traefik](../../networking/traefik/README.md) stack running on the same host (it creates the external `traefik-proxy` network).

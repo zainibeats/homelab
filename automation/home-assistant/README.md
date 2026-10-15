@@ -2,8 +2,6 @@
 
 [Home Assistant](https://www.home-assistant.io/) is an open-source home automation platform that puts local control and privacy first. It tracks and controls the devices at home and automates them.
 
-**Runs on:** Application Server
-
 ## Prerequisites
 
 - A Zigbee coordinator or other radios reachable from the host (the container is privileged with host networking for device and mDNS discovery).

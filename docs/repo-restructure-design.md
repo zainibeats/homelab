@@ -160,7 +160,7 @@ Every stack README uses these sections in this order. A section with nothing to 
 
 <One-paragraph overview: what it is and why it's in the lab.>
 
-**Runs on:** <host>
+**Runs on:** <placement requirement>   (optional, see below)
 
 ## Prerequisites
 ## Setup            (cp .env.example .env, other .example copies, first start)
@@ -170,7 +170,9 @@ Every stack README uses these sections in this order. A section with nothing to 
 ## Troubleshooting
 ```
 
-Category READMEs (`networking/`, `monitoring/`, `infrastructure/`, `utilities/`, `automation/`, `ansible/`, `terraform/`, `ai-agents/`) list their stacks with one line each. The root README gets a table mapping each host to its stacks.
+Category READMEs (`networking/`, `monitoring/`, `infrastructure/`, `utilities/`, `automation/`, `ansible/`, `terraform/`, `ai-agents/`) list their stacks with one line each.
+
+Which machine runs each stack changes often, so it is tracked in private homelab documentation, not in the repo. A stack README has a `**Runs on:**` line only when placement is a requirement or a stable role, worded as that role (e.g. "the OCI host (must share the `services` network with netbird-server)", "a host with an NVIDIA GPU", "every Docker host"), never as the machine it happens to run on today. The root README has no host map; its Infrastructure Overview describes what each device is for.
 
 ## Out of Scope
 

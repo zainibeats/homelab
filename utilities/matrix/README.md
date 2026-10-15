@@ -9,7 +9,7 @@ Private Matrix homeserver (Synapse) with Element Web and Element Call / MatrixRT
 | `livekit` | SFU for calls | `https://RTC_HOST/livekit/sfu` (signalling), `LIVEKIT_IP` 7881/tcp and 7882/udp (media) |
 | `lk-jwt-service` | Issues LiveKit tokens to Matrix users | `https://RTC_HOST/livekit/jwt` |
 
-**Runs on:** Oracle (OCI)
+**Runs on:** the OCI host (must share the `services` network with netbird-server)
 
 ## Prerequisites
 

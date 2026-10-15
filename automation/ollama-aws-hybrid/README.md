@@ -13,7 +13,7 @@ Public traffic enters the EC2 instance over HTTPS through **Traefik**. Traefik
 obtains certificates using Cloudflare's DNS-01 challenge, so the instance does
 not need to expose an HTTP listener on port 80.
 
-**Runs on:** AWS EC2 (Open WebUI) with Ollama on a local machine
+**Runs on:** an AWS EC2 instance (Open WebUI), with Ollama on a local machine
 
 ### Architecture
 

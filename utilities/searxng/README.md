@@ -2,8 +2,6 @@
 
 SearXNG is a privacy-respecting, self-hosted metasearch engine that aggregates results from multiple search engines without tracking users. It is also the web-search backend for Open WebUI in the [AI stack](../../automation/ai-stack/README.md).
 
-**Runs on:** Application Server
-
 ## Prerequisites
 
 - The [Traefik](../../networking/traefik/README.md) stack running on the same host (it creates the external `traefik-proxy` network).

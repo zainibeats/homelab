@@ -2,7 +2,7 @@
 
 Traefik is the edge router and reverse proxy for the homelab. It terminates TLS with Let's Encrypt certificates issued through the Cloudflare DNS challenge, routes Docker services by their labels, and routes services on other hosts through file-based dynamic configuration. A `cloudflared` container in the same stack connects a Cloudflare Tunnel to the `traefik-proxy` network.
 
-**Runs on:** Application Server and Raspberry Pi (OCI and AWS use the Traefik bundled in [netbird-server](../netbird-server/README.md) and [ollama-aws-hybrid](../../automation/ollama-aws-hybrid/README.md))
+**Runs on:** every host that serves web stacks through Traefik labels (on OCI and AWS, the Traefik bundled in [netbird-server](../netbird-server/README.md) and [ollama-aws-hybrid](../../automation/ollama-aws-hybrid/README.md) fills this role)
 
 ## Prerequisites
 

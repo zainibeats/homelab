@@ -2,7 +2,7 @@
 
 Watchtower automates Docker image updates. It watches running containers, pulls new images, and restarts containers when updates are available. This stack runs the maintained `nickfedor/watchtower` fork.
 
-**Runs on:** Every Docker host
+**Runs on:** every Docker host
 
 ## Prerequisites
 

@@ -11,7 +11,7 @@ Prometheus, Grafana, Loki, Alloy, node-exporter and cAdvisor for the OCI host. G
 | `alloy` | Ships container logs (Docker API) and the host journal to Loki |
 | `grafana` | `https://GRAFANA_HOST`, with provisioned datasources and dashboards |
 
-**Runs on:** Oracle (OCI)
+**Runs on:** the OCI host (Grafana sits behind netbird-server's Traefik)
 
 ## Prerequisites
 

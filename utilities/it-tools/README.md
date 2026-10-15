@@ -2,8 +2,6 @@
 
 A collection of handy online tools for developers and IT professionals: encoders/decoders, formatters, converters, generators, and more. Everything runs in the browser, so no data leaves your network.
 
-**Runs on:** Application Server
-
 ## Prerequisites
 
 - The [Traefik](../../networking/traefik/README.md) stack running on the same host (it creates the external `traefik-proxy` network).

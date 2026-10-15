@@ -2,13 +2,13 @@
 
 Run large language models locally with Ollama and use them through Open WebUI. The two services are separate stacks (`ollama/` and `open-webui/`), so either side can be swapped (e.g. LM Studio, a custom Ollama setup, or an API-key service) without changing the other.
 
-**Runs on:** Desktop and GPU Compute Node
+**Runs on:** a host with an NVIDIA GPU (GPU Compute Node, Desktop)
 
 ## Prerequisites
 
 - An NVIDIA GPU with the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) (recommended). Without one, remove the `deploy` section from `ollama/docker-compose.yml`.
 - Two external Docker networks for Open WebUI:
-  - `traefik-proxy` - Carries the `open-webui.${DOMAIN}` routes. The [Traefik](../../networking/traefik/README.md) stack creates it, but Traefik runs on the Application Server and Pi, not on the Desktop or GPU Compute Node. On those hosts, create it by hand (`docker network create traefik-proxy`) or remove it from `open-webui/docker-compose.yml`.
+  - `traefik-proxy` - Carries the `open-webui.${DOMAIN}` routes. The [Traefik](../../networking/traefik/README.md) stack creates it. On a host without Traefik, create it by hand (`docker network create traefik-proxy`) or remove it from `open-webui/docker-compose.yml`.
   - `tmdb-net` - Lets Open WebUI talk to my [TMDB MCP server](https://github.com/zainibeats/tmdb-mcp) and to [SearXNG](../../utilities/searxng/README.md) when they run on the same host. Create it with `docker network create tmdb-net`, or remove it from `open-webui/docker-compose.yml` if you don't use either. Docker networks are per host, so this only connects containers on the same machine.
 
 ## Setup
@@ -54,7 +54,7 @@ Open WebUI (`open-webui/.env`):
 - `CORS_ALLOW_ORIGIN` - Origins allowed by CORS (the LAN URL and the Traefik hostname).
 - `ENABLE_WEB_SEARCH` - `True` to enable web search.
 - `WEB_SEARCH_ENGINE` - Search engine (`searxng`, `bing`, `duckduckgo`, ...).
-- `SEARXNG_QUERY_URL` - SearXNG query URL. When SearXNG runs on the same host (both on `tmdb-net`), use the container name and port: `http://searxng-core:8080/search?q=<query>`. SearXNG runs on the Application Server, so on the Desktop or GPU Compute Node use its Traefik URL instead: `https://search.${DOMAIN}/search?q=<query>`.
+- `SEARXNG_QUERY_URL` - SearXNG query URL. When SearXNG runs on the same host (both on `tmdb-net`), use the container name and port: `http://searxng-core:8080/search?q=<query>`. If SearXNG runs on a different host, use its Traefik URL instead: `https://search.${DOMAIN}/search?q=<query>`.
 - `WEB_SEARCH_RESULT_COUNT` - Number of search results to use.
 
 ## Routing & Ports

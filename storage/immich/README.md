@@ -2,8 +2,6 @@
 
 Immich is a high-performance, self-hosted photo and video backup solution with Google Photos-like features. Media lives on the NAS over SMB; the database stays on local storage.
 
-**Runs on:** Application Server
-
 ## Prerequisites
 
 - The [Traefik](../../networking/traefik/README.md) stack running on the same host (it creates the external `traefik-proxy` network).

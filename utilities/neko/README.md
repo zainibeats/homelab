@@ -9,8 +9,6 @@ Good for:
 - **No browser extensions:** a dedicated, containerized browser for VPN-routed traffic.
 - **More:** embedding content, collaborative browsing, a throwaway browser.
 
-**Runs on:** Application Server
-
 ## Prerequisites
 
 - NVIDIA drivers and the NVIDIA Container Toolkit on the host.

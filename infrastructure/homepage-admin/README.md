@@ -2,8 +2,6 @@
 
 Homepage is an open-source, highly customizable dashboard that aggregates over 100 service APIs. This is the administrator instance, with links and widgets for internal hosts and services; the public instance is [Homepage (Public)](../homepage-public/README.md).
 
-**Runs on:** Raspberry Pi
-
 ## Prerequisites
 
 - The [Traefik](../../networking/traefik/README.md) stack (it creates the external `traefik-proxy` network).

@@ -2,8 +2,6 @@
 
 Nextcloud is a self-hosted file hosting suite, similar to Dropbox or Google Drive, with optional office integration (Collabora Online, OnlyOffice). This stack runs `nextcloud:latest` with MariaDB 10.6; user files live on the NAS over NFS.
 
-**Runs on:** Application Server
-
 ## Prerequisites
 
 - The [Traefik](../../networking/traefik/README.md) stack running on the same host (it creates the external `traefik-proxy` network).

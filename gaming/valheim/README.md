@@ -2,7 +2,7 @@
 
 Docker Compose stack for a Valheim dedicated server (`tsxcloud/valheim-arm`, for the ARM OCI host), reachable privately over NetBird on the `services` network.
 
-**Runs on:** Oracle (OCI)
+**Runs on:** the OCI host (must share the `services` network with netbird-server)
 
 ## Prerequisites
 

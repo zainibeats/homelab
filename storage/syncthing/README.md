@@ -2,7 +2,7 @@
 
 [Syncthing](https://syncthing.net/) continuously synchronizes files between two or more devices in real time, without a third party. It keeps the Obsidian vault and other folders in sync between the NAS and the desktop.
 
-**Runs on:** NAS and Desktop
+**Runs on:** the NAS and personal devices
 
 ## Prerequisites
 

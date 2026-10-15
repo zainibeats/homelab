@@ -2,8 +2,6 @@
 
 Wiki.js is a self-hosted documentation and knowledge base platform. This stack runs Wiki.js 2 with PostgreSQL 15 and exposes the web interface through Traefik.
 
-**Runs on:** Application Server
-
 ## Prerequisites
 
 - The [Traefik](../../networking/traefik/README.md) stack running on the same host (it creates the external `traefik-proxy` network).

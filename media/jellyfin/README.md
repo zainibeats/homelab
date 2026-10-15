@@ -2,8 +2,6 @@
 
 [Jellyfin](https://jellyfin.org/) is a free and open-source media server. Stream to any device from your own server, with no strings attached. This stack uses NVIDIA GPU transcoding.
 
-**Runs on:** Application Server
-
 ## Prerequisites
 
 - NVIDIA drivers and the NVIDIA Container Toolkit on the host (the compose file uses `runtime: nvidia` and reserves all GPUs).

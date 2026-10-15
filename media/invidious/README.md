@@ -9,8 +9,6 @@ Invidious is an open-source alternative frontend for YouTube. Unlike the officia
 | Invidious Companion | Handles video streaming via `youtubei.js` |
 | PostgreSQL 14 | Database backend for Invidious |
 
-**Runs on:** Application Server
-
 ## Prerequisites
 
 - A VPN configuration compatible with Gluetun.
