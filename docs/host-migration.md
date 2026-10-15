@@ -40,6 +40,19 @@ rm -rf <old path>
 - Until the old folders are removed, their live files show up as untracked in `git status`. Don't run `git add -A` mid-migration.
 - Check each host for absolute paths to old folders: `crontab -l`, `systemctl list-unit-files`, shell aliases, scripts.
 
+## Invidious removal (Application Server)
+
+Invidious was removed from the repo. The next `git pull` deletes its tracked `docker-compose.yml`, so stop it first:
+
+```bash
+cd <repo>/media/invidious && docker compose down
+cd <repo> && git pull
+docker volume rm invidious_postgresdata invidious_companioncache   # optional: deletes its database and cache
+rm -rf <repo>/media/invidious                                     # cloned upstream repo, .env, gluetun data
+```
+
+Also remove its Traefik route or DNS record if you added one. It can be restored from git history if needed.
+
 ## Machines that run Terraform or Ansible
 
 After `git pull`, move the ignored leftovers (state, tfvars, live inventories, vault files):

@@ -9,11 +9,6 @@
         description: Media Request Management
         icon: seerr.png
         siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:5055"
-    - Invidious:
-        href: "https://invidious.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Custom Youtube Frontend
-        icon: invidious.png
-        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:3080"
 - Storage and Backups:
     - Nextcloud:
         href: "https://nextcloud.{{HOMEPAGE_VAR_DOMAIN}}"
@@ -62,11 +57,6 @@
         description: Media Request Management
         icon: seerr.png
         siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:5055"
-    - Invidious:
-        href: "http://{{HOMEPAGE_VAR_APP_HOST}}:3080"
-        description: Custom Youtube Frontend
-        icon: invidious.png
-        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:3080"
 - Storage and Backups (Local):
     - Immich:
         href: "http://{{HOMEPAGE_VAR_APP_HOST}}:2283"

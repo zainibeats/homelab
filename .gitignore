@@ -57,20 +57,6 @@ terraform.tfvars
 **/home-assistant/*.db
 zigbee.db
 **/immich/postgres/
-**/invidious/*/
-**/invidious/.ameba.yml
-**/invidious/.editorconfig
-**/invidious/.gitattributes
-**/invidious/.gitmodules
-**/invidious/CHANGELOG.md
-**/invidious/CHANGELOG_legacy.md
-**/invidious/LICENSE
-**/invidious/Makefile
-**/invidious/TRANSLATION
-**/invidious/invidious.service
-**/invidious/shard.lock
-**/invidious/shard.yml
-**/invidious/videojs-dependencies.yml
 **/neko/*/
 **/open-webui/*/
 
