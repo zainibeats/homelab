@@ -77,3 +77,6 @@ zigbee.db
 # Miscellaneous
 */syncthing/config/*
 obsidian-vault
+/.claude
+/private-homelab-docs
+/docs/DOCS-AUDIT.md
