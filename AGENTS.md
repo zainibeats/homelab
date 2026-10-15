@@ -7,6 +7,7 @@
 - **Ambiguity:** Ask for clarification immediately if user intent is unclear.
 - **Safety:** Do not perform destructive operations (deleting files, overwriting large configs) without confirming the current state first.
 - **Transparency:** If unsure about a specific path or dependency, point it out rather than guessing.
+- **Conventions:** Follow [`docs/CONVENTIONS.md`](./docs/CONVENTIONS.md) when adding, moving, or documenting stacks (layout, compose `name:`, example files, `.gitignore`, README template).
 - **Secrets:** Never commit secrets, tokens, or `.env` contents (Cloudflare API tokens, Authentik credentials, etc.) — check `.gitignore` covers them before staging changes, and flag if any appear already tracked.
 
 ## Workflow
