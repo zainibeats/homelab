@@ -52,7 +52,7 @@ Open WebUI (`open-webui/.env`):
 - `OLLAMA_BASE_URL` - Ollama URL: `http://host.docker.internal:11434`. The compose file maps `host.docker.internal` to the host (`extra_hosts: host-gateway`). If Ollama ever runs on a shared Docker network instead of host networking, use `http://ollama:11434`.
 - `WEBUI_SECRET_KEY` - Secret used to secure sessions. Set a long random value.
 - `CORS_ALLOW_ORIGIN` - Origins allowed by CORS (the LAN URL and the Traefik hostname).
-- `ENABLE_WEB_SEARCH` - `True` to enable web search.
+- `ENABLE_WEB_SEARCH` - `True` (the default when unset) enables web search; `False` turns it off.
 - `WEB_SEARCH_ENGINE` - Search engine (`searxng`, `bing`, `duckduckgo`, ...).
 - `SEARXNG_QUERY_URL` - SearXNG query URL. When SearXNG runs on the same host (both on `tmdb-net`), use the container name and port: `http://searxng-core:8080/search?q=<query>`. If SearXNG runs on a different host, use its Traefik URL instead: `https://search.${DOMAIN}/search?q=<query>`.
 - `WEB_SEARCH_RESULT_COUNT` - Number of search results to use.
