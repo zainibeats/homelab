@@ -17,6 +17,16 @@ Rules for adding or changing anything in this repo. Compose stacks are deployed 
 - A gitignored live copy of a compose file (e.g. `monitoring/monitoring-home/docker-compose.yml`) must keep the same `name:` line as its example.
 - Moving a stack folder means migrating every host that runs it: `docker compose down`, `git pull`, move the gitignored live files to the new folder, `docker compose up -d`, and confirm the project name with `docker compose ls`.
 
+## Deploying
+
+Hosts run each stack straight from their clone, and the stacks bind-mount gitignored live files from it. In a deployed clone:
+
+- Never `git stash`, `checkout`, `reset`, `switch` or `clean`. Git treats ignored files as expendable and overwrites any that share a path with a file tracked in the target commit. A running container keeps the old file until it restarts, so the breakage shows up days later.
+- Before `git pull`, check that no untracked or ignored path you rely on is tracked upstream: `git cat-file -e origin/main:<path>` must fail.
+- Untracking a live file (`git rm --cached`) deletes it on every host at its next pull, so back it up on each host first.
+- Shell variables override `.env`. Some shells export `HOSTNAME` and `TZ`, which netbird-client, the game servers and wiki-js read, so run compose as `env -u HOSTNAME -u TZ docker compose ...` there.
+- Dry-run before `up` (`docker compose --dry-run up -d`) to see which containers and networks it will recreate.
+
 ## Live files and examples
 
 - Live config, secrets, and state are never tracked: `.env`, `*.env`, live inventories, vault files, `terraform.tfvars`, `*.tfstate`, `acme.json`, data folders. Each has a tracked example next to it.
@@ -69,4 +79,4 @@ Every stack README follows this template. A section with nothing to say gets one
 
 ## Commits
 
-[Conventional Commits](https://www.conventionalcommits.org/), subject line only (e.g. `docs(networking): standardize stack readmes`).
+[Conventional Commits](https://www.conventionalcommits.org/), subject line only (e.g. `docs(networking): standardize stack readmes`). No body and no trailers.
