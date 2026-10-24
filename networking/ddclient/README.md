@@ -6,7 +6,7 @@ DDClient is a lightweight dynamic DNS updater that keeps Cloudflare DNS records 
 
 ## Prerequisites
 
-- A Cloudflare-managed domain and an API token with `Zone:DNS:Edit` permission for it.
+- A Cloudflare-managed domain and an API token for that zone with `Zone:Zone:Read` (ddclient looks up the zone ID) and `Zone:DNS:Edit`. Leave the token's IP filter off when the host's IP changes.
 
 ## Setup
 
@@ -53,3 +53,6 @@ None. The container only makes outbound API calls.
 
 - Check `docker logs ddclient` for authentication or zone errors.
 - `login=token` is required when `password` is an API token rather than the global API key.
+- Repeating `400`: the config still has the example's values.
+- `403 not authorized`: the token was deleted, or it lacks `Zone:Zone:Read`. `curl -H "Authorization: Bearer <token>" https://api.cloudflare.com/client/v4/user/tokens/verify` says whether it still exists.
+- The container reloads `ddclient.conf` when it changes, but after a failed update ddclient waits 5 minutes before trying again.

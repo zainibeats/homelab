@@ -54,7 +54,13 @@ In the dashboard:
 
 ### Upgrading
 
-Follow the [official upgrade steps](https://docs.netbird.io/selfhosted/maintenance/upgrade): back up, read the release notes, and keep the proxy and management versions in sync. Because the tags here are pinned, also do the following:
+Follow the [official upgrade steps](https://docs.netbird.io/selfhosted/maintenance/upgrade): back up, read the release notes, and keep the proxy and management versions in sync. Some releases migrate the store (v0.80.0 split it by table), so rolling back means restoring the backup, not just reverting tags. Back up with the stack stopped, one tarball per volume from [Data & Backups](#data--backups), plus `config.yaml` and `./crowdsec`:
+
+```sh
+docker run --rm -v netbird_netbird_data:/data:ro -v /path/to/backups:/backup busybox tar czf /backup/netbird_data.tgz -C /data .
+```
+
+Because the tags here are pinned, also do the following:
 
 1. Diff the installer against the new release:
    ```sh
@@ -63,7 +69,8 @@ Follow the [official upgrade steps](https://docs.netbird.io/selfhosted/maintenan
    ```
 2. Carry over any changes to the compose, `config.yaml` or env templates.
 3. Bump `netbird-server`, `reverse-proxy` and netbird-client's `netbird` together, plus the matching dashboard release.
-4. Replace the kept script with the new one.
+4. Traefik and CrowdSec are pinned too. Check their releases and security advisories, and keep any hardening flags added to Traefik's command.
+5. Replace the kept script with the new one.
 
 ## Configuration
 
@@ -114,3 +121,6 @@ Follow the [official upgrade steps](https://docs.netbird.io/selfhosted/maintenan
 - Peers can't reach `services`: confirm the network resource and access policy in the dashboard, and that netbird-client is the routing peer.
 - Proxy fails to register: regenerate `NB_PROXY_TOKEN` (Setup step 5) and restart `proxy`.
 - After an upgrade, keep the server, proxy, and client versions in sync (see [Upgrading](#upgrading)).
+- `peer login has expired` in the netbird-server logs: login expiry is on for user peers, so that device's user must log in again.
+- A router 404s or fails TLS for a few seconds after a container restarts: Traefik ignores containers while their health check is `starting`.
+- Compose stores a hash of each network's definition, so any change to `services` makes `up` try to recreate it, which fails while other stacks are attached. Dry-run first. To recreate it, stop and remove this stack's containers rather than running `down`, because other stacks' containers (Matrix, Grafana) stay on `netbird_netbird`.

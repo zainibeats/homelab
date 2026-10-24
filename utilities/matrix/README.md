@@ -62,8 +62,9 @@ Other config files: `synapse/homeserver.yaml` (from `homeserver.example.yaml`), 
 
 ## Data & Backups
 
-- `./synapse` → `/data` - Synapse config, signing key, and media. Back this up; the signing key can't be regenerated without breaking the server identity.
-- `./postgres-data` - Postgres data (messages, accounts). Back up with `pg_dump` or while stopped.
+- `./synapse` → `/data` - Synapse config, signing key, and media, owned by uid 991. Back this up; the signing key can't be regenerated without breaking the server identity.
+- `./postgres-data` - Postgres data (messages, accounts), owned by uid 70, mode 700. Back up with `pg_dump` or while stopped.
+- To edit files in either folder without sudo, use a one-off container as that uid, e.g. `docker run --rm --user 991:991 -v "$PWD/synapse:/data" busybox ...`.
 - `.env`, `element/config.json` - Live config (gitignored).
 
 ## Troubleshooting
@@ -73,3 +74,5 @@ Other config files: `synapse/homeserver.yaml` (from `homeserver.example.yaml`), 
 - Clients need NetBird running on the device itself. A NetBird container on a workstation doesn't route that host's browser.
 - Some routers block DNS answers that point to private IPs (DNS rebinding protection). Whitelist the domain if the names don't resolve.
 - The `netbird-only` allowlist middleware is defined on the `synapse` container. While Synapse is down, the other routers fail closed.
+- Element loads but never reaches Synapse (no `/_matrix` requests in Traefik's access log): `element/config.json` still has the example's `matrix.domain.tld`, or was edited without restarting `element-web`, which copies the file at startup. Edit it in place (`cat > element/config.json`), not with `sed -i`: that replaces the file, and the single-file bind mount keeps the old one.
+- Calls fail with ICE errors after a recreate: Docker's interface order changed, and LiveKit advertised the wrong address. `rtc.ips.includes` in `livekit.yaml` must be pinned to `LIVEKIT_IP/32`. LiveKit refuses to start on unknown keys in that file.

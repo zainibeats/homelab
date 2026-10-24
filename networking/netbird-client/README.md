@@ -46,4 +46,6 @@ On the host running [netbird-server](../netbird-server/README.md), start that st
 
 - Check connectivity: `docker exec netbird-client netbird status`, or look for the node in the NetBird dashboard.
 - The image is pinned to the NetBird server's version and excluded from Watchtower, so [upgrade them together](../netbird-server/README.md#upgrading).
+- The peer registers under the wrong name: a `HOSTNAME` exported by your shell overrides `.env`. Start it with `env -u HOSTNAME docker compose up -d`.
+- On the netbird-server host, peers reach this client over the relay (`rels://` in `netbird status -d`), not directly: the container publishes no UDP port, and its STUN probe to the host's own public IP times out. That's expected.
 - For advanced options (custom certificates, policies), see the [NetBird documentation](https://docs.netbird.io).

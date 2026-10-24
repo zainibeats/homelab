@@ -44,3 +44,4 @@ None. Watchtower runs on its own `watchtower_net` bridge (`172.28.0.0/24`) and p
 
 - Check what happened on the last run: `docker logs watchtower`.
 - A container keeps getting updated when it shouldn't: add the opt-out label above and recreate it.
+- After Watchtower updates a compose container, `docker compose --dry-run up -d` wants to recreate it, because Watchtower copies the old `com.docker.compose.image` label. Recreating it is harmless.
