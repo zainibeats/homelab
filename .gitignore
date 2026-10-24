@@ -59,6 +59,8 @@ zigbee.db
 **/immich/postgres/
 **/neko/*/
 **/open-webui/*/
+/gaming/*/data/
+/gaming/valheim/config/
 
 # Miscellaneous
 */syncthing/config/*
