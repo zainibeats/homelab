@@ -45,9 +45,9 @@ Compose stacks are grouped by job, one folder per stack. Provisioning code (run 
 - Example files are `<file>.example.<ext>` (env files: `.env.example`, `<name>.env.example`; Terraform: `terraform.tfvars.example`). Copy them without `.example` and fill them in; the live copies are gitignored.
 
 ## AI Agents
-This repository includes an AI agent framework located in the `.agents` directory. 
-- **[AGENTS.md](./AGENTS.md)** - Core rules, behaviors, and instructions for the AI agents.
-- **[.agents](./.agents)** - Contains specialized skills and configurations used by the agents to perform tasks like documentation audits and conventional commit generation.
+Agents working on this repository are configured by `AGENTS.md` and the `.agents` directory. Both apply to this repo only.
+- **[AGENTS.md](./AGENTS.md)** - Rules and workflow for agents working on this repo: safety, secrets, commit style, handling of deployed clones and root-owned live files, and the stack conventions in [docs/CONVENTIONS.md](./docs/CONVENTIONS.md). It does not apply to other projects.
+- **[.agents](./.agents)** - Skills for agents working on this repo, such as documentation audits and conventional commit generation. The skills are generic, so they can be copied to other repos.
 - **[ai-agents](./ai-agents/README.md)** - Agent context and skills for tools outside this repo (e.g. the Obsidian vault).
 
 ## Storage Overview
