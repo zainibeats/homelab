@@ -21,8 +21,8 @@ not need to expose an HTTP listener on port 80.
 
 **EC2 Instance**:
 - Gluetun runs inside the instance and creates a WireGuard tunnel to the local network.
-- Open‑WebUI runs inside the same compose stack and shares a container network with Gluetun (`network_mode: "service:gluetun"`), so it can communicate with the tunnel.
-- Traefik terminates HTTPS with a certificate obtained through Cloudflare's DNS challenge and proxies requests to Open WebUI through Gluetun's shared network namespace.
+- Open‑WebUI runs in the same compose stack and shares Gluetun's network namespace, so its traffic goes through the tunnel.
+- Traefik terminates HTTPS with a certificate obtained through Cloudflare's DNS challenge and proxies requests to Open WebUI through Gluetun.
 
 ```text
 Client -> EC2:443 -> Traefik -> Gluetun:8080/Open WebUI -> WireGuard -> Ollama
@@ -60,122 +60,50 @@ DNS caches expire.
 
 ### Terraform
 
-The configuration in
-[`terraform/aws/ollama-aws-hybrid`](../../terraform/aws/ollama-aws-hybrid/)
-creates the AWS resources
-for the EC2 host: a VPC, public subnet, internet gateway, route table, security
-group, SSH key pair, EC2 instance, encrypted EBS root volume, and Elastic IP.
-The EC2 instance uses
-[`cloud-init.yaml`](../../terraform/aws/ollama-aws-hybrid/cloud-init.yaml)
-to
-install Docker and Docker Compose during first boot.
-
-Before starting, configure an AWS CLI profile and create the SSH key referenced
-by `public_key_path`. Then create your local variables file:
+[`terraform/aws/ollama-aws-hybrid`](../../terraform/aws/ollama-aws-hybrid/README.md) creates the EC2 host, and its cloud-init installs Docker and Docker Compose on first boot. Set up `terraform.tfvars` as described there (`aws_profile`, `trusted_ipv4_cidrs`, `availability_zone_id`), then:
 
 ```shell
 cd ../../terraform/aws/ollama-aws-hybrid
 cp terraform.tfvars.example terraform.tfvars
+terraform init && terraform plan && terraform apply
 ```
 
-Update `terraform.tfvars` with `aws_profile`, one or more trusted public IPv4
-addresses in `/32` CIDR notation under `trusted_ipv4_cidrs`, and an
-`availability_zone_id`. Use an availability-zone ID such as `usw2-az2`, not a
-zone name such as `us-west-2b`. Do not commit `terraform.tfvars` or Terraform
-state files.
-
-`trusted_ipv4_cidrs` currently allows both SSH and HTTPS access to the EC2
-instance. Only include public client IPs that should have that access. For a
-broader deployment, split SSH and HTTPS into separate security group inputs.
-
-Review and deploy the infrastructure:
-
-```shell
-terraform init
-terraform fmt -check
-terraform validate
-terraform plan
-terraform apply
-```
-
-After the apply completes, wait for cloud-init to finish installing Docker,
-then use the `public_ip` output to create an `A` record for
-`open-webui.${DOMAIN}` in the Cloudflare dashboard. The Elastic IP keeps this
-address stable across EC2 stop/start cycles. The `ssh_command` output provides
-the command for
-connecting to the instance.
-
-To remove the AWS resources when they are no longer needed, review the destroy
-plan before confirming it:
-
-```shell
-terraform plan -destroy
-terraform destroy
-```
-
-This project currently uses local Terraform state. That is suitable for an
-experimental single-user deployment; shared or production use should move the
-state to an encrypted remote backend with locking.
+When cloud-init has finished, create an `A` record for `open-webui.${DOMAIN}` in Cloudflare from the `public_ip` output. The `ssh_command` output connects to the instance. To remove everything, review `terraform plan -destroy` before running `terraform destroy`.
 
 ### Ansible
 
-The playbooks in [`ansible/ollama-aws-hybrid/`](../../ansible/ollama-aws-hybrid/) verify the EC2 prerequisites and
-deploy the Compose and Traefik configuration. Create a local inventory from the
-example and replace the EC2 address and SSH key path:
+The playbooks in [`ansible/ollama-aws-hybrid/`](../../ansible/ollama-aws-hybrid/) verify the EC2 prerequisites and deploy the Compose and Traefik configuration. Create a local inventory from the example and replace the EC2 address and SSH key path:
 
 ```shell
 cd ../../ansible/ollama-aws-hybrid
 cp open-webui-ec2-instance.example.yml open-webui-ec2-instance.yml
 ```
 
-Create the runtime environment file from the project example, fill in every
-placeholder, and encrypt the complete file before running the deployment:
+Create the runtime environment file from the example, fill in every placeholder, and encrypt it:
 
 ```shell
 cp ../../automation/ollama-aws-hybrid/.env.example files/runtime.env
 ansible-vault encrypt files/runtime.env
 ```
 
-The deployment decrypts the file while copying it to the EC2 host
-as `/home/ubuntu/ollama-aws-hybrid/.env` with mode `0600`; the remote file is
-plaintext and must retain its restrictive permissions.
-
-Verify the host, then prepare the application directory:
+The deployment decrypts it to `/home/ubuntu/ollama-aws-hybrid/.env` on the EC2 host with mode `0600`; the remote file is plaintext, so keep that mode.
 
 ```shell
 ansible-playbook verify-host.yml
-ansible-playbook --ask-vault-pass setup.yml
-```
-
-Run `setup.yml` a second time to confirm idempotency. The second run should
-report no changes when the deployed configuration is already current.
-
-Deploy the stack:
-
-```shell
+ansible-playbook --ask-vault-pass setup.yml   # a second run should report no changes
 ansible-playbook deploy.yml
 ```
 
-To stop the stack while preserving volumes:
-
-```shell
-ansible-playbook teardown.yml
-```
+`teardown.yml` stops the stack and keeps its volumes.
 
 ### Manual deployment
 
-For a manual deployment, copy `.env.example` to `.env`, replace every
-placeholder, ensure Traefik's certificate store is private, and start the
-stack:
+For a manual deployment, copy `.env.example` to `.env`, replace every placeholder, make Traefik's certificate store private, and start the stack:
 
 ```shell
 mkdir -p letsencrypt && touch letsencrypt/acme.json && chmod 600 letsencrypt/acme.json
 docker compose up -d
 ```
-
-Traefik discovers the route from labels on the Gluetun service. This is
-intentional: Open WebUI uses `network_mode: "service:gluetun"`, so it shares
-Gluetun's network namespace and is reachable through Gluetun on port `8080`.
 
 ## Configuration
 
@@ -203,20 +131,15 @@ Traefik's static configuration is in [`config/traefik.yml`](./config/traefik.yml
 
 ## Routing & Ports
 
-```text
-Client -> EC2:443 -> Traefik -> Gluetun:8080/Open WebUI -> WireGuard -> Ollama
-```
-
 - `443` - The only published port (Traefik, HTTPS). Restrict it to trusted public CIDRs in the Terraform security group. There is no HTTP listener on port 80; certificates use the DNS-01 challenge.
-- `open-webui.${DOMAIN}` - Open WebUI. Traefik discovers the route from labels on the Gluetun service: Open WebUI uses `network_mode: "service:gluetun"`, so it shares Gluetun's network namespace and is reachable through Gluetun on port `8080`. Port `3000` is not published.
-- Create a DNS `A` record for `open-webui.${DOMAIN}` pointing to the instance's public IP (the Terraform `public_ip` output).
+- `open-webui.${DOMAIN}` - Open WebUI. Open WebUI uses `network_mode: "service:gluetun"`, so Traefik discovers the route from labels on the Gluetun service and reaches Open WebUI through Gluetun on port `8080`. Port `3000` is not published. The `A` record points to the Terraform `public_ip`.
 
 ## Data & Backups
 
 - `open-webui` volume - Open WebUI data (users, chats, settings). Back this up if the instance is long-lived.
 - `./letsencrypt/acme.json` - Traefik certificates (mode `600`, gitignored).
 - `./gluetun` - Gluetun data.
-- Terraform state is local to `terraform/aws/ollama-aws-hybrid` (gitignored). Move it to an encrypted remote backend with locking for shared or production use.
+- Terraform state is local to `terraform/aws/ollama-aws-hybrid` (gitignored); use an encrypted remote backend with locking for shared or production use.
 
 ## Troubleshooting
 
