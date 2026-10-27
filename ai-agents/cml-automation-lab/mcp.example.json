@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "cml": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["--from", "cml-mcp[pyats]", "cml-mcp"],
+      "env": {
+        "CML_URL": "https://<cml-ip>",
+        "CML_USERNAME": "<cml-username>",
+        "CML_PASSWORD": "<cml-password>",
+        "CML_VERIFY_SSL": "false"
+      }
+    }
+  }
+}

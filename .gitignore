@@ -10,6 +10,7 @@ secrets.yaml
 **/matrix/element/config.json
 **/ddclient/config/
 .agents/settings.local.json
+/.mcp.json
 **/letsencrypt/acme.json
 
 # Logs and Cache
