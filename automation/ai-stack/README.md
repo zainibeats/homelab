@@ -75,4 +75,4 @@ Open WebUI (`open-webui/.env`):
 - Open WebUI shows no models: Ollama isn't reachable at `host.docker.internal:11434`. Confirm `OLLAMA_HOST=0.0.0.0:11434` is set in `ollama/.env` and test with `docker exec open-webui curl -s http://host.docker.internal:11434/api/tags`.
 - `docker compose up` fails with "network tmdb-net declared as external, but could not be found": create it or remove it from the compose file.
 
-Claude Code context bundles and skills that used to live here are in [`ai-agents/`](../../ai-agents/README.md).
+AI agent context bundles and skills that used to live here are in [`agent-context/`](../../agent-context/README.md).

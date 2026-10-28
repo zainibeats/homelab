@@ -48,7 +48,7 @@ Compose stacks are grouped by job, one folder per stack. Provisioning code (run 
 | ---- | ---------- | -------- |
 | **[AGENTS.md](./AGENTS.md)** | This repo only | Rules and workflow for agents working here |
 | **[.agents](./.agents)** | This repo, reusable anywhere | Skills used here (documentation audits, conventional commits). They're generic, so they can be copied to other repos |
-| **[ai-agents](./ai-agents/README.md)** | Other projects, not this repo | Context bundles and skills for tools outside this repo, such as the Obsidian vault |
+| **[agent-context](./agent-context/README.md)** | Other projects, not this repo | Context bundles and skills for tools outside this repo, such as the Obsidian vault |
 
 ## Automatic Updates
 
