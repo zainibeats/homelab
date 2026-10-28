@@ -21,7 +21,7 @@ There is no `.env` file. `TZ` (`America/Los_Angeles`) is set in the compose file
 ## Routing & Ports
 
 - `network_mode: host` - Home Assistant listens directly on the host at `8123`.
-- The Application Server's Traefik routes it through the file-based config in `networking/traefik/config/dynamic/ubuntu-server*.yml`.
+- The Application Server's Traefik routes it through the file-based config in `networking/traefik/config/dynamic/application-server*.yml`.
 
 ## Data & Backups
 

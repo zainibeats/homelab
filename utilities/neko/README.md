@@ -62,7 +62,7 @@ Neko shares Gluetun's network namespace, so Gluetun publishes its ports:
 - `8880` → `8080` - Neko web interface.
 - `52000-52100/udp` - WebRTC media.
 - Gluetun sits on `neko-network` (`172.77.0.0/24`) at `172.77.0.2`.
-- The Application Server's Traefik reaches Neko through the file-based routes in `networking/traefik/config/dynamic/ubuntu-server*.yml`.
+- The Application Server's Traefik reaches Neko through the file-based routes in `networking/traefik/config/dynamic/application-server*.yml`.
 
 ## Data & Backups
 

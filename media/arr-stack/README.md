@@ -69,7 +69,7 @@ Then configure each app:
 
 ## Routing & Ports
 
-- Traefik routes `sonarr`, `radarr`, `lidarr`, `bazarr`, and `seerr` at `<app>.${DOMAIN}` and `<app>.${SUBDOMAIN}.${DOMAIN}`. qBittorrent and Prowlarr sit behind Gluetun and are routed through the file-based config in `networking/traefik/config/dynamic/ubuntu-server*.yml`.
+- Traefik routes `sonarr`, `radarr`, `lidarr`, `bazarr`, and `seerr` at `<app>.${DOMAIN}` and `<app>.${SUBDOMAIN}.${DOMAIN}`. qBittorrent and Prowlarr sit behind Gluetun and are routed through the file-based config in `networking/traefik/config/dynamic/application-server*.yml`.
 - Host ports: `8122` (qBittorrent UI), `6881` (torrent), `9696` (Prowlarr), `8989`, `7878`, `8686`, `6767`, `5055`.
 - Networks: `servarrnetwork` (static IPs, Gluetun at `172.69.0.2`) and the external `traefik-proxy`.
 

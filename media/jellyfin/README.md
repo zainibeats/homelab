@@ -22,7 +22,7 @@ There is no `.env` file. The compose file sets `JELLYFIN_CACHE_DIR`, `JELLYFIN_C
 ## Routing & Ports
 
 - `network_mode: host` - Jellyfin listens directly on the host: `8096` (HTTP), plus its DLNA and discovery ports.
-- The Application Server's Traefik routes it through the file-based config in `networking/traefik/config/dynamic/ubuntu-server*.yml`.
+- The Application Server's Traefik routes it through the file-based config in `networking/traefik/config/dynamic/application-server*.yml`.
 
 ## Data & Backups
 

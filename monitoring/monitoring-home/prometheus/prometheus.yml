@@ -15,27 +15,27 @@ scrape_configs:
   # --- PI 5 Metrics ---
   - job_name: "pi5-node"
     static_configs:
-      - targets: ["node-exporter:9100"] # Node exporter on Ubuntu
+      - targets: ["node-exporter:9100"] # Node exporter on Application Server
         labels:
           instance: "raspberry-pi-5"
 
-  # --- Ubuntu Server Metrics ---
-  - job_name: "ubuntu-node"
+  # --- Application Server Metrics ---
+  - job_name: "application-server-node"
     static_configs:
-      - targets: ["<UBUNTU_IP>:9100"] # Node exporter on Ubuntu
+      - targets: ["<APPLICATION_SERVER_IP>:9100"] # Node exporter on Application Server
         labels:
-          instance: "ubuntu-server"
+          instance: "application-server"
 
-  # - job_name: 'ubuntu-cadvisor'
+  # - job_name: 'application-server-cadvisor'
   # static_configs:
-  # - targets: ['<UBUNTU_IP>:8081'] # cAdvisor on Ubuntu
+  # - targets: ['<APPLICATION_SERVER_IP>:8081'] # cAdvisor on Application Server
 
-  # --- LinuxMint Metrics ---
-  - job_name: "lm-node"
+  # --- Desktop Workstation Metrics ---
+  - job_name: "desktop-node"
     static_configs:
-      - targets: ["<LM_IP>:9100"] # Node exporter on 'linux-mint'
+      - targets: ["<DESKTOP_IP>:9100"] # Node exporter on the desktop workstation
         labels:
-          instance: "linux-mint"
+          instance: "desktop-workstation"
 
   # --- TrueNAS Metrics ---
   - job_name: "tn-node"
@@ -44,16 +44,9 @@ scrape_configs:
         labels:
           instance: "truenas-scale"
 
-  # --- PVECompute Metrics ---
-  - job_name: "pvecompute-node"
+  # --- GPU Compute Metrics ---
+  - job_name: "gpu-compute-node"
     static_configs:
-      - targets: ["<PVE_IP>:9100"] # Node exporter on RPi
+      - targets: ["<GPU_COMPUTE_IP>:9100"] # Node exporter on GPU Compute
         labels:
-          instance: "pve-compute"
-
-  # --- Debian-Sceptre Metrics ---
-  - job_name: "sceptre-node"
-    static_configs:
-      - targets: ["<SCEPTRE_IP>:9100"] # Node exporter on RPi
-        labels:
-          instance: "debian-sceptre"
+          instance: "gpu-compute"
