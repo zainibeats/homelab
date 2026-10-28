@@ -11,7 +11,7 @@
 - **Secrets:** Never commit secrets, tokens, or `.env` contents (Cloudflare API tokens, Authentik credentials, etc.) — check `.gitignore` covers them before staging changes, and flag if any appear already tracked. Never read token files or credentials in live config (e.g. `cloudflare-dns-token`, `ddclient.conf`); the user creates and edits them.
 - **Deployed clones:** hosts run stacks straight from their clone. Never run `git stash`, `checkout`, `reset`, `switch` or `clean` in one; see [Deploying](./docs/CONVENTIONS.md#deploying).
 - **Root-owned live files:** don't edit them with sudo. Write `<file>.new`, show the diff, and let the user copy it in.
-- **Commits:** one Conventional Commits subject line. No body and no trailers (`Co-Authored-By`, session links).
+- **Commits:** follow [Commits](./docs/CONVENTIONS.md#commits).
 
 ## Workflow
 1. **Analyze:** Read the necessary files and gather context before suggesting any changes.

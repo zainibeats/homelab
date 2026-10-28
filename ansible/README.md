@@ -1,68 +1,28 @@
 # Ansible
 
-This setup provides shared Ansible automation for managing homelab and cloud servers. It is organized into subdirectories by service:
+Shared Ansible automation for homelab and cloud servers, one subdirectory per job:
 
-- **`server-admin/`**: General server administration tasks (e.g., package updates).
+- **`server-admin/`**: General server administration (e.g., package updates).
 - **`gaming/`**: Deploys one game stack from `gaming/` onto the OCI game host.
 - **`ollama-aws-hybrid/`**: Prepares and deploys the [Ollama AWS Hybrid](../automation/ollama-aws-hybrid/README.md) stack on its EC2 host.
 
-## Inventory
+## Setup
 
-### Server Admin
-- **`server-admin/inventory/hosts.yml`**: Local inventory used by Ansible by default for admin tasks.
-- **`server-admin/inventory/hosts.example.yml`**: Example inventory template with placeholder host addresses and connection settings.
+Each subdirectory has its own `ansible.cfg`, so run commands from inside it. For server-admin, create the inventory from the example and replace the placeholder hostnames, ports, users, and SSH key path:
 
-### Gaming
-- **`gaming/inventory/`**: Contains inventory files specific to gaming hosts.
+```bash
+cp server-admin/inventory/hosts.example.yml server-admin/inventory/hosts.yml
+```
 
-Hosts are grouped by purpose:
-
-- **`debian_servers`**: Debian-based hosts that can run Debian-specific tasks.
-- **`homelab_servers`**: Local homelab machines.
-- **`cloud_servers`**: Cloud-hosted machines.
-
-## Configuration
-
-1. **Ansible Config**
-   Each subdirectory contains its own `ansible.cfg`. This ensures that the correct inventory and variables are loaded when running tasks from those specific directories.
-
-2. **Inventory Setup**
-   Copy the example inventory and replace the placeholder hostnames, ports, users, and SSH key path for the server admin setup:
-
-   ```bash
-   cp server-admin/inventory/hosts.example.yml server-admin/inventory/hosts.yml
-   ```
-
-3. **SSH Access**
-   Ensure the configured SSH user and private key can connect to each host before running playbooks.
-
-4. **Privilege Escalation**
-   The package update playbook uses `become: true`, so the remote user must be allowed to run privileged package-management tasks. These hosts are configured to require a sudo password, so include `--ask-become-pass` when running playbooks that use `become`.
+Hosts are grouped as `debian_servers`, `homelab_servers`, and `cloud_servers`. The SSH user and key must be able to connect to each host. These hosts require a sudo password, so pass `--ask-become-pass` to any playbook that uses `become`.
 
 ## Playbooks
 
-- **`server-admin/playbooks/update-packages.yml`**: Updates the package cache, performs a dist upgrade on Debian-based homelab hosts, and reboots hosts when `/var/run/reboot-required` exists.
-
-## Usage
-
-Run commands from the appropriate subdirectory:
+- **`server-admin/playbooks/update-packages.yml`**: Updates the package cache, dist-upgrades Debian-based hosts (it asserts this first), and reboots only when `/var/run/reboot-required` exists.
 
 ```bash
-# For server administration
 cd ansible/server-admin
 ansible all -m ping
 ansible-playbook playbooks/update-packages.yml --ask-become-pass
+ansible-playbook playbooks/update-packages.yml --limit <host-or-group> --ask-become-pass
 ```
-
-Limit the run to a single host or group when needed:
-
-```bash
-ansible-playbook playbooks/update-packages.yml --limit application_server --ask-become-pass
-ansible-playbook playbooks/update-packages.yml --limit homelab_servers --ask-become-pass
-```
-
-## Notes
-
-- The update playbook asserts that each target is Debian-based before running `apt` tasks.
-- Reboots are automatic only when the target host reports that one is required.
-- Use `--ask-become-pass` for playbooks that need sudo because these hosts do not use passwordless sudo.

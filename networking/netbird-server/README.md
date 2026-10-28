@@ -83,16 +83,13 @@ Because the tags here are pinned, also do the following:
 
 `dashboard.env` (installer defaults; change only the domain):
 
-- `NETBIRD_MGMT_API_ENDPOINT`, `NETBIRD_MGMT_GRPC_API_ENDPOINT` - `https://NETBIRD_DOMAIN`.
-- `AUTH_AUTHORITY` - `https://NETBIRD_DOMAIN/oauth2` (embedded IdP).
-- `AUTH_AUDIENCE`, `AUTH_CLIENT_ID`, `AUTH_CLIENT_SECRET`, `USE_AUTH0`, `AUTH_SUPPORTED_SCOPES`, `AUTH_REDIRECT_URI`, `AUTH_SILENT_REDIRECT_URI` - Embedded IdP client settings; leave as generated.
-- `NGINX_SSL_PORT`, `LETSENCRYPT_DOMAIN` - Leave as generated (`443`, `none`); Traefik handles TLS.
+- `NETBIRD_MGMT_API_ENDPOINT`, `NETBIRD_MGMT_GRPC_API_ENDPOINT`, `AUTH_AUTHORITY` - `https://NETBIRD_DOMAIN` (`AUTH_AUTHORITY` adds `/oauth2`, the embedded IdP).
+- `AUTH_AUDIENCE`, `AUTH_CLIENT_ID`, `AUTH_CLIENT_SECRET`, `USE_AUTH0`, `AUTH_SUPPORTED_SCOPES`, `AUTH_REDIRECT_URI`, `AUTH_SILENT_REDIRECT_URI`, `NGINX_SSL_PORT`, `LETSENCRYPT_DOMAIN` - Leave as generated; Traefik handles TLS.
 
 `proxy.env` (NetBird Proxy):
 
 - `NB_PROXY_DOMAIN` - Public URL where the proxy is reachable.
-- `NB_PROXY_TOKEN` - Proxy token (Setup step 5).
-- `NB_PROXY_CROWDSEC_API_KEY` - CrowdSec bouncer key (Setup step 5).
+- `NB_PROXY_TOKEN`, `NB_PROXY_CROWDSEC_API_KEY` - Proxy token and CrowdSec bouncer key (Setup step 5).
 - `NB_PROXY_CROWDSEC_API_URL` - `http://crowdsec:8080`.
 - `NB_PROXY_MANAGEMENT_ADDRESS`, `NB_PROXY_ALLOW_INSECURE` - Connect to management over the internal Docker network (avoids hairpin NAT).
 - `NB_PROXY_TRUSTED_PROXIES`, `NB_PROXY_PROXY_PROTOCOL` - Trust Traefik (`172.30.0.10`) and preserve client IPs with PROXY protocol.
@@ -120,7 +117,6 @@ Because the tags here are pinned, also do the following:
 
 - Peers can't reach `services`: confirm the network resource and access policy in the dashboard, and that netbird-client is the routing peer.
 - Proxy fails to register: regenerate `NB_PROXY_TOKEN` (Setup step 5) and restart `proxy`.
-- After an upgrade, keep the server, proxy, and client versions in sync (see [Upgrading](#upgrading)).
 - `peer login has expired` in the netbird-server logs: login expiry is on for user peers, so that device's user must log in again.
 - A router 404s or fails TLS for a few seconds after a container restarts: Traefik ignores containers while their health check is `starting`.
 - Compose stores a hash of each network's definition, so any change to `services` makes `up` try to recreate it, which fails while other stacks are attached. Dry-run first. To recreate it, stop and remove this stack's containers rather than running `down`, because other stacks' containers (Matrix, Grafana) stay on `netbird_netbird`.

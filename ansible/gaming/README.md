@@ -2,95 +2,51 @@
 
 Ansible automation for deploying one game stack at a time onto the reusable OCI Debian-based host from `terraform/oci/free-tier-host`.
 
-The playbooks copy the existing Compose stacks from `gaming/minecraft` or `gaming/palworld`, install Docker host prerequisites, decrypt a Vault-managed `.env`, and start the selected stack. Valheim isn't supported by the playbooks (`gaming_allowed_stacks` lists only `minecraft` and `palworld`); deploy it manually with `docker compose`.
-
-## Layout
-
-- `inventory/oci-game-hosts.example.yml` - Inventory template for the OCI host.
-- `files/*.env.vault` - Vault-managed runtime env files, created from the game stack `.env.example` files.
-- `playbooks/setup.yml` - Prepare the host and copy the selected game stack.
-- `playbooks/deploy.yml` - Start the selected stack and stop the other stack by default.
-- `playbooks/teardown.yml` - Stop the selected stack.
-- `playbooks/verify-host.yml` - Check Docker and selected stack setup.
+The playbooks copy the Compose stack from `gaming/minecraft` or `gaming/palworld`, install Docker host prerequisites, decrypt a Vault-managed `.env`, and start the stack. Valheim isn't supported (`gaming_allowed_stacks` lists only `minecraft` and `palworld`); deploy it manually with `docker compose`.
 
 ## Setup
 
-Run commands from this directory:
+Run commands from this directory (`cd ansible/gaming`).
 
-```bash
-cd ansible/gaming
-```
+1. Create the inventory and edit it with the OCI public IP, SSH user, and key path:
 
-Create the inventory:
+   ```bash
+   cp inventory/oci-game-hosts.example.yml inventory/oci-game-hosts.yml
+   ```
 
-```bash
-cp inventory/oci-game-hosts.example.yml inventory/oci-game-hosts.yml
-```
+2. Install the required collection:
 
-Edit `inventory/oci-game-hosts.yml` with the OCI public IP, SSH user, and key path.
+   ```bash
+   ansible-galaxy collection install -r requirements.yml
+   ```
 
-Install the required Ansible collection:
+3. Create an encrypted runtime env file (`files/<game>.env.vault`) for each game you plan to deploy. The `*.env.vault` files are gitignored.
 
-```bash
-ansible-galaxy collection install -r requirements.yml
-```
+   ```bash
+   cp ../../gaming/minecraft/.env.example /tmp/minecraft.env
+   ansible-vault encrypt /tmp/minecraft.env --output files/minecraft.env.vault
+   ```
 
-Create an encrypted runtime env file for each game you plan to deploy:
-
-```bash
-cp ../../gaming/minecraft/.env.example /tmp/minecraft.env
-ansible-vault encrypt /tmp/minecraft.env --output files/minecraft.env.vault
-
-cp ../../gaming/palworld/.env.example /tmp/palworld.env
-ansible-vault encrypt /tmp/palworld.env --output files/palworld.env.vault
-```
-
-The real `*.env.vault` files are ignored locally by default. Remove the ignore rule if you want to commit encrypted Vault files.
+   Repeat with `palworld` for Palworld.
 
 ## Usage
 
-Prepare the OCI host for Minecraft:
+Set `game_stack` to `minecraft` or `palworld`:
+
+| Playbook | Does |
+| --- | --- |
+| `setup.yml` | Prepares the host and copies the selected stack. Needs `--ask-vault-pass`. |
+| `deploy.yml` | Starts the selected stack and stops the other one. |
+| `verify-host.yml` | Checks Docker and the selected stack's setup. |
+| `teardown.yml` | Stops the selected stack. |
 
 ```bash
 ansible-playbook playbooks/setup.yml -e game_stack=minecraft --ask-vault-pass
-```
-
-Deploy Minecraft:
-
-```bash
 ansible-playbook playbooks/deploy.yml -e game_stack=minecraft
 ```
 
-Switch the same OCI host to Palworld:
-
-```bash
-ansible-playbook playbooks/setup.yml -e game_stack=palworld --ask-vault-pass
-ansible-playbook playbooks/deploy.yml -e game_stack=palworld
-```
-
-`deploy.yml` stops the other known game stack first when `gaming_stop_other_stack` is true. Override it only when you intentionally want to leave another stack running:
-
-```bash
-ansible-playbook playbooks/deploy.yml -e game_stack=palworld -e gaming_stop_other_stack=false
-```
-
-Verify the host:
-
-```bash
-ansible-playbook playbooks/verify-host.yml -e game_stack=minecraft
-```
-
-Stop a stack:
-
-```bash
-ansible-playbook playbooks/teardown.yml -e game_stack=minecraft
-```
+To switch the host to the other game, run the same two commands with its name. `deploy.yml` stops the other stack unless you pass `-e gaming_stop_other_stack=false`.
 
 ## Runtime Paths
 
-By default the remote host uses:
-
-- `/opt/gaming/minecraft`
-- `/opt/gaming/palworld`
-
-Each selected directory contains the copied `docker-compose.yml`, decrypted `.env`, persistent `data/`, and optional `config/`.
+Each stack lives in `/opt/gaming/<game>` on the host, with the copied `docker-compose.yml`, the decrypted `.env`, persistent `data/`, and optional `config/`.

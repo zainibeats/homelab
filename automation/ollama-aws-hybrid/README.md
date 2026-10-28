@@ -2,16 +2,9 @@
 
 > **Experimental** — This is an exploratory setup and not the primary Ollama deployment. For the standard local-only configuration, see [ai-stack](../ai-stack/README.md).
 
-This project provides a hybrid LLM deployment that runs your large language models locally on a home machine while exposing a user‑friendly web interface via an AWS EC2 instance. Public clients connect to Open WebUI over HTTPS, and Open WebUI reaches the local Ollama service through a WireGuard tunnel managed by **Gluetun**.
+A hybrid LLM deployment: Ollama runs on a home machine, and an AWS EC2 instance serves Open WebUI over HTTPS. Open WebUI reaches Ollama through a WireGuard tunnel managed by **Gluetun**. Traefik on the instance gets its certificate through Cloudflare's DNS-01 challenge, so port 80 stays closed.
 
-The preferred workflow uses Terraform to provision the EC2 host, cloud-init to
-install Docker and Docker Compose, and Ansible to configure and run the Compose
-stack. The Compose files can still be used manually if you prefer to provision
-or configure the host yourself.
-
-Public traffic enters the EC2 instance over HTTPS through **Traefik**. Traefik
-obtains certificates using Cloudflare's DNS-01 challenge, so the instance does
-not need to expose an HTTP listener on port 80.
+The preferred workflow is Terraform (EC2 host, with cloud-init installing Docker) followed by Ansible (deploys the Compose stack). You can also provision the host and run the Compose files yourself.
 
 **Runs on:** an AWS EC2 instance (Open WebUI), with Ollama on a local machine
 
@@ -19,28 +12,15 @@ not need to expose an HTTP listener on port 80.
 
 <img src="https://assets.czaini.net/images/aws-ollama-diagram.jpg" width="50%" height="auto"/>
 
-**EC2 Instance**:
-- Gluetun runs inside the instance and creates a WireGuard tunnel to the local network.
-- Open‑WebUI runs in the same compose stack and shares Gluetun's network namespace, so its traffic goes through the tunnel.
-- Traefik terminates HTTPS with a certificate obtained through Cloudflare's DNS challenge and proxies requests to Open WebUI through Gluetun.
-
 ```text
 Client -> EC2:443 -> Traefik -> Gluetun:8080/Open WebUI -> WireGuard -> Ollama
 ```
 
 #### Public IP and DNS
 
-The default infrastructure uses an Elastic IP so the Cloudflare DNS record
-remains valid across EC2 stop/start cycles and service downtime is minimized.
+The default infrastructure uses an Elastic IP so the Cloudflare DNS record survives EC2 stop/start cycles.
 
-As an alternative, [`ddclient`](../../networking/ddclient/README.md) can
-update the Cloudflare DNS record when the instance's dynamically assigned
-public IP changes. This avoids reserving an Elastic IP, but introduces a period
-of downtime while the instance starts, `ddclient` detects the new address, and
-DNS caches expire.
-
-**Local**:
-- Ollama is exposed on the LAN (e.g., `http://192.168.1.100:11434`) and is reachable from the EC2 instance through the WireGuard tunnel.
+Alternatively, [`ddclient`](../../networking/ddclient/README.md) can update the record when a dynamic public IP changes. That avoids reserving an Elastic IP, but costs downtime while the instance starts, `ddclient` detects the new address, and DNS caches expire.
 
 ## Prerequisites
 
@@ -126,8 +106,6 @@ docker compose up -d
 - `OLLAMA_BASE_URL` - URL of the **local** Ollama instance, reached through the tunnel (e.g. `http://192.168.1.100:11434`).
 - `WEBUI_SECRET_KEY` - Long, random secret used by Open WebUI to secure sessions.
 - `TZ` - Timezone, e.g. `America/Los_Angeles`.
-
-Traefik's static configuration is in [`config/traefik.yml`](./config/traefik.yml). See the full stack in [`docker-compose.yml`](./docker-compose.yml).
 
 ## Routing & Ports
 

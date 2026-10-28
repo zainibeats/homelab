@@ -1,6 +1,6 @@
 # Homelab
 
-This repository contains configuration files and documentation for my homelab setup, including Docker Compose stacks, infrastructure automation, service documentation, and hardware that powers the environment. Further details about the hardware inventory are available in the [hardware readme](./hardware/README.md).
+Configuration and documentation for my homelab: Docker Compose stacks, infrastructure automation, and [hardware](./hardware/README.md).
 
 > For my build processes, insights, stories, photos, and more, visit my [blog](https://czaini.net/blog).
 
@@ -34,23 +34,23 @@ Compose stacks are grouped by job, one folder per stack. Provisioning code (run 
 - **[Monitoring](./monitoring/README.md)** - Metrics, logs, and uptime monitoring for home and OCI hosts
 - **[Networking](./networking/README.md)** - Reverse proxy, dynamic DNS, and remote access (WireGuard, NetBird)
 - **[Storage](./storage/README.md)** - Data storage, backup, and security services
-- **[Utilities](./utilities/README.md)** - General-purpose tools including file conversion, IT utilities, secret sharing, search, virtual browser, wiki, and Matrix chat
+- **[Utilities](./utilities/README.md)** - General-purpose tools and Matrix chat
 
 **Provisioning**
 - **[Terraform](./terraform/README.md)** - Terraform configurations for cloud and Proxmox hosts
 - **[Ansible](./ansible/README.md)** - Playbooks for server administration, game hosts, and the Ollama AWS hybrid host
 
-**Conventions** (full list in [docs/CONVENTIONS.md](./docs/CONVENTIONS.md))
-- Every compose file pins `name:`, so renaming a folder never renames its volumes. Gitignored live compose copies must keep the same `name:` line (e.g. `monitoring/monitoring-home/docker-compose.yml`).
-- Example files are `<file>.example.<ext>` (env files: `.env.example`, `<name>.env.example`; Terraform: `terraform.tfvars.example`). Copy them without `.example` and fill them in; the live copies are gitignored.
+**Conventions:** layout, compose `name:`, example files, and the README template are in [docs/CONVENTIONS.md](./docs/CONVENTIONS.md).
 
 ## AI Agents
-Agents working on this repository are configured by `AGENTS.md` and the `.agents` directory. Both apply to this repo only.
-- **[AGENTS.md](./AGENTS.md)** - Rules and workflow for agents working on this repo: safety, secrets, commit style, and handling of deployed clones and root-owned live files.
-- **[.agents](./.agents)** - Skills for agents working on this repo, such as documentation audits and conventional commit generation. The skills are generic, so they can be copied to other repos.
-- **[ai-agents](./ai-agents/README.md)** - Agent context and skills for tools outside this repo (e.g. the Obsidian vault).
+
+| Path | Applies to | Contents |
+| ---- | ---------- | -------- |
+| **[AGENTS.md](./AGENTS.md)** | This repo only | Rules and workflow for agents working here |
+| **[.agents](./.agents)** | This repo, reusable anywhere | Skills used here (documentation audits, conventional commits). They're generic, so they can be copied to other repos |
+| **[ai-agents](./ai-agents/README.md)** | Other projects, not this repo | Context bundles and skills for tools outside this repo, such as the Obsidian vault |
 
 ## Automatic Updates
 
-- **Containers:** **Watchtower** updates Docker containers daily at 5:00 AM to avoid peak usage hours. See the [Watchtower documentation](./infrastructure/watchtower/README.md) for configuration and usage.
+- **Containers:** [Watchtower](./infrastructure/watchtower/README.md) updates Docker containers daily at 5:00 AM.
 - **Host OS:** All Debian-based hosts except Proxmox use `unattended-upgrades` for automatic security updates. TrueNAS and Proxmox are updated manually.

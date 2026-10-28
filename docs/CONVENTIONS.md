@@ -79,4 +79,4 @@ Every stack README follows this template. A section with nothing to say gets one
 
 ## Commits
 
-[Conventional Commits](https://www.conventionalcommits.org/), subject line only (e.g. `docs(networking): standardize stack readmes`). No body and no trailers.
+[Conventional Commits](https://www.conventionalcommits.org/), subject line only (e.g. `docs(networking): standardize stack readmes`). No body and no trailers (`Co-Authored-By`, session links). The tracked [conventional-commits skill](../.agents/skills/conventional-commits/SKILL.md) applies this rule.
