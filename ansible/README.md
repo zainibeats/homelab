@@ -57,7 +57,7 @@ ansible-playbook playbooks/update-packages.yml --ask-become-pass
 Limit the run to a single host or group when needed:
 
 ```bash
-ansible-playbook playbooks/update-packages.yml --limit ubuntu_server --ask-become-pass
+ansible-playbook playbooks/update-packages.yml --limit application_server --ask-become-pass
 ansible-playbook playbooks/update-packages.yml --limit homelab_servers --ask-become-pass
 ```
 

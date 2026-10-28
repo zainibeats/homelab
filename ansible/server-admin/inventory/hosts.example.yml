@@ -3,22 +3,22 @@ all:
 
     debian_servers:
       hosts:
-        ubuntu_server:
-          ansible_host: UBUNTU_SERVER_IP
+        application_server:
+          ansible_host: APPLICATION_SERVER_IP
           ansible_port: 2222
         raspberry_pi:
           ansible_host: RASPBERRY_PI_IP
-        proxmox_ve:
-          ansible_host: PROXMOX_VE_IP
+        gpu_compute:
+          ansible_host: GPU_COMPUTE_IP
         azure_jump_server:
           ansible_host: AZURE_JUMP_SERVER_IP
           ansible_user: azureuser
 
     homelab_servers:
       hosts:
-        ubuntu_server:
+        application_server:
         raspberry_pi:
-        proxmox_ve:
+        gpu_compute:
 
     cloud_servers:
       hosts:

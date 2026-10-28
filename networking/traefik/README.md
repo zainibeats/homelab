@@ -27,7 +27,7 @@ Dynamic configuration examples:
 
 - `pi5.example.yml` - Homepage, Grafana, and Uptime Kuma on the Raspberry Pi.
 - `truenas.example.yml` - TrueNAS web UI.
-- `ubuntu-server.example.yml`, `ubuntu-server-host.example.yml`, `ubuntu-server-lan.example.yml` - qBittorrent, Prowlarr, Jellyfin, Home Assistant, and Neko on the Application Server (public, host-network, and LAN-only variants).
+- `application-server.example.yml`, `application-server-host.example.yml`, `application-server-lan.example.yml` - qBittorrent, Prowlarr, Jellyfin, Home Assistant, and Neko on the Application Server (public, host-network, and LAN-only variants).
 
 ## Configuration
 

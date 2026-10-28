@@ -1,59 +1,59 @@
 http:
   routers:
-    qbittorrent-lan:
-      rule: "Host(`qb.subdomain.domain.tld`)"
+    qbittorrent:
+      rule: "Host(`qb.domain.tld`)"
       entryPoints:
         - websecure
       tls:
         certResolver: cloudflare
-      service: qbittorrent-gluetun-lan
-    prowlarr-lan:
-      rule: "Host(`prowlarr.subdomain.domain.tld`)"
+      service: qbittorrent-gluetun
+    prowlarr:
+      rule: "Host(`prowlarr.domain.tld`)"
       entryPoints:
         - websecure
       tls:
         certResolver: cloudflare
-      service: prowlarr-gluetun-lan
-    jellyfin-lan:
-      rule: "Host(`jellyfin.subdomain.domain.tld`)"
+      service: prowlarr-gluetun
+    jellyfin:
+      rule: "Host(`jellyfin.domain.tld`)"
       entryPoints:
         - websecure
       tls:
         certResolver: cloudflare
-      service: jellyfin-lan-ubuntu
-    homeassistant-lan:
-      rule: "Host(`homeassistant.subdomain.domain.tld`)"
+      service: jellyfin-application-server
+    homeassistant:
+      rule: "Host(`homeassistant.domain.tld`)"
       entryPoints:
         - websecure
       tls:
         certResolver: cloudflare
-      service: homeassistant-lan-ubuntu
-    neko-lan:
-      rule: "Host(`neko.subdomain.domain.tld`)"
+      service: homeassistant-application-server
+    neko:
+      rule: "Host(`neko.domain.tld`)"
       entryPoints:
         - websecure
       tls:
         certResolver: cloudflare
-      service: neko-lan-ubuntu
+      service: neko-application-server
 
   services:
-    qbittorrent-gluetun-lan:
+    qbittorrent-gluetun:
       loadBalancer:
         servers:
           - url: "http://172.23.51.30:8122"
-    prowlarr-gluetun-lan:
+    prowlarr-gluetun:
       loadBalancer:
         servers:
           - url: "http://172.23.51.30:9696"
-    jellyfin-lan-ubuntu:
+    jellyfin-application-server:
       loadBalancer:
         servers:
           - url: "http://172.23.51.30:8096"
-    homeassistant-lan-ubuntu:
+    homeassistant-application-server:
       loadBalancer:
         servers:
           - url: "http://172.23.51.30:8123"
-    neko-lan-ubuntu:
+    neko-application-server:
       loadBalancer:
         servers:
           - url: "http://172.23.51.30:8880"

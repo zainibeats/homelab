@@ -20,21 +20,7 @@ http:
         - websecure
       tls:
         certResolver: cloudflare
-      service: jellyfin-ubuntu
-    homeassistant:
-      rule: "Host(`homeassistant.domain.tld`)"
-      entryPoints:
-        - websecure
-      tls:
-        certResolver: cloudflare
-      service: homeassistant-ubuntu
-    neko:
-      rule: "Host(`neko.domain.tld`)"
-      entryPoints:
-        - websecure
-      tls:
-        certResolver: cloudflare
-      service: neko-ubuntu
+      service: jellyfin-application-server
 
   services:
     qbittorrent-gluetun:
@@ -45,15 +31,7 @@ http:
       loadBalancer:
         servers:
           - url: "http://172.23.51.30:9696"
-    jellyfin-ubuntu:
+    jellyfin-application-server:
       loadBalancer:
         servers:
           - url: "http://172.23.51.30:8096"
-    homeassistant-ubuntu:
-      loadBalancer:
-        servers:
-          - url: "http://172.23.51.30:8123"
-    neko-ubuntu:
-      loadBalancer:
-        servers:
-          - url: "http://172.23.51.30:8880"

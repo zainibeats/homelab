@@ -68,7 +68,7 @@ This section documents the physical hardware that powers my home lab. It covers 
 - StarTech Open Frame 12U adjustable depth rack
   - NAS and utility devices
   - Core and access switching
-  - Rack-mount compute node
+  - GPU Compute Node (rack-mounted)
   - UPS for power protection
 
 ---
@@ -84,7 +84,7 @@ The lab uses a small 10 Gb switching core for high-throughput local storage and 
 - **Primary Desktop**
   - Goal: Complete – Upgrade over time
 
-- **Compute Node**
+- **GPU Compute Node**
   - Goal: Rack‑mounted GPU compute node powered on demand. Uses my retired RTX 3070 Ti desktop in a 4U chassis; CPU upgrade is optional.
 
 - **Always‑On Utility Node**
