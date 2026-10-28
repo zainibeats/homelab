@@ -50,10 +50,6 @@ Agents working on this repository are configured by `AGENTS.md` and the `.agents
 - **[.agents](./.agents)** - Skills for agents working on this repo, such as documentation audits and conventional commit generation. The skills are generic, so they can be copied to other repos.
 - **[ai-agents](./ai-agents/README.md)** - Agent context and skills for tools outside this repo (e.g. the Obsidian vault).
 
-## Storage Overview
-
-Storage is provided by a dedicated NAS (TrueNAS Server) and separated by category. Media, application data, backups, virtual machine storage, etc. are organized into separate datasets and shares.
-
 ## Automatic Updates
 
 Utilizing **Watchtower** for automatic Docker container updates.
