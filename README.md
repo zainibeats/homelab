@@ -52,6 +52,5 @@ Agents working on this repository are configured by `AGENTS.md` and the `.agents
 
 ## Automatic Updates
 
-Utilizing **Watchtower** for automatic Docker container updates.
-
-I've configured it to run daily at 5:00 AM to minimize disruption during peak usage hours. See the [Watchtower documentation](./infrastructure/watchtower/README.md) for configuration details and usage instructions.
+- **Containers:** **Watchtower** updates Docker containers daily at 5:00 AM to avoid peak usage hours. See the [Watchtower documentation](./infrastructure/watchtower/README.md) for configuration and usage.
+- **Host OS:** All Debian-based hosts except Proxmox use `unattended-upgrades` for automatic security updates. TrueNAS and Proxmox are updated manually.
