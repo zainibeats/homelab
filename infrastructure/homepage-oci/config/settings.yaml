@@ -1,0 +1,28 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/settings/
+
+title: "{{HOMEPAGE_VAR_TITLE}}"
+headerStyle: boxed
+theme: dark
+hideVersion: true
+statusStyle: dot
+
+background:
+  image: https://images.unsplash.com/photo-1502790671504-542ad42d5189?auto=format&fit=crop&w=2560&q=80
+  blur: xl
+  brightness: 90
+  opacity: 60
+
+cardBlur: sm
+
+layout:
+  Chat & Watch:
+    style: row
+    columns: 2
+    icon: mdi-chat-#FFFFFF
+
+  Game Servers:
+    style: row
+    columns: 3
+    icon: mdi-gamepad-variant-#FFFFFF

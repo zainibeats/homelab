@@ -7,6 +7,7 @@ Platform services: dashboards, version control, and container management.
 ### Dashboard
 - **[Homepage (Public)](./homepage-public/README.md)** - Public dashboard of service status
 - **[Homepage (Admin)](./homepage-admin/README.md)** - Administrator dashboard for internal services
+- **[Homepage (OCI)](./homepage-oci/README.md)** - Landing page for family and friends on NetBird: chat, watch parties, game server status
 
 ### Container Management
 - **[Watchtower](./watchtower/README.md)** - Automatic Docker container updates on a schedule

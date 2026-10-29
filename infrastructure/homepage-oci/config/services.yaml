@@ -1,0 +1,40 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/services/
+# Join passwords are shared in Element, never on this page.
+
+- Chat & Watch:
+    - Element:
+        icon: element.svg
+        href: https://{{HOMEPAGE_VAR_CHAT_HOST}}
+        description: Chat and calls
+        siteMonitor: https://{{HOMEPAGE_VAR_CHAT_HOST}}
+
+    - Neko:
+        icon: neko.svg
+        href: https://{{HOMEPAGE_VAR_NEKO_HOST}}
+        description: Watch parties in a shared browser
+        siteMonitor: https://{{HOMEPAGE_VAR_NEKO_HOST}}
+
+- Game Servers:
+    - Minecraft:
+        icon: minecraft.svg
+        description: "Join: {{HOMEPAGE_VAR_MINECRAFT_HOST}}"
+        widget:
+          type: minecraft
+          url: udp://{{HOMEPAGE_VAR_MINECRAFT_IP}}:25565
+
+    - Valheim:
+        icon: valheim.png
+        description: "Join: {{HOMEPAGE_VAR_VALHEIM_IP}}:2456 · password: ask in Element"
+        widget:
+          type: gamedig
+          serverType: valheim
+          url: udp://{{HOMEPAGE_VAR_VALHEIM_IP}}:2457 # Steam query port (game port + 1)
+          fields: ["status", "players"]
+
+    # GameDig can only query Palworld through its admin REST API, so this is up/down only.
+    - Palworld:
+        icon: palworld.png
+        description: "Join: {{HOMEPAGE_VAR_PALWORLD_IP}}:8211 · password: ask in Element"
+        ping: "{{HOMEPAGE_VAR_PALWORLD_IP}}"

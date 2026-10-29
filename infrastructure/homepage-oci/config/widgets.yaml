@@ -1,0 +1,12 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/info-widgets/
+
+- datetime:
+    text_size: xl
+    format:
+      timeStyle: short
+
+- greeting:
+    text_size: x4
+    text: Welcome
