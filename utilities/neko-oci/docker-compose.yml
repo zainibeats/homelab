@@ -1,0 +1,47 @@
+name: neko-oci
+
+networks:
+  services:
+    external: true # created by netbird-server, routed to NetBird peers by netbird-client
+
+volumes:
+  home: # /home/neko: Brave profile; starts owned by the image's neko user
+
+services:
+  neko:
+    image: ghcr.io/m1k1o/neko/brave:3.2.0
+    container_name: neko-oci
+    hostname: neko-oci # Brave's profile lock records the hostname; a fixed one lets it clear a stale lock itself
+    restart: unless-stopped
+    shm_size: 2gb
+    cap_add:
+      - SYS_ADMIN # Brave's sandbox
+    cpus: 3 # leave a core for the other OCI stacks
+    mem_limit: 6g
+    # No published ports: NetBird peers reach the web UI through Traefik and
+    # WebRTC media (52000/udp) directly at NEKO_IP on the routed "services" network.
+    networks:
+      services:
+        ipv4_address: ${NEKO_IP}
+    volumes:
+      - home:/home/neko
+    environment:
+      TZ: ${TZ:-America/Los_Angeles}
+      NEKO_SERVER_PROXY: "true" # trust X-Forwarded-For from Traefik
+      NEKO_DESKTOP_SCREEN: 1280x720@30
+      NEKO_CAPTURE_VIDEO_CODEC: h264 # x264 on the CPU, lighter than the vp8 default
+      NEKO_MEMBER_PROVIDER: multiuser
+      NEKO_MEMBER_MULTIUSER_USER_PASSWORD: ${NEKO_MEMBER_MULTIUSER_USER_PASSWORD:?set in .env}
+      NEKO_MEMBER_MULTIUSER_ADMIN_PASSWORD: ${NEKO_MEMBER_MULTIUSER_ADMIN_PASSWORD:?set in .env}
+      NEKO_WEBRTC_UDPMUX: 52000
+      NEKO_WEBRTC_ICELITE: "true"
+      NEKO_WEBRTC_NAT1TO1: ${NEKO_IP}
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=services
+      - traefik.http.middlewares.neko-netbird-only.ipallowlist.sourcerange=${ALLOWED_RANGES}
+      - traefik.http.routers.neko.rule=Host(`${NEKO_HOST}`)
+      - traefik.http.routers.neko.entrypoints=${TRAEFIK_ENTRYPOINT}
+      - traefik.http.routers.neko.tls.certresolver=${TRAEFIK_CERTRESOLVER}
+      - traefik.http.routers.neko.middlewares=neko-netbird-only
+      - traefik.http.services.neko.loadbalancer.server.port=8080

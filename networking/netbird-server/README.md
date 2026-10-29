@@ -48,6 +48,7 @@ In the dashboard:
   |----------|-------|-----|
   | TCP | 443, 7881 | Matrix through Traefik, LiveKit TCP fallback |
   | UDP | 7882 | LiveKit media |
+  | UDP | 52000 | Neko (OCI) media |
   | TCP | 25565 | Minecraft |
   | UDP | 8211, 27015 | Palworld |
   | UDP | 2456-2458 | Valheim |
