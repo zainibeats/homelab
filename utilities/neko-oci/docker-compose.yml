@@ -6,23 +6,56 @@ networks:
 
 volumes:
   home: # /home/neko: Brave profile; starts owned by the image's neko user
+  gluetun: # Gluetun's server list cache
 
 services:
+  # Neko shares Gluetun's network namespace: browsing leaves through the VPN (no
+  # traffic when it's down), while NetBird peers reach NEKO_IP on "services".
+  # Recreating gluetun cuts neko off; restart neko with it.
+  gluetun:
+    image: qmcgaw/gluetun:v3.41.3
+    container_name: neko-oci-gluetun
+    hostname: neko-oci # neko inherits it; Brave's profile lock records the hostname
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    networks:
+      services:
+        ipv4_address: ${NEKO_IP}
+    volumes:
+      - gluetun:/gluetun
+    environment:
+      TZ: ${TZ:-America/Los_Angeles}
+      VPN_SERVICE_PROVIDER: ${VPN_SERVICE_PROVIDER:?set in .env}
+      VPN_TYPE: wireguard
+      WIREGUARD_PRIVATE_KEY: ${WIREGUARD_PRIVATE_KEY:?set in .env}
+      SERVER_COUNTRIES: ${SERVER_COUNTRIES:-}
+      FIREWALL_INPUT_PORTS: 8080,52000 # web UI from Traefik, WebRTC media from NetBird peers
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=services
+      - traefik.http.middlewares.neko-netbird-only.ipallowlist.sourcerange=${ALLOWED_RANGES}
+      - traefik.http.routers.neko.rule=Host(`${NEKO_HOST}`)
+      - traefik.http.routers.neko.entrypoints=${TRAEFIK_ENTRYPOINT}
+      - traefik.http.routers.neko.tls.certresolver=${TRAEFIK_CERTRESOLVER}
+      - traefik.http.routers.neko.middlewares=neko-netbird-only
+      - traefik.http.services.neko.loadbalancer.server.port=8080
+
   neko:
     image: ghcr.io/m1k1o/neko/brave:3.2.0
     container_name: neko-oci
-    hostname: neko-oci # Brave's profile lock records the hostname; a fixed one lets it clear a stale lock itself
     restart: unless-stopped
+    network_mode: service:gluetun
+    depends_on:
+      gluetun:
+        condition: service_healthy
     shm_size: 2gb
     cap_add:
       - SYS_ADMIN # Brave's sandbox
     cpus: 3 # leave a core for the other OCI stacks
     mem_limit: 6g
-    # No published ports: NetBird peers reach the web UI through Traefik and
-    # WebRTC media (52000/udp) directly at NEKO_IP on the routed "services" network.
-    networks:
-      services:
-        ipv4_address: ${NEKO_IP}
     volumes:
       - home:/home/neko
     environment:
@@ -36,12 +69,3 @@ services:
       NEKO_WEBRTC_UDPMUX: 52000
       NEKO_WEBRTC_ICELITE: "true"
       NEKO_WEBRTC_NAT1TO1: ${NEKO_IP}
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=services
-      - traefik.http.middlewares.neko-netbird-only.ipallowlist.sourcerange=${ALLOWED_RANGES}
-      - traefik.http.routers.neko.rule=Host(`${NEKO_HOST}`)
-      - traefik.http.routers.neko.entrypoints=${TRAEFIK_ENTRYPOINT}
-      - traefik.http.routers.neko.tls.certresolver=${TRAEFIK_CERTRESOLVER}
-      - traefik.http.routers.neko.middlewares=neko-netbird-only
-      - traefik.http.services.neko.loadbalancer.server.port=8080
