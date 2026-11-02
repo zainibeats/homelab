@@ -9,6 +9,7 @@ The machines running in the lab. Each one's purpose is listed in the [top-level 
 | NAS                | Xeon E3-1235L  | —           | 32 GB ECC | Mirrored HDD pools   |
 | Application Server | Core i7-7700   | GTX 1050    | 16 GB     | 1 TB HDD             |
 | Raspberry Pi 5     | —              | —           | 8 GB      | —                    |
+| Kubernetes Nodes   | Core i5-7500T  | —           | 32 GB     | 256 GB NVMe          |
 | GPU Compute Node   | Ryzen 9 5900X  | RTX 3070 Ti | 64 GB     | 2 × 1 TB NVMe        |
 | Workstation        | Ryzen 9 9950X  | RTX 5080    | 32 GB     | ~10 TB across 4 SSDs |
 
