@@ -13,6 +13,7 @@ Configuration and documentation for my homelab: Docker Compose stacks, infrastru
 | **NAS**                    | Centralized storage and backups               | TrueNAS Scale |
 | **Application Server**     | Primary application hosting                   | Ubuntu Server |
 | **Raspberry Pi**           | Network services, monitoring and automation   | Raspberry Pi OS Lite |
+| **Kubernetes Nodes** x 2       | Learning/experimenting (Kubernetes)           | Debian |
 | **GPU Compute Node**       | Virtual machines, remote desktop and testing  | Proxmox VE |
 
 ### Cloud Instances
