@@ -1,6 +1,7 @@
 # Environment and Secrets
 .env
 runtime.env
+/homelab-toolbox/secrets.env
 secrets.yaml
 *.pem
 **/netbird-server/config.yaml
@@ -31,7 +32,8 @@ terraform.tfvars
 # Automation and Configuration
 /ansible/ollama-aws-hybrid/open-webui-ec2-instance.yml
 /ansible/ollama-aws-hybrid/check.output
-/ansible/server-admin/inventory/hosts.yml
+/ansible/**/hosts.yml
+/ansible/*/.venv/
 **/gitea/**/app.ini
 /networking/traefik/config/traefik.yml
 /networking/traefik/config/dynamic/*.yml
@@ -69,3 +71,4 @@ obsidian-vault
 /.claude
 /private-homelab-docs
 /docs/DOCS-AUDIT.md
+/.pi
