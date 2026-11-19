@@ -4,6 +4,8 @@ Ansible automation for deploying one game stack at a time onto the reusable OCI 
 
 The playbooks copy the Compose stack from `gaming/minecraft` or `gaming/palworld`, install Docker host prerequisites, decrypt a Vault-managed `.env`, and start the stack. Valheim isn't supported (`gaming_allowed_stacks` lists only `minecraft` and `palworld`); deploy it manually with `docker compose`.
 
+The game stacks publish no ports; they join the external `services` network, which the playbooks don't create. Start [NetBird Server](../../networking/netbird-server/README.md) or [NetBird Client](../../networking/netbird-client/README.md) on the host first, or the stack fails with "network services declared as external, but could not be found".
+
 ## Setup
 
 Run commands from this directory (`cd ansible/gaming`).

@@ -39,7 +39,7 @@ docker run --rm --network services curlimages/curl -s -o /dev/null -w '%{http_co
 - `NEKO_MEMBER_MULTIUSER_USER_PASSWORD` - Password for guests.
 - `NEKO_MEMBER_MULTIUSER_ADMIN_PASSWORD` - Password for the admin.
 
-Fixed in the compose file: Brave `3.2.0` and Gluetun `v3.41.3`, both pinned (Watchtower only pulls the same tag; upgrade them together by hand), WireGuard, H.264 (x264) at `1280x720@30`, multiuser auth, WebRTC on one UDP mux port `52000` with ICE-lite, file transfer off, and limits of 3 CPUs and 6 GB for Neko.
+Fixed in the compose file: Brave `3.2.0` and Gluetun `v3.41.3`, both pinned (Watchtower only pulls the same tag; upgrade them together by hand), WireGuard, H.264 (x264) at `1280x720@30`, multiuser auth, WebRTC on one UDP mux port `52000` with ICE-lite, and limits of 3 CPUs and 6 GB for Neko. File transfer stays off (Neko's default).
 
 ## Routing & Ports
 
