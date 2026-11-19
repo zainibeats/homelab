@@ -1,0 +1,5 @@
+- name: Base OS configuration
+  ansible.builtin.import_playbook: base.yml
+
+- name: Install k3s
+  ansible.builtin.import_playbook: k3s.orchestration.site

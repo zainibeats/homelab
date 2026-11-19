@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# Run the homelab-toolbox image against the current directory.
+# Usage: homelab-box                 interactive bash in /work
+#        homelab-box <cmd> [args]    run one command, e.g. homelab-box tofu plan
+set -euo pipefail
+IFS=$'\n\t'
+
+# ---- CONFIG ----
+IMAGE="${HOMELAB_BOX_IMAGE:-homelab-toolbox:latest}"
+KNOWN_HOSTS="${HOMELAB_BOX_KNOWN_HOSTS:-$HOME/.ssh/known_hosts}"
+KUBE_DIR="${HOMELAB_BOX_KUBE_DIR:-$HOME/.kube}"
+SECRETS_ENV="${HOMELAB_BOX_SECRETS_ENV:-$HOME/.config/homelab/secrets.env}"
+
+die() { echo "homelab-box: $*" >&2; exit 1; }
+
+# ---- CHECKS ----
+# SSH goes through agent forwarding only; no key files are ever mounted.
+if [[ -z "${SSH_AUTH_SOCK:-}" || ! -S "$SSH_AUTH_SOCK" ]]; then
+  die "no SSH agent (SSH_AUTH_SOCK is unset or not a socket). Start one and add a key: eval \"\$(ssh-agent -s)\" && ssh-add"
+fi
+if command -v ssh-add >/dev/null 2>&1; then
+  rc=0; ssh-add -l >/dev/null 2>&1 || rc=$?
+  (( rc != 2 )) || die "cannot reach the SSH agent at $SSH_AUTH_SOCK (is it still running?)"
+fi
+
+[[ -f "$SECRETS_ENV" ]] || die "missing $SECRETS_ENV. Create it from the template in the homelab-toolbox folder: install -D -m 600 secrets.env.example $SECRETS_ENV"
+
+# ssh in the container records new host keys here, so make sure the file exists.
+if [[ ! -e "$KNOWN_HOSTS" ]]; then
+  mkdir -p -m 700 "$(dirname "$KNOWN_HOSTS")"
+  touch "$KNOWN_HOSTS"
+fi
+
+# ---- RUN ----
+# Default bridge networking on purpose (no --network host): the container follows
+# the host's routes, including NetBird/WireGuard, and the firewall sees the host.
+docker_args=(run --rm -i)
+[[ -t 0 ]] && docker_args+=(-t)
+docker_args+=(
+  --mount "type=bind,src=$PWD,dst=/work"
+  --mount "type=bind,src=$SSH_AUTH_SOCK,dst=/ssh-agent"
+  --env SSH_AUTH_SOCK=/ssh-agent
+  --mount "type=bind,src=$KNOWN_HOSTS,dst=/home/ops/.ssh/known_hosts"
+  --env-file "$SECRETS_ENV"
+)
+if [[ -d "$KUBE_DIR" ]]; then
+  docker_args+=(--mount "type=bind,src=$KUBE_DIR,dst=/home/ops/.kube,readonly")
+fi
+
+exec docker "${docker_args[@]}" "$IMAGE" "$@"

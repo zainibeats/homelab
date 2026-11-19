@@ -39,7 +39,8 @@ Compose stacks are grouped by job, one folder per stack. Provisioning code (run 
 
 **Provisioning**
 - **[Terraform](./terraform/README.md)** - Terraform configurations for cloud and Proxmox hosts
-- **[Ansible](./ansible/README.md)** - Playbooks for server administration, game hosts, and the Ollama AWS hybrid host
+- **[Ansible](./ansible/README.md)** - Playbooks for server administration, game hosts, k3s nodes, and the Ollama AWS hybrid host
+- **[Homelab Toolbox](./homelab-toolbox/README.md)** - Container image with OpenTofu, Ansible, kubectl and Helm, plus a wrapper to run them
 
 **Conventions:** layout, compose `name:`, example files, and the README template are in [docs/CONVENTIONS.md](./docs/CONVENTIONS.md).
 

@@ -1,0 +1,5 @@
+- name: Base OS configuration for k3s nodes
+  hosts: k3s_cluster
+  become: true
+  roles:
+    - base

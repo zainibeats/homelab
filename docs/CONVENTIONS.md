@@ -6,6 +6,7 @@ Rules for adding or changing anything in this repo. Compose stacks are deployed 
 
 - **Compose stacks** live one level under a category folder named for their job: `<category>/<stack>/`. Categories: `automation`, `gaming`, `infrastructure`, `media`, `monitoring`, `networking`, `storage`, `utilities`.
 - **Provisioning** lives in top-level folders by tool: `terraform/<provider>/<name>/` and `ansible/<project>/`. Category folders hold only compose stacks.
+- **`homelab-toolbox/`** is the container image (OpenTofu, Ansible, kubectl, Helm) for running provisioning code without installing the tools locally.
 - **Variants of one service** are flat siblings with a suffix (`netbird-server`/`netbird-client`, `homepage-admin`/`homepage-public`, `monitoring-home`/`monitoring-oci`), not a parent folder with variant subfolders.
 - **`agent-context/`** holds context for AI agents working on things outside this repo (e.g. the Obsidian vault). **`.agents/`** is this repo's own agent config.
 - Every category folder has a `README.md` listing its stacks, one line each.

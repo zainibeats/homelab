@@ -4,6 +4,7 @@ Shared Ansible automation for homelab and cloud servers, one subdirectory per jo
 
 - **`server-admin/`**: General server administration (e.g., package updates).
 - **`gaming/`**: Deploys one game stack from `gaming/` onto the OCI game host.
+- **`k3s/`**: Prepares the k3s nodes and installs the cluster, see [k3s](./k3s/README.md).
 - **`ollama-aws-hybrid/`**: Prepares and deploys the [Ollama AWS Hybrid](../automation/ollama-aws-hybrid/README.md) stack on its EC2 host.
 
 ## Setup
