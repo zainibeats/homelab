@@ -1,0 +1,23 @@
+name: compose-validation
+on: push
+jobs:
+  get-yaml:
+    runs-on: ubuntu-slim
+    outputs:
+      files: ${{ steps.files.outputs.files }}
+    steps:
+      - id: checkout
+        uses: actions/checkout@v6
+      - id: files
+        run: echo "files=$(git ls-files | grep -E 'docker-compose(\.example)?\.yml' | jq -R -s -c 'split("\n")[:-1]')" >> "$GITHUB_OUTPUT"
+
+  validate:
+    needs: get-yaml
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        file: ${{ fromJSON(needs.get-yaml.outputs.files) }}
+    steps:
+      - uses: actions/checkout@v6
+      - run: docker compose -f "${{ matrix.file }}" config -q
