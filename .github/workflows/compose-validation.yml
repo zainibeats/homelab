@@ -1,0 +1,51 @@
+name: compose-validation
+on:
+  push:
+    paths:
+      - '**/docker-compose*.yml'
+      - '**/*.env*.example'
+      - '.github/workflows/compose-validation.yml'
+  pull_request:
+    paths:
+      - '**/docker-compose*.yml'
+      - '**/*.env*.example'
+      - '.github/workflows/compose-validation.yml'
+  workflow_dispatch:
+
+jobs:
+  find-compose-files:
+    runs-on: ubuntu-slim
+    outputs:
+      compose_files: ${{ steps.list.outputs.compose_files }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: List compose files
+        id: list
+        # Finds every docker-compose.yml and docker-compose.example.yml tracked in git
+        run: echo "compose_files=$(git ls-files | grep -E 'docker-compose(\.example)?\.yml' | jq -R -s -c 'split("\n")[:-1]')" >> "$GITHUB_OUTPUT"
+
+  validate-compose:
+    name: validate ${{ matrix.compose_file }}
+    needs: find-compose-files
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compose_file: ${{ fromJSON(needs.find-compose-files.outputs.compose_files) }}
+    env:
+      STACK_FILE: ${{ matrix.compose_file }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Create .env files from examples
+        run: |
+          dir="$(dirname "$STACK_FILE")"
+          # copy each *.example file next to itself, without the suffix
+          find "$dir" -maxdepth 1 -name '*.example' | while read -r f; do
+            cp "$f" "${f%.example}"
+            # fill blank KEY= lines so ${VAR:?} doesn't abort
+            sed -i -E 's/^([A-Za-z_][A-Za-z0-9_]*)=$/\1=ci-placeholder/' "${f%.example}"
+          done
+      - name: Check compose config
+        run: docker compose -f "$STACK_FILE" config -q
