@@ -1,5 +1,17 @@
 name: compose-validation
-on: push
+on:
+  push:
+    paths:
+      - '**/docker-compose*.yml'
+      - '**/*.env*.example'
+      - '.github/workflows/compose-validation.yml'
+  pull_request:
+    paths:
+      - '**/docker-compose*.yml'
+      - '**/*.env*.example'
+      - '.github/workflows/compose-validation.yml'
+  workflow_dispatch:
+
 jobs:
   find-compose-files:
     runs-on: ubuntu-slim
