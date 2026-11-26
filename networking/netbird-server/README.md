@@ -1,6 +1,6 @@
 # NetBird Server
 
-My self-hosted NetBird control plane: the combined server, the dashboard, the NetBird Proxy with CrowdSec, and Traefik. It started as the output of NetBird's [one-line installer](https://docs.netbird.io/selfhosted/selfhosted-quickstart), version 0.79.0 (answers: built-in Traefik, proxy on, CrowdSec on). The script for the version now deployed is kept here as [`getting-started-v0.83.2.sh`](./getting-started-v0.83.2.sh) for diffing and is never run.
+My self-hosted NetBird control plane: the combined server, the dashboard, the NetBird Proxy with CrowdSec, and Traefik. It started as the output of NetBird's [one-line installer](https://docs.netbird.io/selfhosted/selfhosted-quickstart), version 0.79.0 (answers: built-in Traefik, proxy on, CrowdSec on). The installer version it was last synced with is in the header of `docker-compose.yml`.
 
 Changes from the installer output:
 
@@ -64,15 +64,16 @@ docker run --rm -v netbird_netbird_data:/data:ro -v /path/to/backups:/backup bus
 
 Because the tags here are pinned, also do the following:
 
-1. Diff the installer against the new release:
+1. Diff the installer between the synced version (compose header) and the new release, or read the file's [commit history](https://github.com/netbirdio/netbird/commits/main/infrastructure_files/getting-started.sh):
    ```sh
-   curl -fsSLo new.sh https://github.com/netbirdio/netbird/releases/download/vX.Y.Z/getting-started.sh
-   diff getting-started-v0.83.2.sh new.sh
+   base=https://raw.githubusercontent.com/netbirdio/netbird
+   diff <(curl -fsSL $base/v0.83.2/infrastructure_files/getting-started.sh) \
+        <(curl -fsSL $base/vX.Y.Z/infrastructure_files/getting-started.sh)
    ```
 2. Carry over any changes to the compose, `config.yaml` or env templates.
 3. Bump `netbird-server`, `reverse-proxy` and netbird-client's `netbird` together, plus the matching dashboard release.
 4. Traefik and CrowdSec are pinned too. Check their releases and security advisories, and keep any hardening flags added to Traefik's command.
-5. Replace the kept script with the new one.
+5. Update the synced version in the compose header and the `diff` above.
 
 ## Configuration
 
