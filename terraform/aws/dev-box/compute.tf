@@ -1,0 +1,27 @@
+# EC2 instance for dev-box
+resource "aws_instance" "dev_box_ec2" {
+  instance_type          = var.instance_type
+  ami                    = data.aws_ami.ubuntu_server.id
+  key_name               = aws_key_pair.dev_box.key_name
+  vpc_security_group_ids = [aws_security_group.dev_box.id]
+  subnet_id              = aws_subnet.public.id
+  user_data              = file("cloud-init.yaml")
+
+  root_block_device {
+    volume_type           = "gp3"
+    volume_size           = 50
+    encrypted             = true
+    delete_on_termination = true
+  }
+
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 1
+  }
+
+  tags = {
+    Environment = var.environment
+    Name        = "dev-box-${var.environment}-ec2-instance"
+  }
+}

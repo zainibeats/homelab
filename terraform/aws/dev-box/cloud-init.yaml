@@ -1,0 +1,20 @@
+#cloud-config
+package_update: true
+packages:
+  - docker.io
+  - docker-compose-v2
+  - git
+  - build-essential
+  - curl
+  - tmux
+  - python3
+  - python3-pip
+  - python3-venv
+  - ripgrep
+  - jq
+runcmd:
+  - systemctl enable --now docker
+  - usermod -aG docker ubuntu
+  - curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+  - apt-get install -y nodejs
+  - npm install -g @anthropic-ai/claude-code
