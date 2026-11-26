@@ -29,7 +29,8 @@ jobs:
         run: |
           dir="$(dirname "$STACK_FILE")"
           find "$dir" -maxdepth 1 -name '*.example' | while read -r f; do
-            cp "$f" "${f%.example}";
+            cp "$f" "${f%.example}"
+            sed -i -E 's/^([A-Za-z_][A-Za-z0-9_]*)=$/\1=ci-placeholder/' "${f%.example}"
           done
           echo "folder: $dir"
           ls -a "$dir"
