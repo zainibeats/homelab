@@ -22,6 +22,7 @@ jobs:
         uses: actions/checkout@v6
       - name: List compose files
         id: list
+        # Finds every docker-compose.yml and docker-compose.example.yml tracked in git
         run: echo "compose_files=$(git ls-files | grep -E 'docker-compose(\.example)?\.yml' | jq -R -s -c 'split("\n")[:-1]')" >> "$GITHUB_OUTPUT"
 
   validate-compose:
@@ -37,14 +38,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-      - name: Copy examples
+      - name: Create .env files from examples
         run: |
           dir="$(dirname "$STACK_FILE")"
+          # copy each *.example file next to itself, without the suffix
           find "$dir" -maxdepth 1 -name '*.example' | while read -r f; do
             cp "$f" "${f%.example}"
+            # fill blank KEY= lines so ${VAR:?} doesn't abort
             sed -i -E 's/^([A-Za-z_][A-Za-z0-9_]*)=$/\1=ci-placeholder/' "${f%.example}"
           done
-          echo "folder: $dir"
-          ls -a "$dir"
       - name: Check compose config
         run: docker compose -f "$STACK_FILE" config -q
