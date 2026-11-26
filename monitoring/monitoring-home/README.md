@@ -27,6 +27,12 @@ On every other machine to be monitored, run only Node Exporter with the standalo
 
 Grafana provisions only the Loki datasource (as the default) through its entrypoint. Add Prometheus (`http://prometheus:9090`) in Grafana under **Connections → Data sources**.
 
+### Dashboard
+
+[`dashboard.example.json`](./dashboard.example.json) is the "Homelab Node Overview" Grafana dashboard: status, CPU, memory, disk, uptime and network panels per host, then cAdvisor container CPU and memory (top 10) and `/var/log` logs from Loki. It isn't provisioned automatically. In Grafana, go to **Dashboards → New → Import**, upload the file, and pick your Prometheus and Loki data sources (add Prometheus first, see above).
+
+The host panels filter on the `instance` labels in [`prometheus/prometheus.yml`](./prometheus/prometheus.yml) (`raspberry-pi-5`, `application-server`, `desktop-workstation`, `truenas-scale`, `gpu-compute`). Edit the queries if your targets use other labels. The logs panel queries `{job="varlogs"}`, which Promtail's default config sets for `/var/log`.
+
 ## Configuration
 
 - `DOMAIN` - Base domain for the Grafana Traefik route (`grafana.${DOMAIN}`).
