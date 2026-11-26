@@ -2,6 +2,7 @@ name: netbird   # keeps volume/network names (netbird_netbird, netbird_netbird_d
 
 # Self-hosted NetBird (combined server, dashboard, proxy, CrowdSec) behind Traefik.
 # Rendered by getting-started.sh v0.79.0 (built-in Traefik, proxy and CrowdSec on),
+# synced with v0.83.2 (AppSec left off),
 # then edited by hand: the "services" network, the letsencrypt-dns resolver and
 # pinned NetBird images. See README.md "Upgrading" before changing image tags.
 # Values come from .env (copy .env.example).
@@ -9,7 +10,7 @@ name: netbird   # keeps volume/network names (netbird_netbird, netbird_netbird_d
 services:
   # Traefik reverse proxy (automatic TLS via Let's Encrypt)
   traefik:
-    image: traefik:v3.6
+    image: traefik:v3.7.19   # installer pins >= v3.7.13 (aliasHeadersStrategy)
     container_name: netbird-traefik
     restart: unless-stopped
     networks:
@@ -25,11 +26,13 @@ services:
       # Docker provider
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
-      - "--providers.docker.network=netbird"
+      - "--providers.docker.network=netbird_netbird"   # full name; "netbird" made Traefik guess
       # Entrypoints
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.allowACMEByPass=true"
+      - "--entrypoints.web.http.aliasHeadersStrategy=delete"
+      - "--entrypoints.websecure.http.aliasHeadersStrategy=delete"
       # Disable timeouts for long-lived gRPC streams
       - "--entrypoints.websecure.transport.respondingTimeouts.readTimeout=0"
       - "--entrypoints.websecure.transport.respondingTimeouts.writeTimeout=0"
@@ -69,7 +72,7 @@ services:
 
   # UI dashboard
   dashboard:
-    image: netbirdio/dashboard:v2.94.0
+    image: netbirdio/dashboard:v2.98.0
     container_name: netbird-dashboard
     restart: unless-stopped
     networks: [netbird]
@@ -93,7 +96,7 @@ services:
 
   # Combined server (Management + Signal + Relay + STUN)
   netbird-server:
-    image: netbirdio/netbird-server:0.79.0
+    image: netbirdio/netbird-server:0.83.2
     container_name: netbird-server
     restart: unless-stopped
     networks: [netbird]
@@ -132,7 +135,7 @@ services:
 
   # NetBird Proxy - exposes internal resources to the internet
   proxy:
-    image: netbirdio/reverse-proxy:0.79.0
+    image: netbirdio/reverse-proxy:0.83.2
     container_name: netbird-proxy
     ports:
     - 51820:51820/udp
@@ -165,7 +168,7 @@ services:
         max-file: "2"
 
   crowdsec:
-    image: crowdsecurity/crowdsec:v1.7.7
+    image: crowdsecurity/crowdsec:v1.8.1
     container_name: netbird-crowdsec
     restart: unless-stopped
     networks: [netbird]

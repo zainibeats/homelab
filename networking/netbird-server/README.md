@@ -1,13 +1,14 @@
 # NetBird Server
 
-My self-hosted NetBird control plane: the combined server, the dashboard, the NetBird Proxy with CrowdSec, and Traefik. It started as the output of NetBird's [one-line installer](https://docs.netbird.io/selfhosted/selfhosted-quickstart), version 0.79.0 (answers: built-in Traefik, proxy on, CrowdSec on). That script is kept here as [`getting-started-v0.79.0.sh`](./getting-started-v0.79.0.sh) for diffing and is never run.
+My self-hosted NetBird control plane: the combined server, the dashboard, the NetBird Proxy with CrowdSec, and Traefik. It started as the output of NetBird's [one-line installer](https://docs.netbird.io/selfhosted/selfhosted-quickstart), version 0.79.0 (answers: built-in Traefik, proxy on, CrowdSec on). The installer version it was last synced with is in the header of `docker-compose.yml`.
 
 Changes from the installer output:
 
 - This stack creates the `services` network (`SERVICES_SUBNET`), and Traefik joins it at `TRAEFIK_SERVICES_IP` (`10.110.2.20`). [netbird-client](../netbird-client/README.md) routes the network to peers. [Matrix](../../utilities/matrix/README.md) and the game servers sit on it.
 - A second resolver, `letsencrypt-dns`, handles DNS-01 through Cloudflare. It covers NetBird-only hostnames, which resolve to private IPs. The token goes in `cloudflare-dns-token` (`Zone:DNS:Edit`, `chmod 600`).
 - The NetBird images are pinned and excluded from Watchtower.
-- Domain and ACME email come from `.env`. `name: netbird` keeps the installer's volume and network names (`netbird_netbird_data`, `netbird_netbird`).
+- Domain and ACME email come from `.env`. `name: netbird` keeps the installer's volume and network names (`netbird_netbird_data`, `netbird_netbird`). Traefik's `providers.docker.network` names `netbird_netbird` directly, not the installer's `${COMPOSE_PROJECT_NAME:-}_netbird`.
+- CrowdSec AppSec for the dashboard (offered since 0.83.0) is off.
 - The installer hard-codes Traefik's internal IP as `172.30.0.10`. It's also in `config.yaml`, `proxy.env` and Matrix's lk-jwt-service `extra_hosts`.
 
 **Runs on:** the OCI host
@@ -63,15 +64,16 @@ docker run --rm -v netbird_netbird_data:/data:ro -v /path/to/backups:/backup bus
 
 Because the tags here are pinned, also do the following:
 
-1. Diff the installer against the new release:
+1. Diff the installer between the synced version (compose header) and the new release, or read the file's [commit history](https://github.com/netbirdio/netbird/commits/main/infrastructure_files/getting-started.sh):
    ```sh
-   curl -fsSLo new.sh https://github.com/netbirdio/netbird/releases/download/vX.Y.Z/getting-started.sh
-   diff getting-started-v0.79.0.sh new.sh
+   base=https://raw.githubusercontent.com/netbirdio/netbird
+   diff <(curl -fsSL $base/v0.83.2/infrastructure_files/getting-started.sh) \
+        <(curl -fsSL $base/vX.Y.Z/infrastructure_files/getting-started.sh)
    ```
 2. Carry over any changes to the compose, `config.yaml` or env templates.
 3. Bump `netbird-server`, `reverse-proxy` and netbird-client's `netbird` together, plus the matching dashboard release.
 4. Traefik and CrowdSec are pinned too. Check their releases and security advisories, and keep any hardening flags added to Traefik's command.
-5. Replace the kept script with the new one.
+5. Update the synced version in the compose header and the `diff` above.
 
 ## Configuration
 

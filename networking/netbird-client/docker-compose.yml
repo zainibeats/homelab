@@ -2,7 +2,7 @@ name: netbird-client
 
 services:
   netbird-client:
-    image: netbirdio/netbird:0.79.0
+    image: netbirdio/netbird:0.83.2
     container_name: netbird-client
     restart: unless-stopped
     cap_add:
