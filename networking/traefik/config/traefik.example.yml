@@ -11,6 +11,7 @@ entryPoints:
   web:
     address: ":80"
     http:
+      aliasHeadersStrategy: keep
       redirections:
         entryPoint:
           to: websecure
@@ -18,6 +19,8 @@ entryPoints:
 
   websecure:
     address: ":443"
+    http:
+      aliasHeadersStrategy: keep
 
 providers:
   docker:
