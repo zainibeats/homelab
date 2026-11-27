@@ -16,9 +16,9 @@ background:
 cardBlur: sm
 
 providers:
-  openweathermap: openweathermapapikey
-  weatherapi: weatherapiapikey
-  finnhub: apikeyapikeyapikeyapikey
+  openweathermap: {{HOMEPAGE_VAR_OWM_KEY}}
+  weatherapi: {{HOMEPAGE_VAR_WEATHER_KEY}}
+  finnhub: {{HOMEPAGE_VAR_FINNHUB_KEY}}
 
 layout:
   Media:
