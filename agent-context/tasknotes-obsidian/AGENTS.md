@@ -1,7 +1,7 @@
 # Design Document: Obsidian Second Brain
 
 ## Overview
-Architectural overview and tagging strategy for the Obsidian "Second Brain" vault (`/mnt/backup/syncthing/notes/obsidian-vault`). Task management is handled by the **TaskNotes** plugin in `TaskNotes/`. For task schema, CLI, and API details, refer to the `tasknotes` skill.
+Architectural overview and tagging strategy for the Obsidian "Second Brain" vault (`~/obsidian-vault`). Task management is handled by the **TaskNotes** plugin in `TaskNotes/`. For task schema, CLI, and API details, refer to the `tasknotes` skill.
 
 ## Organizational Structure
 Uses the **PARA method**:
@@ -36,7 +36,7 @@ Tags should be implemented in the **YAML frontmatter** using the `tags:` key (e.
 ### Core Principles
 1.  **Thematic Clustering**: Tags should be used to group notes into distinct thematic "islands" in the graph view (e.g., grouping all AI-related notes together, even if they reside in different folders like `Dev/ideas` and `Resources/blog notes`).
 2.  **Granularity**: Use specific technology and topic-based tags rather than broad categories. Instead of just `#dev`, use `#terraform`, `#ansible`, `#docker`, and `#kubernetes`.
-3.  **Multi-dimensional Linking (Multi-tagging)**: Notes should often carry multiple tags to represent cross-cutting relationships. A note on "Automating AWS with Terraform" should contain both `#aws` and `#terraform` to ensure it appears in both thematic clusters in the graph.
+3.  **Multi-dimensional Linking (Multi-tagging)**: Notes should often carry multiple tags to represent cross-cutting relationships. A note on "Automating AWS with Terraform" should contain both `#aws` and `#terraform` to ensure it appears in both thematic clusters in the graph. Always use tags that already exist in the vault; do not create new ones unless explicitly instructed.
 4.  **No Entity Tracking (Current Scope)**: The current focus is on topical/technological themes rather than tracking specific entities like people or hardware components.
 
 ### Identified Primary Themes for Tagging
@@ -72,3 +72,6 @@ As the vault grows, this design document will be updated to reflect new themes, 
 - **“open resources”**  → `@3-Resources/`
 
 - For full TaskNotes CLI/API/schema details, see the `tasknotes` skill rather than duplicating that reference here.
+
+## Style Preferences
+- No em dashes (—). Use other punctuation or restructuring instead.
