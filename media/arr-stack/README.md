@@ -9,7 +9,6 @@ A collection of services for automating media downloads and organization, based 
 | Prowlarr | Indexer management | 9696 (published by Gluetun) |
 | Sonarr | TV show management | 8989 |
 | Radarr | Movie management | 7878 |
-| Lidarr | Music management | 8686 |
 | Bazarr | Subtitle management | 6767 |
 | Seerr | Media requesting | 5055 |
 | Deunhealth | Restarts unhealthy containers | N/A |
@@ -50,8 +49,8 @@ docker compose up -d
 Then configure each app:
 
 - **qBittorrent:** log in as `admin` with the temporary password from `docker logs qbittorrent`, then change it in Settings > WebUI. In Advanced settings, set the network interface to `tun0`. In Settings > Downloads, set the default save path to `/data/downloads/qbittorrent/completed`.
-- **Prowlarr:** add indexers, then add the apps by their static IPs on `servarrnetwork`: Sonarr `172.69.0.3`, Radarr `172.69.0.4`, Lidarr `172.69.0.5`.
-- **Sonarr/Radarr/Lidarr:** add qBittorrent as the download client and set root folders: `/tv` for Sonarr (`/mnt/nfs/jellyfin/tv`), `/movies` for Radarr (`/mnt/nfs/jellyfin/movies`), `/data` for Lidarr (`/mnt/nfs/jellyfin/music/itunes-archive`). Lidarr's `/data` is only the music archive, so it can't see `/data/downloads`.
+- **Prowlarr:** add indexers, then add the apps by their static IPs on `servarrnetwork`: Sonarr `172.69.0.3`, Radarr `172.69.0.4`.
+- **Sonarr/Radarr/Bazarr:** add qBittorrent as the download client and set root folders: `/tv` for Sonarr (`/mnt/nfs/jellyfin/tv`), `/movies` for Radarr (`/mnt/nfs/jellyfin/movies`).
 - **Bazarr:** connect Sonarr and Radarr, then add subtitle providers.
 - **Seerr:** connect Sonarr and Radarr so approved requests download automatically.
 
@@ -69,14 +68,14 @@ Then configure each app:
 
 ## Routing & Ports
 
-- Traefik routes `sonarr`, `radarr`, `lidarr`, `bazarr`, and `seerr` at `<app>.${DOMAIN}` and `<app>.${SUBDOMAIN}.${DOMAIN}`. qBittorrent and Prowlarr sit behind Gluetun and are routed through the file-based config in `networking/traefik/config/dynamic/application-server*.yml`.
-- Host ports: `8122` (qBittorrent UI), `6881` (torrent), `9696` (Prowlarr), `8989`, `7878`, `8686`, `6767`, `5055`.
+- Traefik routes `sonarr`, `radarr`, `bazarr`, and `seerr` at `<app>.${DOMAIN}` and `<app>.${SUBDOMAIN}.${DOMAIN}`. qBittorrent and Prowlarr sit behind Gluetun and are routed through the file-based config in `networking/traefik/config/dynamic/application-server*.yml`.
+- Host ports: `8122` (qBittorrent UI), `6881` (torrent), `9696` (Prowlarr), `8989`, `7878`, `6767`, `5055`.
 - Networks: `servarrnetwork` (static IPs, Gluetun at `172.69.0.2`) and the external `traefik-proxy`.
 
 ## Data & Backups
 
 - `/mnt/nfs/jellyfin` → `/data` - Media library and downloads.
-- `/mnt/nfs/apps/arr/{gluetun,sonarr,radarr,lidarr,bazarr,seerr}` - App configs (NFS). Back these up.
+- `/mnt/nfs/apps/arr/{gluetun,sonarr,radarr,bazarr,seerr}` - App configs (NFS). Back these up.
 - `./qbittorrent`, `./prowlarr` - qBittorrent and Prowlarr configs next to the compose file (gitignored). Back these up.
 
 ## Troubleshooting

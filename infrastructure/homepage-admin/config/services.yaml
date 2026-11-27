@@ -22,11 +22,6 @@
         description: Indexer Manager
         icon: prowlarr.png
         siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:9696"
-    - Lidarr:
-        href: "https://lidarr.{{HOMEPAGE_VAR_DOMAIN}}"
-        description: Music Automation
-        icon: lidarr.png
-        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8686"
     - Bazarr:
         href: "https://bazarr.{{HOMEPAGE_VAR_DOMAIN}}"
         description: Subtitle Automation
@@ -118,11 +113,6 @@
         description: Indexer Manager
         icon: prowlarr.png
         siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:9696"
-    - Lidarr:
-        href: "http://{{HOMEPAGE_VAR_APP_HOST}}:8686"
-        description: Music Automation
-        icon: lidarr.png
-        siteMonitor: "http://{{HOMEPAGE_VAR_APP_HOST}}:8686"
     - Bazarr:
         href: "http://{{HOMEPAGE_VAR_APP_HOST}}:6767"
         description: Subtitle Management
