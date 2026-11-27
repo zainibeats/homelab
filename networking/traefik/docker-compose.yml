@@ -19,7 +19,11 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
-      - ./letsencrypt/acme.json:/var/traefik/certs/acme.json
+      - type: bind
+        source: ./letsencrypt/acme.json
+        target: /var/traefik/certs/acme.json
+        bind:
+          create_host_path: false
       - /etc/localtime:/etc/localtime:ro
       - ./config/dynamic:/etc/traefik/dynamic:ro
     labels:

@@ -55,5 +55,6 @@ Static configuration lives in `config/traefik.yml`: entrypoints `web` (`:80`, re
 ## Troubleshooting
 
 - Certificates not issued: check `docker logs traefik` for DNS challenge errors and confirm the token's zone permissions. `acme.json` must be mode `600`, or Traefik refuses to use it.
+- `up` fails with a bind source path error for `acme.json`: the file is missing. Create it as in Setup. Compose won't create it for you, because Docker would make a root-owned directory in its place.
 - A service isn't routed: confirm it is on the `traefik-proxy` network and has `traefik.enable=true`.
 - `HTTP router already configured, skipping`: two files in `config/dynamic/` define the same router or service name, and Traefik keeps the first one it loads. Remove the duplicate or stale file.
