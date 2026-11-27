@@ -16,14 +16,15 @@ Traefik is the edge router and reverse proxy for the homelab. It terminates TLS 
 cp .env.example .env
 cp config/traefik.example.yml config/traefik.yml
 # Copy only the dynamic files this host needs, e.g.:
-cp config/dynamic/pi5.example.yml config/dynamic/pi5.yml
+mkdir -p config/dynamic
+cp config/dynamic.example/pi5.example.yml config/dynamic/pi5.yml
 mkdir -p letsencrypt && touch letsencrypt/acme.json && chmod 600 letsencrypt/acme.json
 docker compose up -d
 ```
 
 Edit `config/traefik.yml` and set `certificatesResolvers.cloudflare.acme.email` to your address. The live `config/traefik.yml` and `config/dynamic/*.yml` files are gitignored; only the `.example.yml` files are tracked.
 
-Dynamic configuration examples:
+Dynamic configuration examples live in `config/dynamic.example/`, outside the watched `config/dynamic/` folder. Traefik loads every `.yml` in `config/dynamic/`, so an example left there would clash with its live copy:
 
 - `pi5.example.yml` - Homepage, Grafana, and Uptime Kuma on the Raspberry Pi.
 - `truenas.example.yml` - TrueNAS web UI.
@@ -55,3 +56,4 @@ Static configuration lives in `config/traefik.yml`: entrypoints `web` (`:80`, re
 
 - Certificates not issued: check `docker logs traefik` for DNS challenge errors and confirm the token's zone permissions. `acme.json` must be mode `600`, or Traefik refuses to use it.
 - A service isn't routed: confirm it is on the `traefik-proxy` network and has `traefik.enable=true`.
+- `HTTP router already configured, skipping`: two files in `config/dynamic/` define the same router or service name, and Traefik keeps the first one it loads. Remove the duplicate or stale file.
