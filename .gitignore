@@ -39,6 +39,7 @@ terraform.tfvars
 /networking/traefik/config/dynamic/*.yml
 !/networking/traefik/config/dynamic/*.example.yml
 /monitoring/monitoring-home/docker-compose.yml
+**/syncthing/docker-compose.yml
 **/monitoring-oci/grafana-admin-password
 
 # Data and Storage

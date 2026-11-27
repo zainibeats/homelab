@@ -13,7 +13,7 @@ services:
     volumes:
       - ${SYNCTHING_DATA}:/var/syncthing
       ## If directory above is not on host machine (e.g. external drive), use the following:
-      - ./config:/var/syncthing/config
+      # - ./config:/var/syncthing/config
     healthcheck:
       test: curl -fkLsS -m 2 127.0.0.1:8384/rest/noauth/health | grep -o --color=never OK || exit 1
       interval: 1m
