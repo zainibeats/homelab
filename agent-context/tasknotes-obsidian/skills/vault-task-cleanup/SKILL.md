@@ -1,6 +1,6 @@
 ---
 name: vault-task-cleanup
-description: Use when asked to clean up, triage, tidy, or audit TaskNotes tasks. Finds tasks with missing or invalid statuses, empty open tasks, done tasks not yet archived, and tasks with no tags or project links, then asks the user to Update Status, Archive, Delete, or Ignore each one. Do not use for creating or editing single tasks; that belongs to the tasknotes skill.
+description: Use when asked to clean up, triage, tidy, or audit TaskNotes tasks. Finds tasks with missing or invalid statuses, empty open tasks, done tasks not yet archived, tasks with no tags or project links, and near-duplicate tasks, then asks the user to Update Status, Archive, Delete, or Ignore each one. Do not use for creating or editing single tasks; that belongs to the tasknotes skill.
 ---
 
 # Vault Task Cleanup
@@ -29,33 +29,37 @@ Paths are relative to the vault root. Schema and access rules come from `AGENTS.
 
 6. **Evaluate Orphaned Tasks**: Flag tasks with no topic tags (the system tags `task` and `archived` don't count) and no `projects` link. Also flag `projects` entries written as plain strings, which TaskNotes silently ignores. Use the `vault-tagging` skill to propose 1–4 topic tags based on the title and body. Mark any tag the vault doesn't already use as **new**.
 
-7. **Propose Actions**: Group the findings by check, with a count for each, in one table:
+7. **Find Near-Duplicates**: Group tasks with the same or very similar titles. Within each group, compare content depth. The task with specifics (models, chipsets, specs, compatibility lists, links, checklists) is the **source of truth**. Flag any task that adds nothing the source of truth lacks, and suggest Delete. If neither task has more detail than the other, or each holds details the other lacks, list the group under Ignore with a note.
+
+8. **Propose Actions**: Group the findings by check, with a count for each, in one table:
 
    | # | Task | Issue | Suggested action |
    |---|------|-------|------------------|
    | 1 | [[Fix NAS alerts]] | status `none` | Update Status → `open` |
    | 2 | [[Old idea]] | empty, open | Delete |
+   | 3 | [[Buy keyboard]] | thin duplicate of [[Buy keyboard (75%, hot-swap)]] | Delete |
 
    For each issue, offer exactly:
    - **Update Status**: state the proposed change. For orphans, this also covers adding the tags or fixing the `projects` links.
    - **Archive**: archive the task the TaskNotes way. It moves to `TaskNotes/Archive/` and gets the `archived` tag.
-   - **Delete**: only suggest this for empty or clearly dead tasks.
+   - **Delete**: only suggest this for empty, clearly dead, or thin duplicate tasks.
    - **Ignore**: leave the task untouched.
 
    Accept answers per task or in bulk (for example `1-4 archive, 5 ignore` or "archive all done"). Use AskUserQuestion if it's available.
 
-8. **Execute**: Apply only what the user chose, through the `tasknotes` skill and its MCP server, not manual file edits. Unanswered items count as Ignore.
+9. **Execute**: Apply only what the user chose, through the `tasknotes` skill and its MCP server, not manual file edits. Unanswered items count as Ignore.
    - **Update Status**: change only the targeted frontmatter keys. When the status becomes `done`, set `completedDate` to today (`YYYY-MM-DD`).
    - **Archive**: set `status: done` and `completedDate` if they're missing, then archive the task.
    - **Delete**: confirm once more, naming each task, even after a bulk approval. If deletion fails, move the file to `TaskNotes/_to_delete/`.
    - **Ignore**: no change.
 
-9. **Verify**: Re-run steps 3–6 on the tasks you touched. Report how many were updated, archived, deleted, and ignored, plus anything that failed.
+10. **Verify**: Re-run steps 3–7 on the tasks you touched. Report how many were updated, archived, deleted, and ignored, plus anything that failed.
 
 ## Rules
 
 - A task that fails several checks appears once, with all its issues listed.
 - Never rewrite a task body or invent details to fill an empty task.
+- Leave the source-of-truth task of a duplicate group unchanged. Merging details into it is a separate request.
 - Never set `done` without evidence or the user's say-so.
 - Ask before un-archiving a task. Flagging it is fine.
 - If unsure about a task, list it under Ignore with a note instead of acting.
