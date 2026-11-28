@@ -8,6 +8,10 @@ services:
     tty: true
     environment:
       - OLLAMA_HOST=${OLLAMA_HOST:-127.0.0.1:11434}   # 0.0.0.0 so Open WebUI can reach it via host.docker.internal
+      # Empty = Ollama's own defaults
+      - OLLAMA_CONTEXT_LENGTH=${OLLAMA_CONTEXT_LENGTH:-}
+      - OLLAMA_FLASH_ATTENTION=${OLLAMA_FLASH_ATTENTION:-}
+      - OLLAMA_KV_CACHE_TYPE=${OLLAMA_KV_CACHE_TYPE:-}
     restart: unless-stopped
     volumes:
       - ${OLLAMA_DATA:-ollama}:/root/.ollama   # unset: named volume; or a host path

@@ -45,6 +45,8 @@ Ollama (`ollama/.env`):
 - `MODELS_DIR` - Host directory with model files, mounted at `/models`.
 - `OLLAMA_HOST` - Listen address. `0.0.0.0:11434` so Open WebUI can reach Ollama; the compose default is `127.0.0.1:11434`.
 - `OLLAMA_DATA` - Optional host path for downloaded models (e.g. a dedicated disk). Unset keeps them in the `ollama` named volume.
+- `OLLAMA_CONTEXT_LENGTH` - Optional default context window. Ollama uses 4096 on GPUs under 24 GB; agents such as Hermes Agent need 64000+. Check the served window with `docker exec ollama ollama ps`.
+- `OLLAMA_FLASH_ATTENTION` / `OLLAMA_KV_CACHE_TYPE` - Optional. `1` and `q8_0` (or `q4_0`) shrink the KV cache so long contexts fit in VRAM.
 
 Open WebUI (`open-webui/.env`):
 
