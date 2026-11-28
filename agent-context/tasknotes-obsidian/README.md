@@ -22,6 +22,6 @@ This directory is the source copy kept for version control, so it isn't read in 
 |---|---|
 | `AGENTS.md` | `AGENTS.md` |
 | `.mcp.json` | `.mcp.json` |
-| `skills/*` | your agent's skills directory, one folder per skill (e.g. `.claude/skills/` or `.pi/skills/`) |
+| `skills/*` | your agent's skills directory, one folder per skill (e.g. `.claude/skills/` or `.agents/skills/`) |
 
 `AGENTS.md` and `.mcp.json` are read from the project root regardless of tool; only the skills need a tool-specific directory. Copy each folder under `skills/` as a sibling, since tools only discover `<skills-dir>/<name>/SKILL.md` one level deep. `skills/tasknotes/` is the vendored upstream copy; the other three are authored here.
