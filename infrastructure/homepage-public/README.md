@@ -26,6 +26,8 @@ Dashboard content lives in `config/` (`services.yaml`, `widgets.yaml`, `bookmark
 - `HOMEPAGE_VAR_OWM_LABEL` - Weather widget label.
 - `HOMEPAGE_VAR_OWM_LAT` - Weather latitude.
 - `HOMEPAGE_VAR_OWM_LONG` - Weather longitude.
+- `HOMEPAGE_VAR_WEATHER_KEY` - WeatherAPI key, set under `providers.weatherapi` in `config/settings.yaml`.
+- `HOMEPAGE_VAR_FINNHUB_KEY` - Finnhub API key, set under `providers.finnhub` in `config/settings.yaml`.
 - `HOMEPAGE_VAR_DOMAIN` - Domain used in service links.
 - `HOMEPAGE_VAR_APP_HOST` - Application Server IP used in service links.
 - `DOMAIN` - Base domain for the Traefik routes.
