@@ -23,10 +23,11 @@ When a user asks to "process the inbox" or "look through my inbox":
 - **Search for existing tasks:** Use `tasknotes_query_tasks` to find tasks with similar keywords, projects, or contexts.
 - **Search for existing notes:** Use `grep` or filesystem searches to find existing notes that contain related information.
 - **Analyze Relationships:** If a note in the inbox mentions a specific project (e.g., "AWS setup"), prioritize checking the `projects:` linkage in TaskNotes.
+- **Check for duplicates:** If an existing task covers the same item (same or very similar title), treat it as a match. Never propose a second task for it.
 
 ### 3. Action Recommendation
 For each item identified in the inbox, propose one of the following:
-- **Append to Existing Task:** "This seems like it belongs in the task [[Task Name]]. Should I add it as a checklist item or a note in the body?"
+- **Append to Existing Task:** "This seems like it belongs in the task [[Task Name]]. Should I add it as a checklist item or a note in the body?" When the inbox item has more detail than the existing task (specs, models, links), say so and offer to add that detail to the task.
 - **Append to Existing Note:** "This looks like information for your [[Note Name]] note. Should I append it there?"
 - **Create New Task:** "This is a new action item. I propose creating a task: `[Suggested Title]` with `priority: normal` and `projects: [[Project]]`. Should I proceed?"
 - **Create New Note:** "This is a significant piece of information. I propose creating a new note named `[Suggested Name]` in the appropriate folder. Should I proceed?"
@@ -44,7 +45,7 @@ For each item identified in the inbox, propose one of the following:
 - **Conciseness:** Keep the summary of findings brief and actionable.
 - **Granularity:** Break down large captures into multiple tasks if they represent distinct actions.
 - **PARA Alignment:** When creating new tasks, ensure they are linked to the correct PARA folder via the `projects:` field.
-- **Tagging:** Use relevant topic tags (e.g., `#aws`, `#dev`) for new tasks to ensure they appear in the correct Graph View clusters.
+- **Tagging:** Use relevant topic tags from the `vault-tagging` skill (e.g., `dev`, `homelab`) in frontmatter `tags:` for new tasks to ensure they appear in the correct Graph View clusters.
 - **TaskNotes Synergy:** Always prefer using the `tasknotes` skill tools for task creation and updates to ensure consistency with the TaskNotes plugin.
 
 ## Examples
