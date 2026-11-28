@@ -40,12 +40,12 @@ terraform apply
 The VM comes up with SSH only. The software is installed by hand inside the VM after `terraform apply`:
 
 1. **Enable non-free sources:** add `contrib non-free non-free-firmware` to the components in `/etc/apt/sources.list.d/debian.sources`, then run `sudo apt update`.
-2. **Models disk:** format `/dev/sdb` and mount it where Ollama keeps models:
+2. **Models disk:** format the `scsi1` disk and mount it where Ollama keeps models. Use the by-id path: the kernel's `sda`/`sdb` letters don't follow the Proxmox `scsi0`/`scsi1` order, and the models disk may well be `sda`. Check it first with `ls -l /dev/disk/by-id/ | grep drive-scsi1`.
 
    ```bash
-   sudo mkfs.ext4 -L models /dev/sdb
+   sudo mkfs.ext4 -L models /dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1
    sudo mkdir -p /var/lib/ollama
-   echo 'LABEL=models /var/lib/ollama ext4 defaults,discard 0 2' | sudo tee -a /etc/fstab
+   echo 'LABEL=models /var/lib/ollama ext4 defaults,discard,nofail 0 2' | sudo tee -a /etc/fstab
    sudo systemctl daemon-reload && sudo mount -a
    ```
 
