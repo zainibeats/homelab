@@ -52,7 +52,17 @@ The VM comes up with SSH only. The software is installed by hand inside the VM a
 3. **NVIDIA driver:** `sudo apt install linux-headers-cloud-amd64 nvidia-driver firmware-misc-nonfree`, then reboot. `nvidia-smi` should list the GPU.
 4. **Docker + NVIDIA Container Toolkit:** install [Docker Engine](https://docs.docker.com/engine/install/debian/) and the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html), then `sudo nvidia-ctk runtime configure --runtime=docker && sudo systemctl restart docker`. Check with `sudo docker run --rm --gpus all debian:trixie-slim nvidia-smi`.
 5. **Ollama:** clone this repo and run the [Ollama stack](../../../automation/ai-stack/README.md). In `ollama/.env`, set `OLLAMA_DATA=/var/lib/ollama/models` so downloaded models land on the models disk (otherwise they fill the OS disk), and `MODELS_DIR=/var/lib/ollama/custom` for Modelfiles. Check with `docker exec ollama ollama run hermes3:8b "hi"`, then `du -sh /var/lib/ollama/models`.
-6. **Firewall:** Ollama has no authentication, so allow port 11434 from the LAN subnet only (nftables or the Proxmox VM firewall).
+6. **Firewall:** Ollama has no authentication, so anything that can reach port 11434 can use the GPU or pull and delete models. UFW denies all incoming traffic except SSH and Ollama from the LAN. Allow SSH first, or `enable` locks you out:
+
+   ```bash
+   sudo apt install -y ufw
+   sudo ufw allow 22/tcp
+   sudo ufw allow from <lan-subnet> to any port 11434 proto tcp   # e.g. 172.20.50.0/24
+   sudo ufw enable
+   sudo ufw status verbose
+   ```
+
+   UFW covers Ollama because the stack uses host networking. Ports published by containers with `ports:` bypass UFW, so don't rely on it for those. If Hermes runs in a bridged container, also allow `sudo ufw allow in on docker0 to any port 11434 proto tcp`.
 7. **Hermes Agent:** install it and point it at `http://localhost:11434/v1`.
 
 ## Configuration
@@ -85,7 +95,8 @@ The VM comes up with SSH only. The software is installed by hand inside the VM a
 ## Routing & Ports
 
 - `22/tcp`: SSH.
-- `11434/tcp`: Ollama API, reachable on the LAN once step 5 of Setup is done. Restrict it to the LAN subnet.
+- `11434/tcp`: Ollama API (host networking). UFW allows it from the LAN subnet only (Setup step 6).
+- Everything else incoming is denied by UFW.
 
 ## Data & Backups
 
