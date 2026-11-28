@@ -74,7 +74,7 @@ Every stack README follows this template. A section with nothing to say gets one
 ```
 
 - **Placement:** which machine runs each stack changes often, so it is tracked in private homelab documentation, not in this repo. Add a `**Runs on:**` line only when placement is a requirement or a stable role, worded as that role ("the OCI host (must share the `services` network with netbird-server)", "a host with an NVIDIA GPU", "every Docker host"), never as the machine it happens to run on today.
-- **Links:** use relative links between READMEs. Commands that `cd` assume the README's own folder as the starting point.
+- **Links:** docs link to each other with relative links (README to README, index to the files it lists, e.g. [skills README](../.agents/skills/README.md) to each `SKILL.md`), not bare paths in backticks. Commands that `cd` assume the README's own folder as the starting point.
 - The root README has no host map; its Infrastructure Overview describes what each device is for.
 
 ## Commits
