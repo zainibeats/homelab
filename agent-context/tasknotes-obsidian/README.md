@@ -11,7 +11,7 @@ Two kinds of agent touch the vault, and this bundle is for only one of them. See
 | | Works in | Reads this bundle? | Writes to the vault? |
 |---|---|---|---|
 | **Agent A** (repo agent) | `homelab/` | No | No. It reads notes through the `obsidian-vault/` symlink and may at most drop a new capture into `0-Inbox/`. |
-| **Agent B** (vault agent) | the vault | Yes: `AGENTS.md`, `.mcp.json`, and every skill below | Yes, through the skills, asking first where the rules say so |
+| **Agent B** (vault agent) | the vault | Yes: `AGENTS.md`, `.mcp.example.json`, and every skill below | Yes, through the skills, asking first where the rules say so |
 
 The inbox is the handoff: Agent A leaves a capture in `0-Inbox/`, and Agent B later turns it into tasks and notes with the `inbox-processing` skill. `AGENTS.md` and the skills here are written for Agent B only.
 
@@ -23,7 +23,7 @@ The inbox is the handoff: Agent A leaves a capture in `0-Inbox/`, and Agent B la
   - **[`skills/vault-tagging/`](skills/vault-tagging/SKILL.md)** — adds and audits topic tags so notes cluster in Graph View.
   - **[`skills/vault-task-cleanup/`](skills/vault-task-cleanup/SKILL.md)** — audits tasks (missing statuses, empty tasks, done tasks not yet archived, tasks with no tags or project links) and proposes Update Status / Archive / Delete / Ignore for each issue.
   - **[`skills/inbox-processing/`](skills/inbox-processing/SKILL.md)** — turns quick captures in the vault's `0-Inbox/` into tasks and notes. It looks for an existing task or note to append to first, and never writes without confirmation.
-- **`.mcp.json`** — registers the TaskNotes MCP server (`http://localhost:8080/mcp`, `lifecycle: lazy`) as a project-scoped MCP server. The TaskNotes plugin's MCP Server toggle (Settings → TaskNotes → Integrations) must be enabled for the server to actually respond; see `skills/tasknotes/references/tasknotes-help.md` for setup and troubleshooting. If the agent tool and Obsidian are on the same machine, a local firewall may still need an allow rule for port 8080 from `127.0.0.1` before the connection succeeds.
+- **`.mcp.example.json`** — template for registering the TaskNotes MCP server (`http://localhost:8080/mcp`, `lifecycle: lazy`) as a project-scoped MCP server. Deploy it as `.mcp.json` and replace the token placeholder with your TaskNotes API token (Settings → TaskNotes → Advanced → HTTP API → API authentication token); plugin 4.13+ rejects unauthenticated MCP clients. The real `.mcp.json` holds a secret, so it is never tracked here. The TaskNotes plugin's MCP Server toggle (Settings → TaskNotes → Integrations) must be enabled for the server to actually respond; see `skills/tasknotes/references/tasknotes-help.md` for setup and troubleshooting. If the agent tool and Obsidian are on the same machine, a local firewall may still need an allow rule for port 8080 from `127.0.0.1` before the connection succeeds.
 
 ## Deployment layout
 
@@ -32,12 +32,12 @@ This directory is the source copy kept for version control, so it isn't read in 
 | Source (here) | Deployed to (vault root) |
 |---|---|
 | `AGENTS.md` | `AGENTS.md` |
-| `.mcp.json` | `.mcp.json` |
+| `.mcp.example.json` | `.mcp.json` (renamed, with your token filled in) |
 | `skills/*` | your agent's skills directory, one folder per skill (e.g. `.claude/skills/` or `.agents/skills/`) |
 
 `AGENTS.md` is read from the project root by most agent tools (Pi, Cursor, Codex, OpenCode, and Claude Code when there is no `CLAUDE.md`). Gemini CLI needs `AGENTS.md` added to `context.fileName` in its settings. Skills need a tool-specific directory, and `.agents/skills/` is the documented project location for Pi.
 
-`.mcp.json` is a narrower case. Claude Code reads it natively. Pi has no built-in MCP support, so it needs the community `pi-mcp-adapter` package, which also reads a project-root `.mcp.json`. Other tools use their own files: `.cursor/mcp.json`, `.codex/config.toml`, `.gemini/settings.json`, `opencode.jsonc`. The `lifecycle` field is a `pi-mcp-adapter` option, and `lazy` is already its default.
+`.mcp.json` is a narrower case. Claude Code reads it natively. Pi has no built-in MCP support, so it needs the community `pi-mcp-adapter` package, which also reads a project-root `.mcp.json`. Other tools use their own files: `.cursor/mcp.json`, `.codex/config.toml`, `.gemini/settings.json`, `opencode.jsonc`. The `lifecycle` field is a `pi-mcp-adapter` option, and `lazy` is already its default. The example is written for Pi. If you use Claude Code for TaskNotes, add `"type": "http"` to the server entry, since Claude Code treats a `url` without a `type` as a configuration error.
 
 Copy each folder under `skills/` as a sibling, since tools only discover `<skills-dir>/<name>/SKILL.md` one level deep.
 
@@ -52,7 +52,8 @@ Copy (re-run after any change here):
 ```bash
 VAULT=~/obsidian-vault
 cd ~/repos/homelab/agent-context/tasknotes-obsidian
-cp AGENTS.md .mcp.json "$VAULT"/
+cp AGENTS.md "$VAULT"/
+cp -n .mcp.example.json "$VAULT"/.mcp.json   # -n keeps an existing .mcp.json with your token; edit the token after the first copy
 mkdir -p "$VAULT/.agents/skills"
 rsync -a --delete skills/ "$VAULT/.agents/skills/"
 ```

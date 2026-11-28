@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "tasknotes": {
+      "url": "http://localhost:8080/mcp",
+      "lifecycle": "lazy",
+      "headers": {
+        "Authorization": "Bearer <your-tasknotes-api-token>"
+      }
+    }
+  }
+}

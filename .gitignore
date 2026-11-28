@@ -12,6 +12,7 @@ secrets.yaml
 **/ddclient/config/
 .agents/settings.local.json
 /.mcp.json
+agent-context/**/.mcp.json
 **/letsencrypt/acme.json
 
 # Logs and Cache

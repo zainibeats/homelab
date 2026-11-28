@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "tasknotes": {
-      "url": "http://localhost:8080/mcp",
-      "lifecycle": "lazy"
-    }
-  }
-}

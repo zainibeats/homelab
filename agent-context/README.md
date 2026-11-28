@@ -8,7 +8,7 @@ In this repo, `obsidian-vault/` is a gitignored symlink to that same vault, so a
 flowchart TD
     vault["Obsidian vault<br/>(e.g. ~/obsidian-vault)"]
     link["homelab/obsidian-vault<br/>(gitignored symlink)"]
-    bundle["agent-context/tasknotes-obsidian<br/>AGENTS.md, .mcp.json, skills"]
+    bundle["agent-context/tasknotes-obsidian<br/>AGENTS.md, .mcp.example.json, skills"]
     a["Agent A<br/>works on the homelab repo"]
     b["Agent B<br/>works in the vault"]
 
