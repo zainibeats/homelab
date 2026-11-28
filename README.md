@@ -20,7 +20,7 @@ Configuration and documentation for my homelab: Docker Compose stacks, infrastru
 | Provider                   | Purpose                                       | OS |
 | -------------------------- | --------------------------------------------- | --- |
 | Oracle                     | Game servers, Matrix, and NetBird server      | Ubuntu Server |
-| Azure                      | Jump server                                   | Debian |
+| Azure                      | Jump server                                   | Ubuntu Server |
 | AWS                        | Testing                                       | Ubuntu Server |
 
 ## Project Organization
@@ -48,7 +48,7 @@ Compose stacks are grouped by job, one folder per stack. Provisioning code (run 
 | Path | Applies to | Contents |
 | ---- | ---------- | -------- |
 | **[AGENTS.md](./AGENTS.md)** | This repo only | Rules and workflow for agents working here |
-| **[.agents](./.agents)** | This repo, reusable anywhere | Skills used here (documentation audits, conventional commits). They're generic, so they can be copied to other repos |
+| **[.agents](./.agents)** | This repo, reusable anywhere | Skills used here (documentation audits, conventional commits, service removal). They're generic, so they can be copied to other repos |
 | **[agent-context](./agent-context/README.md)** | Other projects, not this repo | Context bundles and skills for tools outside this repo, such as the Obsidian vault |
 
 ## Automatic Updates
