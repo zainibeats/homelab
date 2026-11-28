@@ -14,11 +14,19 @@ Terraform for a Debian 13 VM on Proxmox VE with an NVIDIA GPU passed through, us
   pvesm set local --content <existing>,import
   ```
 
-- **API token** set up as in the [Debian VM README](../debian-vm/README.md#proxmox-api-token), plus `Mapping.Use` for the GPU mapping:
+- **API token** with these privileges (whatever role it has):
+  - `Mapping.Use` on the GPU mapping (included in `PVEAdmin`).
+  - `Datastore.AllocateTemplate` on the image datastore (included in `PVEAdmin`).
+  - `Sys.AccessNetwork` on the node, so Proxmox can download the cloud image. **Not in `PVEAdmin`**; the only alternative Proxmox accepts is `Sys.Audit` + `Sys.Modify` on `/`, which is much broader. Grant it with a small custom role:
 
-  ```bash
-  pveum role modify TerraformProv -append 1 -privs "Mapping.Use"
-  ```
+    ```bash
+    pveum role add TerraformDownload -privs "Sys.AccessNetwork"
+    pveum acl modify /nodes/<node> --tokens '<user>@<realm>!<tokenid>' --roles TerraformDownload
+    # privilege-separated token (privsep 1): the user needs it too
+    pveum acl modify /nodes/<node> --users <user>@<realm> --roles TerraformDownload
+    ```
+
+  See the "Required permissions" of [`download-url`](https://pve.proxmox.com/pve-docs/api-viewer/#/nodes/{node}/storage/{storage}/download-url) and the [bpg download file docs](https://registry.terraform.io/providers/bpg/proxmox/latest/docs/resources/download_file).
 
 ## Setup
 
@@ -95,5 +103,6 @@ The VM comes up with SSH only. The software is installed by hand inside the VM a
 
 - **VM won't start, mapping error:** the token needs `Mapping.Use`, and the mapping must exist on `node_name`.
 - **Image download fails with a content type error:** the image datastore is missing the `import` content type.
+- **Image download fails with `HTTP 403 ... Permission check failed` (GetQueryURLMetadata):** the token lacks `Sys.AccessNetwork` on the node (see Prerequisites). `Sys.Modify` granted on the node does not count; Proxmox only accepts it on `/`.
 - **`nvidia-smi` reports no devices:** check `lspci -nnk | grep -A3 NVIDIA` in the guest and confirm vfio still owns the card on the host.
 - **Apply hangs at "waiting for agent":** `qemu_agent_enabled` is `true`, but the agent isn't installed in the guest.
