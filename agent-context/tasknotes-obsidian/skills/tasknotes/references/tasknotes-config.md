@@ -31,7 +31,7 @@ Note: named `default_tags` rather than `tags` to avoid Obsidian treating this co
 
 **contexts** - Optional semantic sub-domain strings. Maps a domain label to a context string written into the task's `contexts:` frontmatter field. Used to filter within a project's Bases views. Values accumulate in the vault and become available in the TaskNotes GUI `@` autosuggest as the task base grows. Full reference: https://tasknotes.dev/core-concepts/
 
-**tags** - The `task` tag is the only required tag. Configure which tag identifies tasks in Settings -> General -> Task Tag. Multi-word tags are normalized to hyphens by the plugin (e.g. `in progress` -> `in-progress`, v4.9.2) for Obsidian tag compatibility. Full reference: https://tasknotes.dev/settings/task-properties/
+**tags** - The `task` tag is the only required tag. Configure which tag identifies tasks in Settings -> TaskNotes -> Task files -> Task identification (Settings -> General -> Task Tag on plugin 4.x). Multi-word tags are normalized to hyphens by the plugin (e.g. `in progress` -> `in-progress`, v4.9.2) for Obsidian tag compatibility. Full reference: https://tasknotes.dev/settings/task-properties/
 
 ---
 
@@ -78,6 +78,7 @@ All dates use `YYYY-MM-DD`. No timestamps, no timezone offsets. `completedDate` 
 | `recurrence` | text | optional | RFC 5545 RRULE with embedded DTSTART. See Workflow 10 in the skill |
 | `recurrence_anchor` | text | optional | `scheduled` or `completion` - pair with `recurrence` |
 | `blockedBy` | list | optional | List of dependency objects; see structure below |
+| `attachments` | list | optional | Ordered list of vault links to attached files. Preserve the existing list on edit; do not invent entries |
 
 **`blockedBy` structure:**
 
