@@ -10,7 +10,7 @@ services:
       - OLLAMA_HOST=${OLLAMA_HOST:-127.0.0.1:11434}   # 0.0.0.0 so Open WebUI can reach it via host.docker.internal
     restart: unless-stopped
     volumes:
-      - ollama:/root/.ollama
+      - ${OLLAMA_DATA:-ollama}:/root/.ollama   # unset: named volume; or a host path
       - ${MODELS_DIR}:/models
     deploy:
       resources:

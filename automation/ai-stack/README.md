@@ -44,6 +44,7 @@ Ollama (`ollama/.env`):
 
 - `MODELS_DIR` - Host directory with model files, mounted at `/models`.
 - `OLLAMA_HOST` - Listen address. `0.0.0.0:11434` so Open WebUI can reach Ollama; the compose default is `127.0.0.1:11434`.
+- `OLLAMA_DATA` - Optional host path for downloaded models (e.g. a dedicated disk). Unset keeps them in the `ollama` named volume.
 
 Open WebUI (`open-webui/.env`):
 
@@ -66,7 +67,7 @@ Open WebUI (`open-webui/.env`):
 
 ## Data & Backups
 
-- `ollama` volume → `/root/.ollama` - Downloaded models; re-downloadable.
+- `ollama` volume (or `${OLLAMA_DATA}` if set) → `/root/.ollama` - Downloaded models; re-downloadable.
 - `${MODELS_DIR}` → `/models` - Custom model files and Modelfiles.
 - `open-webui` volume → `/app/backend/data` - Users, chats, and settings. Back this up.
 
