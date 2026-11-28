@@ -1,6 +1,6 @@
 # Obsidian Vault
 
-Design notes for the Obsidian vault (`~/obsidian-vault`). Task schema and CLI/API details live in the `tasknotes` skill. The tagging workflow lives in the `vault-tagging` skill.
+Design notes for the Obsidian vault (the project root). Task schema and CLI/API details live in the `tasknotes` skill. The tagging workflow lives in the `vault-tagging` skill.
 
 ## Structure (PARA)
 
