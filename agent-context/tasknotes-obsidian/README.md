@@ -6,7 +6,9 @@ It isn't deployed by any Docker Compose file. It's kept here for version control
 
 ## Who uses this
 
-Two kinds of agent touch the vault, and this bundle is for only one of them. See the [diagram](../README.md) in the `agent-context` README.
+Two kinds of agent touch the vault, and this bundle is for only one of them. In this repo, `obsidian-vault/` is a gitignored symlink to the vault, so an agent working on the repo and an agent working in the vault see the same files.
+
+![Agent context and the Obsidian vault](https://assets.czaini.net/images/tasknotes-obsidian.drawio.svg)
 
 | | Works in | Reads this bundle? | Writes to the vault? |
 |---|---|---|---|
