@@ -2,7 +2,7 @@
 
 This directory is an AI agent context bundle for working with a separate personal Obsidian vault (PARA-organized) that uses the [TaskNotes](https://tasknotes.dev/) plugin for task management. The vault itself lives outside this repo (synced via Syncthing); these files are the reference material an agent reads before touching it.
 
-It isn't deployed by any Docker Compose file — it's kept here for version control alongside the rest of the AI tooling in this repo. See [Deployment layout](#deployment-layout) below for where each file actually needs to live to take effect.
+It isn't deployed by any Docker Compose file. It's kept here for version control alongside the rest of the AI tooling in this repo. See [Deployment layout](#deployment-layout) below for where each file actually needs to live to take effect.
 
 ## Contents
 
@@ -16,7 +16,7 @@ It isn't deployed by any Docker Compose file — it's kept here for version cont
 
 ## Deployment layout
 
-This directory is the source copy kept for version control — it isn't read in place. To actually take effect, its contents are placed into the Obsidian vault (the project root, e.g. `/mnt/backup/syncthing/notes/obsidian-vault`) matching each agent tool's own layout convention:
+This directory is the source copy kept for version control, so it isn't read in place. To actually take effect, its contents are placed into the Obsidian vault (the project root, e.g. `~/obsidian-vault`) matching each agent tool's own layout convention:
 
 | Source (here) | Deployed to (vault root) |
 |---|---|
