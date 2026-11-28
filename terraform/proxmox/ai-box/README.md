@@ -50,16 +50,10 @@ The VM comes up with SSH only. The software is installed by hand inside the VM a
    ```
 
 3. **NVIDIA driver:** `sudo apt install linux-headers-cloud-amd64 nvidia-driver firmware-misc-nonfree`, then reboot. `nvidia-smi` should list the GPU.
-4. **Ollama:** install it with `curl -fsSL https://ollama.com/install.sh | sh`. Then run `sudo systemctl edit ollama` and add the following so it listens on the LAN:
-
-   ```ini
-   [Service]
-   Environment="OLLAMA_HOST=0.0.0.0:11434"
-   ```
-
-   Run `sudo chown -R ollama:ollama /var/lib/ollama && sudo systemctl restart ollama`.
-5. **Firewall:** Ollama has no authentication, so allow port 11434 from the LAN subnet only (nftables or the Proxmox VM firewall).
-6. **Hermes Agent:** install it and point it at `http://localhost:11434/v1`.
+4. **Docker + NVIDIA Container Toolkit:** install [Docker Engine](https://docs.docker.com/engine/install/debian/) and the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html), then `sudo nvidia-ctk runtime configure --runtime=docker && sudo systemctl restart docker`. Check with `sudo docker run --rm --gpus all debian:trixie-slim nvidia-smi`.
+5. **Ollama:** clone this repo and run the [Ollama stack](../../../automation/ai-stack/README.md). In `ollama/.env`, set `OLLAMA_DATA=/var/lib/ollama/models` so downloaded models land on the models disk (otherwise they fill the OS disk), and `MODELS_DIR=/var/lib/ollama/custom` for Modelfiles. Check with `docker exec ollama ollama run hermes3:8b "hi"`, then `du -sh /var/lib/ollama/models`.
+6. **Firewall:** Ollama has no authentication, so allow port 11434 from the LAN subnet only (nftables or the Proxmox VM firewall).
+7. **Hermes Agent:** install it and point it at `http://localhost:11434/v1`.
 
 ## Configuration
 
@@ -91,7 +85,7 @@ The VM comes up with SSH only. The software is installed by hand inside the VM a
 ## Routing & Ports
 
 - `22/tcp`: SSH.
-- `11434/tcp`: Ollama API, reachable on the LAN once step 4 of Setup is done. Restrict it to the LAN subnet.
+- `11434/tcp`: Ollama API, reachable on the LAN once step 5 of Setup is done. Restrict it to the LAN subnet.
 
 ## Data & Backups
 
