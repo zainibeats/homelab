@@ -8,7 +8,6 @@ This directory contains services for managing, streaming, and requesting media c
 - **[Arr Stack](./arr-stack/README.md)** - Complete media automation suite including:
   - **Sonarr** - TV show management and automation
   - **Radarr** - Movie management and automation
-  - **Lidarr** - Music management and automation
   - **Bazarr** - Subtitle management
   - **Prowlarr** - Indexer management for all *arr services
   - **qBittorrent** - Torrent download client (VPN-protected)
