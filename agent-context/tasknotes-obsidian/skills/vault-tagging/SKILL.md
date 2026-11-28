@@ -19,7 +19,8 @@ Tags make Graph View show thematic clusters and cross-cutting links that folders
    - Use the basic vocabulary below. Don't add product or technology tags unless the user asks.
    - Add a second tag when the note crosses themes, e.g. `homelab` and `networking`.
    - Reuse an existing tag whenever one fits. Propose a new tag only when the user agrees.
-   - Tag only topics. Don't tag people or hardware as entities.
+   - Tag only topics. Don't tag people or specific devices as entities.
+   - Shopping tasks get `shopping` plus one domain tag: `hardware` (peripherals, adapters, computing gear), `homelab` or `networking` (servers, switches, patch panels), `security`, or `home` or `personal` (household and everyday items).
 4. **Write the tags to frontmatter** as a YAML list, using the method AGENTS.md allows (`printf`):
    ```yaml
    tags: [homelab, networking]
@@ -39,7 +40,7 @@ The basic tags to use. Reuse these before creating anything new.
 - `archived`: TaskNotes adds it when archiving.
 
 **Topic tags:**
-`career`, `dev`, `entertainment`, `health`, `home`, `homelab`, `linux`, `networking`, `personal`, `security`, `shopping`, `storage`, `utility`, `work`
+`career`, `dev`, `entertainment`, `hardware`, `health`, `home`, `homelab`, `linux`, `networking`, `personal`, `security`, `shopping`, `storage`, `utility`, `work`
 
 **More tags exist.** This list is deliberately short. To see the full set in the vault, call the TaskNotes MCP tool `tasknotes_get_filter_options`. Use a tag beyond this list only if the user asks for it.
 

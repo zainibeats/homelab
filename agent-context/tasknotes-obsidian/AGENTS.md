@@ -24,7 +24,7 @@ Tags exist to reveal thematic clusters and cross-cutting links in Graph View, wh
 - Put tags in frontmatter `tags:`, not body hashtags.
 - Use the basic tags listed in the `vault-tagging` skill and reuse existing ones. Add a new tag only when asked.
 - Task notes and regular notes share the same `tags:` field. Task notes also need `task`.
-- Topic tags only; don't track people or hardware as entities.
+- Topic tags only; don't track people or specific devices as entities.
 
 ## Rules
 
